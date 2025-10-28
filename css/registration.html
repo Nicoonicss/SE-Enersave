@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Registration - Enersave</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="registration.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="registration-container">
+        <div class="registration-card">
+            <div class="registration-header">
+                <div class="registration-logo">SE</div>
+                <h1 class="registration-title">Create Account</h1>
+                <p class="registration-subtitle">Join SE-Enersave and connect with sustainable energy solutions</p>
+            </div>
+            
+            <form class="registration-form" id="registrationForm">
+                <div class="form-group">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" id="username" name="username" class="form-input" placeholder="Enter your username" required>
+                    <div class="form-error" id="usernameError" style="display: none;">
+                        <span>⚠</span>
+                        <span>Username is required</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="firstName" class="form-label">First Name</label>
+                    <input type="text" id="firstName" name="firstName" class="form-input" placeholder="Enter your first name" required>
+                    <div class="form-error" id="firstNameError" style="display: none;">
+                        <span>⚠</span>
+                        <span>First name is required</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="lastName" class="form-label">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" class="form-input" placeholder="Enter your last name" required>
+                    <div class="form-error" id="lastNameError" style="display: none;">
+                        <span>⚠</span>
+                        <span>Last name is required</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" name="password" class="form-input" placeholder="Create a strong password" required>
+                    <div class="password-strength" id="passwordStrength">
+                        <div class="password-strength-bar"></div>
+                    </div>
+                    <div class="password-strength-text" id="passwordStrengthText">Password strength</div>
+                    <div class="form-error" id="passwordError" style="display: none;">
+                        <span>⚠</span>
+                        <span>Password must be at least 8 characters</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password2" class="form-label">Confirm Password</label>
+                    <input type="password" id="password2" name="password2" class="form-input" placeholder="Confirm your password" required>
+                    <div class="form-error" id="password2Error" style="display: none;">
+                        <span>⚠</span>
+                        <span>Passwords do not match</span>
+                    </div>
+                </div>
+                
+                <div class="registration-terms">
+                    <p>By creating an account, you agree to our <a href="#" target="_blank">Terms of Service</a> and <a href="#" target="_blank">Privacy Policy</a>.</p>
+                </div>
+                
+                <button type="submit" class="registration-submit" id="submitBtn">
+                    Create Account
+                </button>
+            </form>
+            
+            <div class="registration-divider">
+                <span>or</span>
+            </div>
+            
+            <div class="registration-social">
+                <div class="social-buttons">
+                    <a href="#" class="social-button">
+                        <span>📧</span>
+                        <span>Google</span>
+                    </a>
+                    <a href="#" class="social-button">
+                        <span>📘</span>
+                        <span>Facebook</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="registration-login">
+                <p>Already have an account?</p>
+                <a href="#" class="btn btn-outline">Sign In</a>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../js/main.js"></script>
+</body>
+</html>
+
+theres no error in this code

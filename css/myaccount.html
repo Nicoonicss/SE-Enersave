@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Account - Enersave</title>
+    <meta name="description" content="Manage your SE-Enersave account, projects, and settings. Track your sustainable energy journey.">
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="myaccount.css">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="index.html" class="brand-logo">SE-Enersave</a>
+            </div>
+            <ul class="navbar-nav">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="create.html" class="nav-link">Create</a></li>
+                <li class="nav-item"><a href="myaccount.html" class="nav-link active">My Account</a></li>
+                <li class="nav-item"><a href="download.html" class="nav-link">Download</a></li>
+                <li class="nav-item"><a href="review.html" class="nav-link">Review</a></li>
+            </ul>
+            <div class="navbar-actions">
+                <a href="registration.html" class="btn btn-outline">Sign Up</a>
+                <a href="#" class="btn btn-primary">Sign In</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Account Header -->
+    <section class="account-header">
+        <div class="account-header-content">
+            <div class="account-profile">
+                <div class="profile-avatar">JD</div>
+                <div class="profile-info">
+                    <h1>John Doe</h1>
+                    <p>Community Energy Coordinator</p>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">3</span>
+                            <span class="stat-label">Active Projects</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">15</span>
+                            <span class="stat-label">Community Members</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">2.5MW</span>
+                            <span class="stat-label">Energy Generated</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Account Navigation -->
+    <nav class="account-nav">
+        <div class="account-nav-container">
+            <ul class="account-nav-list">
+                <li class="account-nav-item">
+                    <a href="#profile" class="account-nav-link active" data-section="profile">Profile</a>
+                </li>
+                <li class="account-nav-item">
+                    <a href="#projects" class="account-nav-link" data-section="projects">My Projects</a>
+                </li>
+                <li class="account-nav-item">
+                    <a href="#settings" class="account-nav-link" data-section="settings">Settings</a>
+                </li>
+                <li class="account-nav-item">
+                    <a href="#notifications" class="account-nav-link" data-section="notifications">Notifications</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Account Content -->
+    <section class="account-content">
+        <div class="account-content-container">
+            <!-- Profile Section -->
+            <div class="account-section active" id="profile">
+                <div class="profile-form">
+                    <h2>Profile Information</h2>
+                    <form id="profileForm">
+                        <div class="avatar-upload">
+                            <div class="avatar-preview">
+                                <img src="assets/images/avatar-placeholder.jpg" alt="Profile Avatar" style="display: none;">
+                                <span>JD</span>
+                            </div>
+                            <button type="button" class="avatar-upload-btn">
+                                <span>📷</span>
+                                <span>Change Photo</span>
+                            </button>
+                        </div>
+                        <div class="profile-form-grid">
+                            <div class="form-group">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" id="firstName" name="firstName" class="form-input" value="John">
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" id="lastName" name="lastName" class="form-input" value="Doe">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" id="email" name="email" class="form-input" value="john.doe@community.org">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" class="form-input" value="+1 (555) 123-4567">
+                        </div>
+                        <div class="form-group">
+                            <label for="organization" class="form-label">Organization</label>
+                            <input type="text" id="organization" name="organization" class="form-input" value="Green Valley Community">
+                        </div>
+                        <div class="form-group">
+                            <label for="role" class="form-label">Role</label>
+                            <input type="text" id="role" name="role" class="form-input" value="Community Energy Coordinator">
+                        </div>
+                        <div class="form-group">
+                            <label for="bio" class="form-label">Bio</label>
+                            <textarea id="bio" name="bio" class="form-input" placeholder="Tell us about yourself and your work in sustainable energy">I'm passionate about bringing clean energy solutions to rural communities. With over 5 years of experience in renewable energy projects, I've helped implement solar and wind systems in 15+ communities.</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Projects Section -->
+            <div class="account-section" id="projects">
+                <h2>My Projects</h2>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-image"></div>
+                        <div class="project-content">
+                            <h3 class="project-title">Solar Farm Installation</h3>
+                            <p class="project-description">Large-scale solar installation to power the entire community with clean energy.</p>
+                            <div class="project-meta">
+                                <span class="project-status active">In Progress</span>
+                                <span class="project-date">Started: Jan 2024</span>
+                            </div>
+                            <div class="project-actions">
+                                <button class="btn btn-outline btn-sm">View Details</button>
+                                <button class="btn btn-primary btn-sm">Update Progress</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-image"></div>
+                        <div class="project-content">
+                            <h3 class="project-title">Wind Energy Assessment</h3>
+                            <p class="project-description">Feasibility study for wind energy implementation in the community.</p>
+                            <div class="project-meta">
+                                <span class="project-status completed">Completed</span>
+                                <span class="project-date">Completed: Dec 2023</span>
+                            </div>
+                            <div class="project-actions">
+                                <button class="btn btn-outline btn-sm">View Report</button>
+                                <button class="btn btn-primary btn-sm">Start New Project</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-image"></div>
+                        <div class="project-content">
+                            <h3 class="project-title">Energy Storage System</h3>
+                            <p class="project-description">Battery storage system to ensure reliable power supply during peak hours.</p>
+                            <div class="project-meta">
+                                <span class="project-status pending">Planning</span>
+                                <span class="project-date">Planned: Mar 2024</span>
+                            </div>
+                            <div class="project-actions">
+                                <button class="btn btn-outline btn-sm">View Plan</button>
+                                <button class="btn btn-primary btn-sm">Begin Project</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div class="account-section" id="settings">
+                <div class="settings-section">
+                    <h3>Account Settings</h3>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Email Notifications</h4>
+                            <p>Receive updates about your projects and important announcements</p>
+                        </div>
+                        <div class="setting-control">
+                            <div class="toggle-switch active"></div>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>SMS Notifications</h4>
+                            <p>Get text messages for urgent project updates</p>
+                        </div>
+                        <div class="setting-control">
+                            <div class="toggle-switch"></div>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Marketing Communications</h4>
+                            <p>Receive information about new features and services</p>
+                        </div>
+                        <div class="setting-control">
+                            <div class="toggle-switch active"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Privacy Settings</h3>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Profile Visibility</h4>
+                            <p>Make your profile visible to other community members</p>
+                        </div>
+                        <div class="setting-control">
+                            <div class="toggle-switch active"></div>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Project Sharing</h4>
+                            <p>Allow your projects to be featured as success stories</p>
+                        </div>
+                        <div class="setting-control">
+                            <div class="toggle-switch"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Security</h3>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Two-Factor Authentication</h4>
+                            <p>Add an extra layer of security to your account</p>
+                        </div>
+                        <div class="setting-control">
+                            <button class="btn btn-outline btn-sm">Enable</button>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Change Password</h4>
+                            <p>Update your account password</p>
+                        </div>
+                        <div class="setting-control">
+                            <button class="btn btn-outline btn-sm">Change</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications Section -->
+            <div class="account-section" id="notifications">
+                <h2>Notifications</h2>
+                <div class="notifications-list">
+                    <div class="notification-item">
+                        <div class="notification-icon info">ℹ️</div>
+                        <div class="notification-content">
+                            <h4 class="notification-title">Project Update Available</h4>
+                            <p class="notification-message">Your Solar Farm Installation project has new updates from our technical team.</p>
+                            <span class="notification-time">2 hours ago</span>
+                        </div>
+                    </div>
+                    <div class="notification-item">
+                        <div class="notification-icon success">✅</div>
+                        <div class="notification-content">
+                            <h4 class="notification-title">Project Approved</h4>
+                            <p class="notification-message">Your Wind Energy Assessment project has been approved and is ready to begin.</p>
+                            <span class="notification-time">1 day ago</span>
+                        </div>
+                    </div>
+                    <div class="notification-item">
+                        <div class="notification-icon warning">⚠️</div>
+                        <div class="notification-content">
+                            <h4 class="notification-title">Documentation Required</h4>
+                            <p class="notification-message">Please submit the required permits for your Energy Storage System project.</p>
+                            <span class="notification-time">3 days ago</span>
+                        </div>
+                    </div>
+                    <div class="notification-item">
+                        <div class="notification-icon info">ℹ️</div>
+                        <div class="notification-content">
+                            <h4 class="notification-title">New Funding Opportunity</h4>
+                            <p class="notification-message">A new grant program is available for renewable energy projects in your area.</p>
+                            <span class="notification-time">1 week ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>SE-Enersave</h4>
+                    <p>Connecting communities with sustainable energy solutions for a better tomorrow.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="create.html">Create Project</a></li>
+                        <li><a href="download.html">Download</a></li>
+                        <li><a href="review.html">Reviews</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Community</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link">Facebook</a>
+                        <a href="#" class="social-link">Twitter</a>
+                        <a href="#" class="social-link">LinkedIn</a>
+                        <a href="#" class="social-link">Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 SE-Enersave. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/myaccount.js"></script>
+</body>
+</html>
