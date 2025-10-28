@@ -1,0 +1,136 @@
+/* Home (index.html) */
+
+.hero {
+  padding: 80px 0 40px;
+}
+
+.hero-content {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.hero h1 {
+  margin: 0 0 12px 0;
+  font-size: 44px;
+  line-height: 1.15;
+}
+
+.hero p {
+  color: var(--color-muted);
+  margin: 0 0 20px 0;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.hero-image {
+  margin: 32px auto 0;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-lg);
+}
+
+.features {
+  padding: 40px 0;
+}
+
+.features .text-center h2 {
+  margin: 0 0 8px 0;
+}
+
+.features .text-center p {
+  margin: 0 0 24px 0;
+  color: var(--color-muted);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.feature-card {
+  padding: 18px;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  background: linear-gradient(180deg, var(--color-surface), #0f1526);
+}
+
+.feature-icon {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.stats {
+  padding: 20px 0 0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.stat-item {
+  padding: 16px;
+  border: 1px dashed var(--color-border);
+  border-radius: 14px;
+  background: #0d1324;
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 28px;
+}
+
+.stat-label {
+  color: var(--color-muted);
+}
+
+.testimonials { padding: 40px 0; }
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.testimonial-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 18px;
+  background: #0e1528;
+}
+
+.testimonial-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #1c2541;
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+}
+
+.testimonial-author { display: flex; gap: 10px; align-items: center; }
+
+.cta { padding: 40px 0; }
+
+.cta-buttons { display: flex; gap: 12px; justify-content: center; }
+
+.newsletter { padding: 40px 0; }
+
+.newsletter-content {
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 20px;
+  background: linear-gradient(180deg, #0e1426, #0b1020);
+}
+
+.newsletter-form { display: flex; gap: 10px; }
+
+

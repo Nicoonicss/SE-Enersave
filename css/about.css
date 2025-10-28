@@ -1,0 +1,91 @@
+/* About page */
+
+.page-header {
+  padding: 60px 0 30px;
+  background: radial-gradient(500px 200px at 50% -30%, rgba(79, 70, 229, 0.25), transparent 60%);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.page-header-content {
+  text-align: center;
+}
+
+.mission { padding: 30px 0; }
+
+.mission-content {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 24px;
+  align-items: center;
+}
+
+.mission-image img {
+  border-radius: 14px;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow);
+}
+
+.values { padding: 30px 0; }
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.value-card {
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 16px;
+  background: #0e1528;
+}
+
+.value-icon { font-size: 22px; margin-bottom: 8px; }
+
+.team { padding: 30px 0; }
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.team-member {
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 16px;
+  background: #0e1528;
+}
+
+.member-photo {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #1c2541;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.story { padding: 30px 0; }
+
+.story-timeline {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.timeline-item { border: 1px dashed var(--color-border); border-radius: 12px; padding: 14px; }
+.timeline-year { color: var(--color-muted); font-weight: 600; }
+
+.about-stats { padding: 20px 0; }
+.about-stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.stat-item { text-align: center; border: 1px dashed var(--color-border); padding: 16px; border-radius: 12px; background: #0e1526; }
+.stat-number { font-size: 26px; }
+.stat-label { color: var(--color-muted); }
+
+.about-cta { padding: 30px 0; text-align: center; }
+.about-cta-buttons { display: flex; gap: 12px; justify-content: center; }
+
+

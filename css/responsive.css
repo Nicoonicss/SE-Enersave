@@ -1,0 +1,78 @@
+/* Responsive adjustments */
+
+@media (max-width: 1200px) {
+  .container {
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 992px) {
+  .footer-content {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .navbar .container {
+    height: 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-nav {
+    gap: 12px;
+  }
+
+  .grid-2,
+  .grid-3,
+  .grid-4,
+  .features-grid,
+  .values-grid,
+  .team-grid,
+  .about-stats-grid,
+  .platforms-grid,
+  .requirements-grid,
+  .reviews-grid,
+  .projects-grid,
+  .profile-form-grid,
+  .form-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .hero-image {
+    margin-top: 20px;
+    max-height: 260px;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+
+  .account-nav-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-lg {
+    width: 100%;
+  }
+
+  .navbar-actions {
+    display: none;
+  }
+
+  .footer .container {
+    padding: 32px 16px;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+  }
+
+  .page-header h1,
+  .hero h1 {
+    font-size: 28px !important;
+  }
+}
+
+

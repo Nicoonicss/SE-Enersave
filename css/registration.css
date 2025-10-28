@@ -1,0 +1,30 @@
+/* Registration page */
+
+.registration-container { min-height: calc(100vh - 64px - 200px); display: grid; place-items: center; padding: 30px 0; }
+.registration-card { width: 100%; max-width: 560px; border: 1px solid var(--color-border); border-radius: 18px; background: linear-gradient(180deg, var(--color-surface), #0f1526); box-shadow: var(--shadow); padding: 22px; }
+.registration-header { text-align: center; margin-bottom: 12px; }
+.registration-logo { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; font-weight: 800; background: #1a2240; margin: 0 auto 8px; }
+.registration-title { margin: 0; }
+.registration-subtitle { margin: 6px 0 0 0; color: var(--color-muted); }
+
+.registration-form { display: grid; gap: 12px; }
+
+.password-strength { height: 8px; background: #0f1526; border: 1px solid #26304a; border-radius: 999px; overflow: hidden; }
+.password-strength-bar { width: 0; height: 100%; background: linear-gradient(90deg, #ef4444, #f59e0b, #22c55e); }
+.password-strength-text { font-size: 12px; color: var(--color-muted); margin-top: 4px; }
+
+.registration-terms { color: var(--color-muted); font-size: 14px; }
+.registration-terms a { color: #93c5fd; text-decoration: underline; }
+
+.registration-submit { width: 100%; }
+
+.registration-divider { display: grid; place-items: center; color: var(--color-muted); margin: 10px 0; }
+.registration-divider span { background: #0b0f19; padding: 0 8px; }
+
+.registration-social { display: grid; place-items: center; }
+.social-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+.social-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; border: 1px solid var(--color-border); border-radius: 10px; background: #0f1629; color: var(--color-text); }
+
+.registration-login { display: grid; place-items: center; gap: 8px; margin-top: 10px; color: var(--color-muted); }
+
+
