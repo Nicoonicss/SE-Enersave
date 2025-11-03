@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SE-Enersave API Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .api-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        h2 {
+            color: #2c3e50;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            background: #ecf0f1;
+        }
+    </style>
+</head>
+<body>
+    <h1>SE-Enersave API Example</h1>
+
+    <!-- Register Section -->
+    <div class="api-section">
+        <h2>1. Register User</h2>
+        <button onclick="registerUser()">Register Test User</button>
+        <div id="registerResult" class="result"></div>
+    </div>
+
+    <!-- Login Section -->
+    <div class="api-section">
+        <h2>2. Login</h2>
+        <button onclick="loginUser()">Login</button>
+        <div id="loginResult" class="result"></div>
+    </div>
+
+    <!-- Create Project Section -->
+    <div class="api-section">
+        <h2>3. Create Project</h2>
+        <button onclick="createProject()">Create Test Project</button>
+        <div id="createProjectResult" class="result"></div>
+    </div>
+
+    <!-- Get Projects Section -->
+    <div class="api-section">
+        <h2>4. Get All Projects</h2>
+        <button onclick="getProjects()">Get Projects</button>
+        <div id="getProjectsResult" class="result"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000/api';
+
+        // Store user ID after registration/login
+        let userId = null;
+
+        async function registerUser() {
+            const resultDiv = document.getElementById('registerResult');
+            resultDiv.innerHTML = 'Registering...';
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: 'testuser' + Date.now(),
+                        email: 'test' + Date.now() + '@example.com',
+                        password: 'password123',
+                        first_name: 'Test',
+                        last_name: 'User',
+                        phone: '+1 555-1234',
+                        organization: 'Test Community',
+                        role: 'Community Coordinator'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    userId = data.data.id;
+                    resultDiv.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                    resultDiv.style.background = '#d4edda';
+                } else {
+                    resultDiv.innerHTML = '<pre style="color: red;">Error: ' + JSON.stringify(data, null, 2) + '</pre>';
+                    resultDiv.style.background = '#f8d7da';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = '<pre style="color: red;">Error: ' + error.message + '</pre>';
+                resultDiv.style.background = '#f8d7da';
+            }
+        }
+
+        async function loginUser() {
+            const resultDiv = document.getElementById('loginResult');
+            resultDiv.innerHTML = 'Logging in...';
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: 'test@example.com', // Change to registered email
+                        password: 'password123'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    userId = data.data.id;
+                    resultDiv.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                    resultDiv.style.background = '#d4edda';
+                } else {
+                    resultDiv.innerHTML = '<pre style="color: red;">Error: ' + JSON.stringify(data, null, 2) + '</pre>';
+                    resultDiv.style.background = '#f8d7da';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = '<pre style="color: red;">Error: ' + error.message + '</pre>';
+                resultDiv.style.background = '#f8d7da';
+            }
+        }
+
+        async function createProject() {
+            if (!userId) {
+                alert('Please login first!');
+                return;
+            }
+
+            const resultDiv = document.getElementById('createProjectResult');
+            resultDiv.innerHTML = 'Creating project...';
+
+            try {
+                const response = await fetch(`${API_BASE}/projects`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        project_name: 'Solar Farm Installation',
+                        community_name: 'Green Valley Community',
+                        project_description: 'Large-scale solar installation to power the entire community with clean energy.',
+                        location: 'City, State, Country',
+                        population: 500,
+                        energy_type: 'solar',
+                        energy_capacity: 50.0,
+                        budget: 100000,
+                        timeline: '6-12 months',
+                        challenges: 'Lack of funding for initial setup',
+                        support_needed: 'funding, technical',
+                        contact_person: 'John Doe',
+                        contact_email: 'john@community.org',
+                        contact_phone: '+1 555-1234',
+                        user_id: userId
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                    resultDiv.style.background = '#d4edda';
+                } else {
+                    resultDiv.innerHTML = '<pre style="color: red;">Error: ' + JSON.stringify(data, null, 2) + '</pre>';
+                    resultDiv.style.background = '#f8d7da';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = '<pre style="color: red;">Error: ' + error.message + '</pre>';
+                resultDiv.style.background = '#f8d7da';
+            }
+        }
+
+        async function getProjects() {
+            const resultDiv = document.getElementById('getProjectsResult');
+            resultDiv.innerHTML = 'Loading projects...';
+
+            try {
+                const response = await fetch(`${API_BASE}/projects`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                    resultDiv.style.background = '#d4edda';
+                } else {
+                    resultDiv.innerHTML = '<pre style="color: red;">Error: ' + JSON.stringify(data, null, 2) + '</pre>';
+                    resultDiv.style.background = '#f8d7da';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = '<pre style="color: red;">Error: ' + error.message + '</pre>';
+                resultDiv.style.background = '#f8d7da';
+            }
+        }
+    </script>
+</body>
+</html>
+

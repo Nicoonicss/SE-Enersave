@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enersave Backend API</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .info {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        .endpoint {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #3498db;
+            border-radius: 5px;
+        }
+        .method {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .method.get { background: #3498db; color: white; }
+        .method.post { background: #27ae60; color: white; }
+        .method.put { background: #f39c12; color: white; }
+        .method.delete { background: #e74c3c; color: white; }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ Enersave Backend API</h1>
+        
+        <div class="info">
+            <strong>Status:</strong> Server is running! ✅
+            <br>
+            <strong>Version:</strong> 1.0.0
+            <br>
+            <strong>Base URL:</strong> <code>http://localhost:8000</code>
+        </div>
+
+        <h2>📚 Quick Links</h2>
+        <ul>
+            <li><a href="example-usage.html">Test API (Interactive Example)</a></li>
+            <li><a href="../README.md">Main README</a></li>
+            <li><a href="README.md">Backend Documentation</a></li>
+            <li><a href="database/migrations/create_tables.sql">Database Schema</a></li>
+        </ul>
+
+        <h2>🔐 Authentication Endpoints</h2>
+        
+        <div class="endpoint">
+            <span class="method post">POST</span>
+            <code>/api/auth/register</code>
+            <p>Register a new user</p>
+        </div>
+        
+        <div class="endpoint">
+            <span class="method post">POST</span>
+            <code>/api/auth/login</code>
+            <p>Login user</p>
+        </div>
+
+        <h2>🚀 Project Endpoints</h2>
+        
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <code>/api/projects</code>
+            <p>Get all projects</p>
+        </div>
+        
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <code>/api/projects/{id}</code>
+            <p>Get project by ID</p>
+        </div>
+        
+        <div class="endpoint">
+            <span class="method post">POST</span>
+            <code>/api/projects</code>
+            <p>Create new project</p>
+        </div>
+        
+        <div class="endpoint">
+            <span class="method put">PUT</span>
+            <code>/api/projects/{id}</code>
+            <p>Update project</p>
+        </div>
+        
+        <div class="endpoint">
+            <span class="method delete">DELETE</span>
+            <code>/api/projects/{id}</code>
+            <p>Delete project</p>
+        </div>
+        
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <code>/api/users/{userId}/projects</code>
+            <p>Get user's projects</p>
+        </div>
+
+        <h2>📖 Quick Start</h2>
+        <div class="info">
+            <strong>1.</strong> Test the API using the <a href="example-usage.html">Interactive Example</a><br>
+            <strong>2.</strong> Read the <a href="README.md">Backend Documentation</a> for details<br>
+            <strong>3.</strong> Check <a href="../QUICKSTART.md">Quick Start Guide</a> for setup instructions
+        </div>
+
+        <h2>🏗️ Architecture</h2>
+        <p>This backend is built following <strong>SOLID principles</strong>:</p>
+        <ul>
+            <li><strong>S</strong>ingle Responsibility Principle</li>
+            <li><strong>O</strong>pen/Closed Principle</li>
+            <li><strong>L</strong>iskov Substitution Principle</li>
+            <li><strong>I</strong>nterface Segregation Principle</li>
+            <li><strong>D</strong>ependency Inversion Principle</li>
+        </ul>
+
+        <h2>🛠️ Technologies</h2>
+        <ul>
+            <li>PHP 7.4+</li>
+            <li>MySQL/MariaDB</li>
+            <li>PDO for Database Access</li>
+            <li>RESTful API Design</li>
+        </ul>
+    </div>
+</body>
+</html>
+
