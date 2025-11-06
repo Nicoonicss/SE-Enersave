@@ -1,0 +1,13 @@
+{
+    "name": "enersave/backend",
+    "description": "Enersave Backend API",
+    "type": "project",
+    "require": {
+        "php": ">=7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Enersave\\": ""
+        }
+    }
+}

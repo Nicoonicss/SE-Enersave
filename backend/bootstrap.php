@@ -28,7 +28,24 @@ spl_autoload_register(function ($class) {
     }
     
     $relativeClass = substr($class, $len);
-    $file = $baseDir . str_replace('\\', '/', $relativeClass) . '.php';
+    
+    // Map namespaces to directories
+    $namespaceMap = [
+        'Controllers' => 'controllers',
+        'Models' => 'models',
+        'Services' => 'classes',
+        'Repositories' => 'classes',
+        'Validators' => 'classes',
+        'Router' => 'routes',
+        'Middleware' => 'middleware'
+    ];
+    
+    $parts = explode('\\', $relativeClass);
+    if (count($parts) > 0 && isset($namespaceMap[$parts[0]])) {
+        $parts[0] = $namespaceMap[$parts[0]];
+    }
+    
+    $file = $baseDir . implode('/', $parts) . '.php';
     
     if (file_exists($file)) {
         require $file;
@@ -36,7 +53,7 @@ spl_autoload_register(function ($class) {
 });
 
 // Handle CORS
-require __DIR__ . '/CORS.php';
+require __DIR__ . '/middleware/CORS.php';
 CORSMiddleware::handle();
 
 return [
