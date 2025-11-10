@@ -1,7 +1,0 @@
-# Rewrite engine
-RewriteEngine On
-
-# Redirect all requests to index.php or api.php
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ api.php [L,QSA]
