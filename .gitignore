@@ -1,0 +1,35 @@
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backend
+backend/vendor/
+backend/node_modules/
+backend/composer.phar
+backend/composer.lock
+
+# Logs
+*.log
+logs/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Database
+*.sql.bak
+backend/database/*.db
+backend/database/*.sqlite
+
+# Temp files
+*.tmp
+*.temp
+
