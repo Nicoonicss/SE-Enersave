@@ -29,7 +29,10 @@ class AuthController
             return;
         }
         $_SESSION['user'] = [ 'id' => (int)$user['id'], 'email' => $user['email'], 'username' => $user['username'], 'role' => $user['role'] ];
-        header('Location: /explore');
+        
+        // Redirect based on role
+        $redirectUrl = $this->getRoleRedirectUrl($user['role']);
+        header('Location: ' . $redirectUrl);
         exit;
     }
 
@@ -38,6 +41,14 @@ class AuthController
         $username = trim($_POST['username'] ?? '');
         $email = trim($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
+        $role = trim($_POST['role'] ?? 'COMMUNITY_USER');
+        
+        // Validate role
+        $validRoles = ['COMMUNITY_USER', 'SUPPLIER_INSTALLER', 'EDUCATOR_ADVOCATE', 'DONOR_NGO', 'ADMIN'];
+        if (!in_array($role, $validRoles)) {
+            $role = 'COMMUNITY_USER';
+        }
+        
         if ($username === '' || $email === '' || $password === '') {
             http_response_code(400);
             echo 'All fields are required';
@@ -50,10 +61,25 @@ class AuthController
             return;
         }
         $hash = password_hash($password, PASSWORD_BCRYPT);
-        $id = $userModel->create($username, $email, $hash);
-        $_SESSION['user'] = [ 'id' => $id, 'email' => $email, 'username' => $username, 'role' => 'COMMUNITY_USER' ];
-        header('Location: /explore');
+        $id = $userModel->create($username, $email, $hash, $role);
+        $_SESSION['user'] = [ 'id' => $id, 'email' => $email, 'username' => $username, 'role' => $role ];
+        
+        // Redirect based on role
+        $redirectUrl = $this->getRoleRedirectUrl($role);
+        header('Location: ' . $redirectUrl);
         exit;
+    }
+    
+    private function getRoleRedirectUrl(string $role): string
+    {
+        return match($role) {
+            'COMMUNITY_USER' => '/home',
+            'SUPPLIER_INSTALLER' => '/dashboard',
+            'EDUCATOR_ADVOCATE' => '/home',
+            'DONOR_NGO' => '/home',
+            'ADMIN' => '/dashboard',
+            default => '/home',
+        };
     }
 
     public function logout(): void

@@ -9,7 +9,7 @@
 <body>
     <header class="site-header">
         <div class="inner">
-            <div class="brand"><img src="/images/logo.png" alt="logo"><span class="name">Enersave</span></div>
+            <div class="brand"><img src="/images/logo.svg" alt="logo"><span class="name">Enersave</span></div>
             <nav class="nav">
                 <a href="/explore">Explore</a>
                 <a href="/community">Community</a>
