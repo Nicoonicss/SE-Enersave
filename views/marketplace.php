@@ -10,10 +10,10 @@ include __DIR__ . '/partials/header.php';
             
             <div class="marketplace-controls">
                 <div class="filter-tabs">
-                    <button class="filter-tab active" data-category="solar">Solar</button>
-                    <button class="filter-tab" data-category="wind">Wind</button>
-                    <button class="filter-tab" data-category="hydro">Hydro</button>
-                    <button class="filter-tab" data-category="all">All</button>
+                    <a href="/marketplace?category=all" class="filter-tab <?php echo (!isset($_GET['category']) || $_GET['category'] === 'all') ? 'active' : ''; ?>" data-category="all">All</a>
+                    <a href="/marketplace?category=Solar" class="filter-tab <?php echo (isset($_GET['category']) && $_GET['category'] === 'Solar') ? 'active' : ''; ?>" data-category="solar">Solar</a>
+                    <a href="/marketplace?category=Wind" class="filter-tab <?php echo (isset($_GET['category']) && $_GET['category'] === 'Wind') ? 'active' : ''; ?>" data-category="wind">Wind</a>
+                    <a href="/marketplace?category=Hydro" class="filter-tab <?php echo (isset($_GET['category']) && $_GET['category'] === 'Hydro') ? 'active' : ''; ?>" data-category="hydro">Hydro</a>
                 </div>
                 
                 <div class="marketplace-actions">
@@ -28,7 +28,12 @@ include __DIR__ . '/partials/header.php';
                             <path d="M9 17C13.4183 17 17 13.4183 17 9C17 4.58172 13.4183 1 9 1C4.58172 1 1 4.58172 1 9C1 13.4183 4.58172 17 9 17Z" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             <path d="M19 19L14.65 14.65" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                        <input type="text" placeholder="Search Product..." class="search-input">
+                        <form method="get" action="/marketplace" style="display: flex; width: 100%;">
+                            <input type="text" name="search" placeholder="Search Product..." class="search-input" value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>">
+                            <?php if (isset($_GET['category'])): ?>
+                                <input type="hidden" name="category" value="<?php echo htmlspecialchars($_GET['category']); ?>">
+                            <?php endif; ?>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -37,10 +42,17 @@ include __DIR__ . '/partials/header.php';
         <div class="product-listings-section">
             <h2 class="listings-title">PRODUCT LISTINGS</h2>
             <div class="products-grid">
-                <div class="product-card">
-                    <div class="product-image">
-                        <div class="product-image-placeholder">
-                            <svg width="100" height="80" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <?php if (empty($products)): ?>
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px;">
+                        <p class="muted" style="font-size: 1.125rem;">No products found. Check back later!</p>
+                    </div>
+                <?php else: ?>
+                    <?php 
+                    // Helper function to get SVG icon based on category
+                    function getCategoryIcon($category) {
+                        $category = strtolower($category);
+                        if ($category === 'solar') {
+                            return '<svg width="100" height="80" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect x="10" y="10" width="25" height="20" fill="#1f2937" rx="2"/>
                                 <rect x="40" y="10" width="25" height="20" fill="#1f2937" rx="2"/>
                                 <rect x="70" y="10" width="25" height="20" fill="#1f2937" rx="2"/>
@@ -48,87 +60,54 @@ include __DIR__ . '/partials/header.php';
                                 <rect x="30" y="55" width="20" height="10" fill="#374151" rx="2"/>
                                 <line x1="50" y1="55" x2="50" y2="65" stroke="#6b7280" stroke-width="1"/>
                                 <line x1="55" y1="55" x2="55" y2="65" stroke="#6b7280" stroke-width="1"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Solar Starter Kit</h3>
-                        <p class="product-price">P5,000</p>
-                        <p class="product-supplier">GreenTech</p>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn-buy-now">BUY NOW</button>
-                        <button class="btn-add-cart">ADD TO CART</button>
-                    </div>
-                </div>
-                
-                <div class="product-card">
-                    <div class="product-image">
-                        <div class="product-image-placeholder">
-                            <svg width="100" height="80" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            </svg>';
+                        } elseif ($category === 'wind') {
+                            return '<svg width="100" height="80" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="50" cy="30" r="15" fill="#374151" stroke="#6b7280" stroke-width="2"/>
                                 <path d="M50 15 L50 5 M50 45 L50 55" stroke="#6b7280" stroke-width="2" stroke-linecap="round"/>
                                 <path d="M35 30 L25 30 M65 30 L75 30" stroke="#6b7280" stroke-width="2" stroke-linecap="round"/>
                                 <rect x="30" y="50" width="40" height="8" fill="#9ca3af" rx="2"/>
                                 <rect x="35" y="62" width="30" height="6" fill="#d1d5db" rx="2"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Portable Wind Turbine</h3>
-                        <p class="product-price">P12,000</p>
-                        <p class="product-supplier">AeroPower</p>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn-buy-now">BUY NOW</button>
-                        <button class="btn-add-cart">ADD TO CART</button>
-                    </div>
-                </div>
-                
-                <div class="product-card">
-                    <div class="product-image">
-                        <div class="product-image-placeholder">
-                            <svg width="100" height="80" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            </svg>';
+                        } elseif ($category === 'hydro') {
+                            return '<svg width="100" height="80" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M20 40 Q20 20, 40 20 L60 20 Q80 20, 80 40 L80 50 Q80 60, 70 60 L30 60 Q20 60, 20 50 Z" fill="#3b82f6" opacity="0.3"/>
                                 <path d="M20 40 Q20 20, 40 20 L60 20 Q80 20, 80 40" stroke="#2563eb" stroke-width="2" fill="none"/>
                                 <circle cx="50" cy="35" r="8" fill="#2563eb"/>
                                 <rect x="45" y="50" width="10" height="15" fill="#1e40af" rx="2"/>
                                 <path d="M30 65 L70 65" stroke="#1e40af" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Micro-Hydro System</h3>
-                        <p class="product-price">P25,000</p>
-                        <p class="product-supplier">AquaFlow Solutions</p>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn-buy-now">BUY NOW</button>
-                        <button class="btn-add-cart">ADD TO CART</button>
-                    </div>
-                </div>
-                
-                <div class="product-card">
-                    <div class="product-image">
-                        <div class="product-image-placeholder">
-                            <svg width="100" height="80" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            </svg>';
+                        } else {
+                            return '<svg width="100" height="80" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect x="20" y="15" width="60" height="40" fill="#fbbf24" rx="2"/>
                                 <rect x="25" y="20" width="50" height="30" fill="#f59e0b" rx="2"/>
                                 <path d="M30 55 L30 70 M40 55 L40 70 M50 55 L50 70 M60 55 L60 70" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
                                 <rect x="35" y="72" width="30" height="4" fill="#d97706" rx="2"/>
-                            </svg>
+                            </svg>';
+                        }
+                    }
+                    
+                    foreach ($products as $product): 
+                        $categoryIcon = getCategoryIcon($product['category']);
+                    ?>
+                        <div class="product-card">
+                            <div class="product-image">
+                                <div class="product-image-placeholder">
+                                    <?php echo $categoryIcon; ?>
+                                </div>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-name"><?php echo htmlspecialchars($product['name']); ?></h3>
+                                <p class="product-price">P<?php echo number_format((float)$product['price'], 2); ?></p>
+                                <p class="product-supplier"><?php echo htmlspecialchars($product['supplier_name'] ?? 'Unknown Supplier'); ?></p>
+                            </div>
+                            <div class="product-actions">
+                                <button class="btn-buy-now">BUY NOW</button>
+                                <button class="btn-add-cart">ADD TO CART</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Solar Water Heater</h3>
-                        <p class="product-price">P8,500</p>
-                        <p class="product-supplier">SunHeat Co.</p>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn-buy-now">BUY NOW</button>
-                        <button class="btn-add-cart">ADD TO CART</button>
-                    </div>
-                </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </div>
         
@@ -178,6 +157,8 @@ include __DIR__ . '/partials/header.php';
             font-size: 0.9375rem;
             cursor: pointer;
             transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
         }
         
         .filter-tab:hover {
@@ -372,23 +353,4 @@ include __DIR__ . '/partials/header.php';
         }
         </style>
         
-        <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const filterTabs = document.querySelectorAll('.filter-tab');
-            
-            filterTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    // Remove active class from all tabs
-                    filterTabs.forEach(t => t.classList.remove('active'));
-                    // Add active class to clicked tab
-                    this.classList.add('active');
-                    
-                    // Here you would filter products based on category
-                    const category = this.dataset.category;
-                    console.log('Filter by:', category);
-                    // Add your filtering logic here
-                });
-            });
-        });
-        </script>
 <?php include __DIR__ . '/partials/footer.php'; ?>

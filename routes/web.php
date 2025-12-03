@@ -13,6 +13,9 @@ require_once __DIR__ . '/../controllers/SuppliersController.php';
 require_once __DIR__ . '/../controllers/ReportsController.php';
 require_once __DIR__ . '/../controllers/CommunityController.php';
 require_once __DIR__ . '/../controllers/AuthController.php';
+require_once __DIR__ . '/../controllers/ProductController.php';
+require_once __DIR__ . '/../controllers/AdminController.php';
+require_once __DIR__ . '/../models/Product.php';
 
 $router = new Router();
 
@@ -41,6 +44,30 @@ $router->post('/register', function () {
     (new AuthController())->handleRegister();
 });
 
+$router->get('/forgot-password', function () {
+    if (isset($_SESSION['user'])) {
+        header('Location: /home');
+        exit;
+    }
+    (new AuthController())->forgotPassword();
+});
+
+$router->post('/forgot-password', function () {
+    (new AuthController())->handleForgotPassword();
+});
+
+$router->get('/reset-password', function () {
+    if (isset($_SESSION['user'])) {
+        header('Location: /home');
+        exit;
+    }
+    (new AuthController())->resetPassword();
+});
+
+$router->post('/reset-password', function () {
+    (new AuthController())->handleResetPassword();
+});
+
 $router->get('/logout', function () {
     (new AuthController())->logout();
 });
@@ -52,7 +79,7 @@ $router->get('/home', function () {
 });
 
 $router->get('/marketplace', function () {
-    AuthHelper::requireRole(['COMMUNITY_USER', 'SUPPLIER_INSTALLER']);
+    AuthHelper::requireRole(['COMMUNITY_USER', 'SUPPLIER_INSTALLER', 'DONOR_NGO']);
     (new MarketplaceController())->index();
 });
 
@@ -62,7 +89,7 @@ $router->get('/projects', function () {
 });
 
 $router->get('/learn', function () {
-    AuthHelper::requireRole(['COMMUNITY_USER', 'EDUCATOR_ADVOCATE']);
+    AuthHelper::requireRole(['COMMUNITY_USER', 'EDUCATOR_ADVOCATE', 'DONOR_NGO']);
     (new LearnController())->index();
 });
 
@@ -77,12 +104,42 @@ $router->get('/dashboard', function () {
     (new DashboardController())->index();
 });
 
+$router->get('/products/create', function () {
+    AuthHelper::requireRole(['SUPPLIER_INSTALLER']);
+    (new ProductController())->create();
+});
+
+$router->post('/products/create', function () {
+    AuthHelper::requireRole(['SUPPLIER_INSTALLER']);
+    (new ProductController())->handleCreate();
+});
+
+$router->get('/products', function () {
+    AuthHelper::requireRole(['SUPPLIER_INSTALLER']);
+    (new ProductController())->list();
+});
+
 $router->get('/forum', function () {
     AuthHelper::requireRole(['SUPPLIER_INSTALLER', 'EDUCATOR_ADVOCATE']);
     (new ForumController())->index();
 });
 
 // Admin routes
+$router->get('/admin', function () {
+    AuthHelper::requireRole(['ADMIN']);
+    (new AdminController())->index();
+});
+
+$router->get('/dashboard', function () {
+    AuthHelper::requireRole(['SUPPLIER_INSTALLER', 'ADMIN']);
+    $role = $_SESSION['user']['role'] ?? '';
+    if ($role === 'ADMIN') {
+        (new AdminController())->index();
+    } else {
+        (new DashboardController())->index();
+    }
+});
+
 $router->get('/users', function () {
     AuthHelper::requireRole(['ADMIN']);
     (new UsersController())->index();

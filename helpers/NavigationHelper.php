@@ -17,6 +17,7 @@ class NavigationHelper
                 ['label' => 'Marketplace', 'url' => '/marketplace'],
                 ['label' => 'Projects', 'url' => '/projects'],
                 ['label' => 'Forum', 'url' => '/forum'],
+                ['label' => 'Settings', 'url' => '/settings'],
             ],
             'EDUCATOR_ADVOCATE' => [
                 ['label' => 'Home', 'url' => '/home'],

@@ -21,7 +21,7 @@
 html, body {
     height: 100%;
     overflow-x: hidden;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -121,10 +121,10 @@ body {
 .auth-card .title {
     font-size: 2.5rem;
     font-weight: 700;
-    color: var(--blue-dark);
+    color: #000000;
     margin-bottom: 12px;
-    font-family: Georgia, 'Times New Roman', serif;
-    letter-spacing: -0.5px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    letter-spacing: 0.5px;
 }
 
 .auth-card .muted {
@@ -259,20 +259,52 @@ form {
 /* Right Column - Promotional Section */
 .auth-promo-section {
     flex: 1;
-    background: var(--blue-darker);
+    position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 60px;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 40px 60px;
     min-height: 100vh;
-    position: relative;
+    overflow: hidden;
+}
+
+.auth-promo-section::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    background: url('/images/solarpanelfarm.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 0;
+}
+
+.auth-promo-section::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background: linear-gradient(to top, rgba(34, 197, 94, 0.15), transparent);
+    pointer-events: none;
 }
 
 .promo-content {
-    max-width: 500px;
+    width: 100%;
+    max-width: 600px;
     color: var(--white);
     animation: fadeIn 0.6s ease-out;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100%;
 }
 
 @keyframes fadeIn {
@@ -284,65 +316,61 @@ form {
     }
 }
 
-.promo-brand {
+.promo-brand-top {
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 40px;
+    gap: 12px;
+    margin-bottom: auto;
+    padding-top: 20px;
 }
 
-.promo-brand img {
-    width: 60px;
-    height: 60px;
+.promo-brand-top img {
+    width: 40px;
+    height: 40px;
     object-fit: contain;
     filter: brightness(0) invert(1);
 }
 
-.promo-brand-name {
+.promo-brand-name-top {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--white);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    letter-spacing: 0.5px;
+}
+
+.promo-main-text {
+    margin: auto 0;
+    padding: 40px 0;
+}
+
+.promo-headline {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--white);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.promo-headline-large {
     font-size: 3.5rem;
     font-weight: 700;
     color: var(--white);
-    font-family: Georgia, 'Times New Roman', serif;
-    letter-spacing: -1px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.2;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-.promo-tagline {
-    font-size: 1.25rem;
-    color: var(--white);
-    margin-bottom: 32px;
+.promo-call-to-action {
+    font-size: 1.125rem;
+    color: rgba(255, 255, 255, 0.95);
     line-height: 1.6;
-    font-weight: 300;
-}
-
-.promo-description {
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.9);
-    line-height: 1.8;
-    margin-bottom: 40px;
-}
-
-.promo-features {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.promo-features li {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    margin-bottom: 20px;
-    font-size: 1rem;
-    color: var(--white);
-    line-height: 1.6;
-}
-
-.promo-features li::before {
-    content: "◇";
-    font-size: 1.2rem;
-    color: var(--blue-light);
-    margin-top: 2px;
-    flex-shrink: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    margin-top: 32px;
+    max-width: 90%;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* Responsive Design */
@@ -362,8 +390,16 @@ form {
         padding: 40px;
     }
     
-    .promo-brand-name {
-        font-size: 2.5rem;
+    .promo-headline {
+        font-size: 2.25rem;
+    }
+    
+    .promo-headline-large {
+        font-size: 2.75rem;
+    }
+    
+    .promo-call-to-action {
+        font-size: 1rem;
     }
 }
 
@@ -393,12 +429,20 @@ form {
         font-size: 2rem;
     }
     
-    .promo-brand-name {
-        font-size: 2rem;
+    .promo-headline {
+        font-size: 1.875rem;
     }
     
-    .promo-tagline {
-        font-size: 1.125rem;
+    .promo-headline-large {
+        font-size: 2.25rem;
+    }
+    
+    .promo-call-to-action {
+        font-size: 0.9375rem;
+    }
+    
+    .promo-brand-name-top {
+        font-size: 1.25rem;
     }
 }
 
