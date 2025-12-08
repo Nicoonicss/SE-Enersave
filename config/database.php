@@ -6,7 +6,7 @@ return [
     'port' => 3306,
     'database' => 'enersave_db',
     'username' => 'root',
-    'password' => '',
+    'password' => 'root',
     'charset' => 'utf8mb4',
 ];
 
