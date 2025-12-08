@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard Overview - EnerSave</title>
+    <link rel="stylesheet" href="styles.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">
+            <img src="Logo.png" alt="EnerSave Logo"> 
+            EnerSave
+        </div>
+        <nav class="main-nav">
+            <a href="dashboard.html" class="nav-item active">Dashboard</a>
+            <a href="users.html" class="nav-item">Users</a>
+            <a href="suppliers.html" class="nav-item">Suppliers</a>
+            <a href="projects.html" class="nav-item">Projects</a>
+        </nav>
+        <div class="admin-profile">
+            <span>Admin: Steven</span>
+            <div class="avatar"><i class="fas fa-user-circle"></i></div>
+        </div>
+    </header>
+
+    <main class="dashboard-container">
+        <section id="dashboard" class="page-content active-page">
+            <h1 class="page-title">ADMIN DASHBOARD OVERVIEW</h1>
+            <p class="page-subtitle">A summary of key platform metrics.</p>
+
+            <div class="metrics-cards">
+                <div class="card">
+                    <span class="metric-title">Total Users</span>
+                    <span class="metric-value">340</span>
+                </div>
+                <div class="card">
+                    <span class="metric-title">Total Suppliers</span>
+                    <span class="metric-value">42</span>
+                </div>
+                <div class="card">
+                    <span class="metric-title">Active Projects</span>
+                    <span class="metric-value">18</span>
+                </div>
+                <div class="card">
+                    <span class="metric-title">Total Donations</span>
+                    <span class="metric-value">P280k</span>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                
+                <div class="quick-actions-panel">
+                    <h2>Quick Actions</h2>
+                    <div class="action-buttons">
+                        <button><i class="fas fa-users"></i> Manage Users</button>
+                        <button><i class="fas fa-bolt"></i> Manage Suppliers</button>
+                        <button><i class="fas fa-sun"></i> Manage Projects</button>
+                    </div>
+                </div>
+
+                <div class="recent-activity-panel">
+                    <h2>Recent Activity</h2>
+                    <ul class="activity-list">
+                        <li>
+                            <div class="activity-text">
+                                <div class="activity-title">New Supplier Registered: <strong>GreenTech Power</strong></div>
+                                <div class="activity-time">2 hours ago</div>
+                            </div>
+                            <i class="fas fa-chevron-right activity-arrow"></i>
+                        </li>
+                        <li>
+                            <div class="activity-text">
+                                <div class="activity-title">New Project Submitted: <strong>Solar for Hope</strong></div>
+                                <div class="activity-time">5 hours ago</div>
+                            </div>
+                            <i class="fas fa-chevron-right activity-arrow"></i>
+                        </li>
+                        <li>
+                            <div class="activity-text">
+                                <div class="activity-title">Donation Received: <strong>P5,000 from EcoFund Inc.</strong></div>
+                                <div class="activity-time">1 day ago</div>
+                            </div>
+                            <i class="fas fa-chevron-right activity-arrow"></i>
+                        </li>
+                        <li>
+                            <div class="activity-text">
+                                <div class="activity-title">User Account Updated: <strong>Sarah Discaya (Community)</strong></div>
+                                <div class="activity-time">2 days ago</div>
+                            </div>
+                            <i class="fas fa-chevron-right activity-arrow"></i>
+                        </li>
+                    </ul>
+                    
+                    <div class="activity-footer">
+                        <button class="btn export-btn"><i class="fas fa-download"></i> Export Report</button>
+                        <button class="btn view-all-btn"><i class="fas fa-bell"></i> View All Notifications</button>
+                    </div>
+                </div>
+
+                <div class="system-status-panel">
+                    <h2>System Status</h2>
+                    <div class="status-item">
+                        <span>Platform Uptime:</span>
+                        <span class="status-value green">99.8%</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Pending Supplier Verifications:</span>
+                        <span class="status-value red">3</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Active Crowdfunding Projects:</span>
+                        <span class="status-value">18</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
