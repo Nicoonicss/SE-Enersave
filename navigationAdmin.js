@@ -1,91 +1,148 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // --- 1. ADMIN NAVIGATION LOGIC ---
-    // Map the conceptual names in your HTML to the actual filenames
-    const adminPages = {
-        'dashboard.html': 'dashboard.html', // Placeholder
+
+    // ==========================================
+    // 1. GLOBAL NAVIGATION LOGIC
+    // ==========================================
+    const pageMap = {
+        'dashboard.html': 'adminDashboard.html',
         'users.html': 'usersManagement.html',
         'suppliers.html': 'suppliersManagement.html',
-        'projects.html': 'projects.html' // Placeholder
+        'projects.html': 'projectsManagement.html'
     };
 
     const navItems = document.querySelectorAll('.nav-item');
 
     navItems.forEach(link => {
-        // Get the original href attribute (e.g., "users.html")
         const originalHref = link.getAttribute('href');
-
-        // 1. Update the href to the actual filename
-        if (adminPages[originalHref]) {
-            link.href = adminPages[originalHref];
+        if (pageMap[originalHref]) {
+            link.href = pageMap[originalHref];
         }
-
-        // 2. Highlight Active Link
-        // Check if the current actual URL contains the mapped filename
-        const currentUrl = window.location.pathname.split("/").pop();
-        if (adminPages[originalHref] === currentUrl) {
+        const currentPage = window.location.pathname.split("/").pop();
+        if (pageMap[originalHref] === currentPage) {
             navItems.forEach(n => n.classList.remove('active'));
             link.classList.add('active');
         }
     });
 
-    // --- 2. FILTER BUTTONS INTERACTIVITY ---
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    if (filterBtns.length > 0) {
-        filterBtns.forEach(btn => {
+    // ==========================================
+    // 2. DASHBOARD SPECIFIC INTERACTIONS
+    // ==========================================
+    const quickActions = document.querySelectorAll('.quick-actions-panel button');
+    if(quickActions.length > 0) {
+        quickActions.forEach(btn => {
             btn.addEventListener('click', () => {
-                // Remove active class from all
-                filterBtns.forEach(b => b.classList.remove('active'));
-                // Add active class to clicked
-                btn.classList.add('active');
-                
-                // Simulation: Filter logic would go here
-                console.log(`Filtering by: ${btn.textContent}`);
+                const text = btn.textContent.trim();
+                if(text.includes('Users')) window.location.href = 'usersManagement.html';
+                if(text.includes('Suppliers')) window.location.href = 'suppliersManagement.html';
+                if(text.includes('Projects')) window.location.href = 'projectsManagement.html';
             });
         });
     }
 
-    // --- 3. ACTION LINKS (Edit/Ban/Unban) ---
+    const dashboardBtns = document.querySelectorAll('.export-btn, .view-all-btn');
+    dashboardBtns.forEach(btn => {
+        btn.addEventListener('click', () => alert('Generating Report... 📊'));
+    });
+
+    // ==========================================
+    // 3. FILTER & SORT INTERACTIONS
+    // ==========================================
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    if (filterBtns.length > 0) {
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+    }
+
+    // ==========================================
+    // 4. TABLE ACTIONS (Ban <-> Unban Logic)
+    // ==========================================
+    
     const actionLinks = document.querySelectorAll('.action-link');
+    
     actionLinks.forEach(link => {
         link.addEventListener('click', (e) => {
-            e.preventDefault();
+            e.preventDefault(); 
+            
             const action = link.textContent.trim();
             const row = link.closest('tr');
-            const name = row ? row.cells[1].textContent : 'User';
-
+            const statusSpan = row.querySelector('.status-tag');
+            
+            // --- Ban Logic ---
             if (action === 'Ban') {
-                if(confirm(`Are you sure you want to ban ${name}?`)) {
-                    alert(`${name} has been banned.`);
-                    // Visual update simulation
-                    const statusSpan = row.querySelector('.status-tag');
-                    if(statusSpan) {
-                        statusSpan.textContent = 'Banned';
-                        statusSpan.className = 'status-tag banned';
-                        statusSpan.style.backgroundColor = '#ffebee';
-                        statusSpan.style.color = '#c62828';
-                    }
+                if(confirm('Are you sure you want to BAN this user? 🚫')) {
+                    // 1. Update Status Badge
+                    statusSpan.textContent = 'Banned';
+                    statusSpan.className = 'status-tag banned';
+                    statusSpan.style.backgroundColor = '#ffebee';
+                    statusSpan.style.color = '#c62828';
+
+                    // 2. Change Button to "Unban"
+                    link.textContent = 'Unban';
+                    link.classList.remove('danger'); // Remove red class
+                    link.classList.add('success');   // Add green class
                 }
-            } else if (action === 'Unban') {
-                alert(`${name} has been unbanned.`);
-                 const statusSpan = row.querySelector('.status-tag');
-                    if(statusSpan) {
-                        statusSpan.textContent = 'Active';
-                        statusSpan.className = 'status-tag active';
-                        statusSpan.style.backgroundColor = '#e8f5e9'; // Light green
-                        statusSpan.style.color = '#2e7d32';
-                    }
-            } else {
-                alert(`Opening edit modal for ${name}...`);
+            } 
+            // --- Unban Logic ---
+            else if (action === 'Unban') {
+                if(confirm('Unban this user? ✅')) {
+                    // 1. Update Status Badge
+                    statusSpan.textContent = 'Active';
+                    statusSpan.className = 'status-tag active';
+                    statusSpan.style.backgroundColor = '#e8f5e9';
+                    statusSpan.style.color = '#2e7d32';
+
+                    // 2. Change Button to "Ban"
+                    link.textContent = 'Ban';
+                    link.classList.remove('success'); // Remove green class
+                    link.classList.add('danger');     // Add red class
+                }
+            }
+            // --- Other Actions ---
+            else if (action === 'Edit') {
+                alert('Opening Edit Modal... ✏️');
+            }
+            else if (action === 'Approve') {
+                statusSpan.textContent = 'Active';
+                statusSpan.className = 'status-tag project-active';
+                statusSpan.style.backgroundColor = '#e8f5e9';
+                statusSpan.style.color = '#2e7d32';
+                alert('Project Approved! 🚀');
+            }
+            else if (action === 'Reject') {
+                statusSpan.textContent = 'Rejected';
+                statusSpan.className = 'status-tag project-rejected';
+                statusSpan.style.backgroundColor = '#ffebee';
+                statusSpan.style.color = '#c62828';
+            }
+            else if (action === 'Close') {
+                statusSpan.textContent = 'Completed';
+                statusSpan.className = 'status-tag project-completed';
+                statusSpan.style.backgroundColor = '#e3f2fd';
+                statusSpan.style.color = '#1565c0';
+            }
+            else if (action === 'Restore') {
+                statusSpan.textContent = 'Pending';
+                statusSpan.className = 'status-tag project-pending';
+                statusSpan.style.backgroundColor = '#fff3e0';
+                statusSpan.style.color = '#ef6c00';
+            }
+            else if (action === 'View') {
+                alert('Viewing Project Details... 📄');
             }
         });
     });
 
-    // --- 4. DETAIL PANEL BUTTONS ---
+    // ==========================================
+    // 5. DETAIL PANEL BUTTONS
+    // ==========================================
     const detailBtns = document.querySelectorAll('.details-actions .btn');
     detailBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            alert(`Action "${btn.textContent}" triggered.`);
+            alert(`Action "${btn.textContent}" executed successfully.`);
         });
     });
 });
