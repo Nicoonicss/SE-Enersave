@@ -45,14 +45,39 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==========================================
-    // 3. FILTER & SORT INTERACTIONS
+    // 3. FILTER LOGIC (UPDATED)
     // ==========================================
     const filterBtns = document.querySelectorAll('.filter-btn');
+    // Select all rows from the table body
+    const tableRows = document.querySelectorAll('.data-table tbody tr');
+
     if (filterBtns.length > 0) {
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
+                // 1. Update Button Styling
                 filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
+
+                // 2. Get the Filter Category (e.g., "Admin", "Supplier")
+                const category = btn.textContent.trim();
+
+                // 3. Loop through rows and hide/show based on Role
+                tableRows.forEach(row => {
+                    // The Role is in the 3rd column (index 2)
+                    // Column 0 = ID, Column 1 = Name, Column 2 = Role
+                    const roleCell = row.cells[2]; 
+                    
+                    if (roleCell) {
+                        const roleText = roleCell.textContent.trim();
+
+                        // Logic: Show if "All" OR if role matches category
+                        if (category === 'All' || roleText === category) {
+                            row.style.display = ''; // Default display (show)
+                        } else {
+                            row.style.display = 'none'; // Hide row
+                        }
+                    }
+                });
             });
         });
     }
@@ -71,37 +96,30 @@ document.addEventListener('DOMContentLoaded', () => {
             const row = link.closest('tr');
             const statusSpan = row.querySelector('.status-tag');
             
-            // --- Ban Logic ---
             if (action === 'Ban') {
                 if(confirm('Are you sure you want to BAN this user? 🚫')) {
-                    // 1. Update Status Badge
                     statusSpan.textContent = 'Banned';
                     statusSpan.className = 'status-tag banned';
                     statusSpan.style.backgroundColor = '#ffebee';
                     statusSpan.style.color = '#c62828';
 
-                    // 2. Change Button to "Unban"
                     link.textContent = 'Unban';
-                    link.classList.remove('danger'); // Remove red class
-                    link.classList.add('success');   // Add green class
+                    link.classList.remove('danger');
+                    link.classList.add('success');
                 }
             } 
-            // --- Unban Logic ---
             else if (action === 'Unban') {
                 if(confirm('Unban this user? ✅')) {
-                    // 1. Update Status Badge
                     statusSpan.textContent = 'Active';
                     statusSpan.className = 'status-tag active';
                     statusSpan.style.backgroundColor = '#e8f5e9';
                     statusSpan.style.color = '#2e7d32';
 
-                    // 2. Change Button to "Ban"
                     link.textContent = 'Ban';
-                    link.classList.remove('success'); // Remove green class
-                    link.classList.add('danger');     // Add red class
+                    link.classList.remove('success');
+                    link.classList.add('danger');
                 }
             }
-            // --- Other Actions ---
             else if (action === 'Edit') {
                 alert('Opening Edit Modal... ✏️');
             }
