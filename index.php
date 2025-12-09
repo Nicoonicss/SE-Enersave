@@ -18,5 +18,3 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 
 // Delegate to route definitions and dispatcher
 require __DIR__ . '/routes/web.php';
-
-

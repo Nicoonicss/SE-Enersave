@@ -1,3 +1,9 @@
+<?php
+$pageTitle = 'Learn';
+$role = $_SESSION['user']['role'] ?? '';
+$user = $_SESSION['user'] ?? null;
+$username = $user['username'] ?? 'Educator';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -209,21 +215,27 @@ h1 {
     font-size: 13px;
 }
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
 
 <div class="navbar">
     <div class="nav-left">
-        <img src="Logo.png" alt="logo">
-        <a class = "brand-name"><strong>EnerSave</strong></a>
-        <a href="#" id = "homeDirect">Home</a>
-        <a href="#" style = "color: green;">Learn</a>
-        <a href="#" id = "forumDirect">Community</a>
+        <img src="/images/Logo.png" alt="logo">
+        <a href="/educatorDashboardUI" class="brand-name"><strong>EnerSave</strong></a>
+        <a href="/educatorDashboardUI" id="homeDirect">Home</a>
+        <a href="/educatorLearnUI" style="color: green;">Learn</a>
+        <a href="/educatorCommunityUI" id="forumDirect">Community</a>
     </div>
 
     <div class="nav-right">
-        Educator: Monico
+        <form method="post" action="/toggle-mode" style="display: inline; margin-right: 10px;">
+            <button type="submit" style="background: #2e9e48; color: black; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 13px;">
+                Switch to Student Mode
+            </button>
+        </form>
+        Educator: <?php echo htmlspecialchars($username); ?>
         <div class="nav-avatar"></div>
     </div>
 </div>      
@@ -239,20 +251,20 @@ h1 {
 
     <div class="video-list">
         <div class="video-card">
-            <img src="video.png" class="icon">
-            “How Solar Panels Work”
+            <img src="/images/video.png" class="icon">
+            "How Solar Panels Work"
             <span style="margin-left:auto; color:#666;">(5 mins)</span>
         </div>
 
         <div class="video-card">
-            <img src="video.png" class="icon">
-            “Hydropower Basics”
+            <img src="/images/video.png" class="icon">
+            "Hydropower Basics"
             <span style="margin-left:auto; color:#666;">(8 mins)</span>
         </div>
 
         <div class="video-card">
-            <img src="video.png" class="icon">
-            “Wind Energy Explained”
+            <img src="/images/video.png" class="icon">
+            "Wind Energy Explained"
             <span style="margin-left:auto; color:#666;">(6 mins)</span>
         </div>
     </div>
@@ -264,28 +276,28 @@ h1 {
 
     <div class="guide-list">
         <div class="guide-card">
-            <img src="notes.png" class="icon">
-            “DIY Solar Panel Setup”
+            <img src="/images/notes.png" class="icon">
+            "DIY Solar Panel Setup"
             <button class="download-btn">
-                <img src="download.png" class="icon" style="width:20px;">
+                <i class="fa-solid fa-download"></i>
                 Download
             </button>
         </div>
 
         <div class="guide-card">
-            <img src="notes.png" class="icon">
-            “Wind Generator Guide”
+            <img src="/images/notes.png" class="icon">
+            "Wind Generator Guide"
             <button class="download-btn">
-                <img src="download.png" class="icon" style="width:20px;">
+                <i class="fa-solid fa-download"></i>
                 Download
             </button>
         </div>
 
         <div class="guide-card">
-            <img src="notes.png" class="icon">
-            “Community Energy Tips”
+            <img src="/images/notes.png" class="icon">
+            "Community Energy Tips"
             <button class="download-btn">
-                <img src="download.png" class="icon" style="width:20px;">Download
+                <i class="fa-solid fa-download"></i>Download
             </button>
         </div>
     </div>
@@ -296,9 +308,10 @@ h1 {
 
    <div class="educator-box">
     <button class="educator-upload-btn">Upload New Learning Material</button>
-    <p class="educator-subtext">(Create video lessons, PDF’s, or guides)</p>
+    <p class="educator-subtext">(Create video lessons, PDF's, or guides)</p>
  </div>
 </div>
-<script src="navigationEducator.js"></script>
+<script src="/navigationEducator.js"></script>
 </body>
 </html>
+

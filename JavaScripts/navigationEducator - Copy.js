@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- 1. GLOBAL NAVIGATION LOGIC ---
-    // Define the file paths for Educator pages
+    // Define the routes for Educator pages
     const pages = {
-        'Home': 'educatorDashboardUI.html',
-        'Learn': 'educatorLearnUI.html',
-        'Community': 'educatorCommunityUI.html',
-        'EnerSave': 'educatorDashboardUI.html' // Clicking Brand Name goes to Dashboard
+        'Home': '/educatorDashboardUI',
+        'Learn': '/educatorLearnUI',
+        'Community': '/educatorCommunityUI',
+        'EnerSave': '/educatorDashboardUI' // Clicking Brand Name goes to Dashboard
     };
 
     // UPDATED: We only select links inside .nav-left now
@@ -15,19 +15,19 @@ document.addEventListener('DOMContentLoaded', () => {
     navLinks.forEach(link => {
         const linkText = link.textContent.trim();
         
-        // 1. Assign hrefs based on text content
-        if (pages[linkText]) {
+        // 1. Assign hrefs based on text content (skip if already has href from PHP)
+        if (pages[linkText] && !link.getAttribute('href') || link.getAttribute('href') === '#') {
             link.href = pages[linkText];
         }
 
         // 2. Highlight the active link based on current URL
-        const currentPage = window.location.pathname.split("/").pop();
+        const currentPath = window.location.pathname;
         
         // Only apply styling if the link destination matches the current page
-        if (pages[linkText] === currentPage) {
+        if (pages[linkText] === currentPath) {
             link.style.color = '#2e9e48'; // Green for active
             link.style.fontWeight = '700';
-        } else if (linkText !== 'EnerSave') { 
+        } else if (linkText !== 'EnerSave' && !link.classList.contains('brand-name')) { 
             // Reset others (excluding the brand logo)
             link.style.color = 'black'; 
             link.style.fontWeight = '500';
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnContinue) {
         btnContinue.addEventListener('click', (e) => {
             e.preventDefault();
-            window.location.href = 'educatorLearnUI.html';
+            window.location.href = '/educatorLearnUI';
         });
     }
 
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (linkViewTopic) {
         linkViewTopic.addEventListener('click', (e) => {
             e.preventDefault();
-            window.location.href = 'educatorCommunityUI.html';
+            window.location.href = '/educatorCommunityUI';
         });
     }
 

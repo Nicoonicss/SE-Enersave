@@ -1,9 +1,15 @@
+<?php
+$pageTitle = 'Home';
+$role = $_SESSION['user']['role'] ?? '';
+$user = $_SESSION['user'] ?? null;
+$username = $user['username'] ?? 'Educator';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EnerSave - Student Dashboard</title>
+    <title>EnerSave - Educator Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -346,15 +352,20 @@
 
     <div class="navbar">
     <div class="nav-left">
-        <img src="Logo.png" alt="logo">
-        <a class = "brand-name"><strong>EnerSave</strong></a>
-        <a href="#" id = "homeDirect">Home</a>
-        <a href="#">Learn</a>
-        <a href="#" id = "forumDirect">Community</a>
+        <img src="/images/Logo.png" alt="logo">
+        <a href="/educatorDashboardUI" class="brand-name"><strong>EnerSave</strong></a>
+        <a href="/educatorDashboardUI" id="homeDirect">Home</a>
+        <a href="/educatorLearnUI">Learn</a>
+        <a href="/educatorCommunityUI" id="forumDirect">Community</a>
     </div>
 
     <div class="nav-right">
-        Educator: Monico
+        <form method="post" action="/toggle-mode" style="display: inline; margin-right: 10px;">
+            <button type="submit" style="background: #2e9e48; color: black; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 13px;">
+                Switch to Student Mode
+            </button>
+        </form>
+        Educator: <?php echo htmlspecialchars($username); ?>
         <div class="nav-avatar"></div>
     </div>
 </div>      
@@ -364,7 +375,7 @@
         <section class="welcome-section">
             <h1>WELCOME TO EnerSave!</h1>
             <p class="welcome-subtitle">Your hub for sustainable learning & community projects.</p>
-            <a href="#" class="btn-continue">
+            <a href="/educatorLearnUI" class="btn-continue">
                 Continue Learning <i class="fa-solid fa-play"></i>
             </a>
         </section>
@@ -388,7 +399,7 @@
                         <div class="card-header">Featured Lesson</div>
                         <div class="featured-item">
                             <i class="fa-solid fa-video"></i>
-                            <p class="featured-text">“Understanding Solar Energy Basics” (6 mins)</p>
+                            <p class="featured-text">"Understanding Solar Energy Basics" (6 mins)</p>
                         </div>
                         <a href="#" class="btn-watch">
                             Watch Now <i class="fa-solid fa-play"></i>
@@ -399,9 +410,9 @@
                 <div>
                     <h3 class="section-title">COMMUNITY HIGHLIGHTS</h3>
                     <div class="card">
-                        <p class="forum-topic">Topic: “Best materials for a mini solar panel project?”</p>
+                        <p class="forum-topic">Topic: "Best materials for a mini solar panel project?"</p>
                         <p class="forum-meta">Replies: 12 &nbsp;&nbsp; Posted by: Mark &nbsp;&nbsp; 1h ago</p>
-                        <a href="#" class="link-view">View Topic <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="/educatorCommunityUI" class="link-view">View Topic <i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                 </div>
 
@@ -417,7 +428,7 @@
                             <li class="activity-item">
                                 <div class="activity-icon icon-green"><i class="fa-solid fa-graduation-cap"></i></div>
                                 <div class="activity-content">
-                                    <div class="activity-title">Continue: “DIY Solar Setup”</div>
+                                    <div class="activity-title">Continue: "DIY Solar Setup"</div>
                                     <div class="progress-bar-bg">
                                         <div class="progress-bar-fill"></div>
                                     </div>
@@ -428,7 +439,7 @@
                             <li class="activity-item">
                                 <div class="activity-icon icon-green"><i class="fa-solid fa-video"></i></div>
                                 <div class="activity-content">
-                                    <div class="activity-title">New: “Hydropower 101”</div>
+                                    <div class="activity-title">New: "Hydropower 101"</div>
                                     <p class="activity-subtext">uploaded 2 days ago</p>
                                 </div>
                             </li>
@@ -464,6 +475,7 @@
 
         </div>
     </div>
-    <script src="navigationEducator.js"></script>
+    <script src="/navigationEducator.js"></script>
 </body>
 </html>
+

@@ -1,32 +1,47 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- 1. GLOBAL NAVIGATION LOGIC ---
-    const links = {
-        'EnerSave': 'communityUserUI.html', // Clicking Logo goes Home
-        'Home': 'communityUserUI.html',     // Clicking Home goes to UserUI
-        'Marketplace': 'communityMarketPlaceUI.html',
-        'Projects': 'communityCrowdFundingUI.html', // "Projects" in Navbar
-        'Community': 'communityForumUI.html',
-        'Learn': 'communityLearnUI.html'
+    // --- 1. COMMUNITY NAVIGATION LOGIC ---
+    const communityPages = {
+        'homeDirect': '/communityUserUI',
+        'marketplaceDirect': '/communityMarketplaceUI',
+        'projectDirect': '/communityCrowdfundingUI',
+        'learnDirect': '/communityLearnUI',
+        'forumDirect': '/communityForumUI',
+        'Home': '/communityUserUI',
+        'Marketplace': '/communityMarketplaceUI',
+        'Projects': '/communityCrowdfundingUI',
+        'Learn': '/communityLearnUI',
+        'Community': '/communityForumUI',
+        'EnerSave': '/communityUserUI'
     };
 
-    const navAnchors = document.querySelectorAll('.nav-left a');
-
-    navAnchors.forEach(anchor => {
-        const linkText = anchor.textContent.trim();
+    // Handle all navigation links
+    const navLinks = document.querySelectorAll('.nav-left a');
+    navLinks.forEach(link => {
+        const linkId = link.getAttribute('id');
+        const linkText = link.textContent.trim();
         
-        // Assign Links based on text content
-        if (links[linkText]) {
-            anchor.href = links[linkText];
+        // Assign hrefs based on ID or text content
+        if (linkId && communityPages[linkId]) {
+            if (!link.getAttribute('href') || link.getAttribute('href') === '#') {
+                link.href = communityPages[linkId];
+            }
+        } else if (communityPages[linkText]) {
+            if (!link.getAttribute('href') || link.getAttribute('href') === '#') {
+                link.href = communityPages[linkText];
+            }
         }
 
-        // Highlight Active Page Logic
-        // We check if the current browser URL includes the file name associated with the link
-        const currentFile = links[linkText];
-        if(currentFile && window.location.href.includes(currentFile)) {
-            anchor.style.color = 'green';
-        } else if (linkText !== 'EnerSave') {
-            anchor.style.color = 'black';
+        // Highlight active link based on current URL
+        const currentPath = window.location.pathname;
+        const linkHref = link.getAttribute('href');
+        
+        if (linkHref && linkHref === currentPath) {
+            link.style.color = '#2e9e48'; // Green for active
+            link.style.fontWeight = '700';
+        } else if (linkText !== 'EnerSave' && !link.classList.contains('brand-name')) {
+            link.style.color = 'black';
+            link.style.fontWeight = '500';
         }
     });
 
@@ -36,14 +51,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const heroMarketBtn = document.querySelector('.hero-buttons .btn-green');
     if(heroMarketBtn) {
         heroMarketBtn.addEventListener('click', () => {
-            window.location.href = 'communityMarketPlaceUI.html';
+            window.location.href = '/communityMarketplaceUI';
         });
     }
 
     const heroLearnBtn = document.querySelector('.hero-buttons .btn-white');
     if(heroLearnBtn) {
         heroLearnBtn.addEventListener('click', () => {
-            window.location.href = 'communityLearnUI.html';
+            window.location.href = '/communityLearnUI';
         });
     }
 
@@ -51,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const viewProjectBtn = document.querySelector('.view-project');
     if(viewProjectBtn) {
         viewProjectBtn.addEventListener('click', () => {
-            window.location.href = 'communityCrowdFundingUI.html';
+            window.location.href = '/communityCrowdfundingUI';
         });
     }
 

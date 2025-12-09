@@ -2,47 +2,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 1. SUPPLIER NAVIGATION LOGIC ---
     const supplierPages = {
-        'homeDirect': 'SupplierDashBoard.html',
-        'marketplaceDirect': 'SupplierMarketPlace.html',
-        'Community': 'SupplierCommunity.html',
-        'EnerSave': 'SupplierDashBoard.html'
+        'homeDirect': '/SupplierDashBoard',
+        'marketplaceDirect': '/SupplierMarketPlace',
+        'Community': '/SupplierCommunity',
+        'Dashboard': '/SupplierDashBoard',
+        'EnerSave': '/SupplierDashBoard'
     };
 
-    // Handle ID-based links (homeDirect, marketplaceDirect)
-    const idLinks = ['homeDirect', 'marketplaceDirect'];
-    idLinks.forEach(id => {
-        const linkElement = document.getElementById(id);
-        if (linkElement) {
-            linkElement.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.location.href = supplierPages[id];
-            });
-            
-            // Highlight Logic for IDs
-            const targetPage = supplierPages[id];
-            const currentPage = window.location.pathname.split("/").pop();
-            if(targetPage === currentPage) {
-                linkElement.style.color = 'green';
-                linkElement.style.fontWeight = '700';
-            } else {
-                 linkElement.style.color = 'black';
+    // Handle all navigation links
+    const navLinks = document.querySelectorAll('.nav-left a');
+    navLinks.forEach(link => {
+        const linkId = link.getAttribute('id');
+        const linkText = link.textContent.trim();
+        
+        // Assign hrefs based on ID or text content
+        if (linkId && supplierPages[linkId]) {
+            if (!link.getAttribute('href') || link.getAttribute('href') === '#') {
+                link.href = supplierPages[linkId];
+            }
+        } else if (supplierPages[linkText]) {
+            if (!link.getAttribute('href') || link.getAttribute('href') === '#') {
+                link.href = supplierPages[linkText];
             }
         }
-    });
 
-    // Handle Text-based links (Community, Logo)
-    const textLinks = document.querySelectorAll('.nav-left a:not([id])'); // Selects links without IDs
-    textLinks.forEach(link => {
-        const text = link.textContent.trim();
-        if (supplierPages[text]) {
-            link.href = supplierPages[text];
-            
-            // Highlight Logic
-            const currentPage = window.location.pathname.split("/").pop();
-            if(supplierPages[text] === currentPage) {
-                link.style.color = 'green';
-                link.style.fontWeight = '700';
-            }
+        // Highlight active link based on current URL
+        const currentPath = window.location.pathname;
+        const linkHref = link.getAttribute('href');
+        
+        if (linkHref && linkHref === currentPath) {
+            link.style.color = '#2e9e48'; // Green for active
+            link.style.fontWeight = '700';
+        } else if (linkText !== 'EnerSave' && !link.classList.contains('brand-name')) {
+            link.style.color = 'black';
+            link.style.fontWeight = '500';
         }
     });
 

@@ -1,3 +1,9 @@
+<?php
+$pageTitle = 'Forum';
+$role = $_SESSION['user']['role'] ?? '';
+$user = $_SESSION['user'] ?? null;
+$username = $user['username'] ?? 'Educator';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -192,15 +198,20 @@
 
  <div class="navbar">
     <div class="nav-left">
-        <img src="Logo.png" alt="logo">
-        <a class = "brand-name"><strong>EnerSave</strong></a>
-        <a href="#" id = "homeDirect">Home</a>
-        <a href="#" id = "learnDirect">Learn</a>
-        <a href="#"style = "color: green;">Community</a>
+        <img src="/images/Logo.png" alt="logo">
+        <a href="/educatorDashboardUI" class="brand-name"><strong>EnerSave</strong></a>
+        <a href="/educatorDashboardUI" id="homeDirect">Home</a>
+        <a href="/educatorLearnUI" id="learnDirect">Learn</a>
+        <a href="/educatorCommunityUI" style="color: green;">Community</a>
     </div>
 
     <div class="nav-right">
-        Educator: Monico
+        <form method="post" action="/toggle-mode" style="display: inline; margin-right: 10px;">
+            <button type="submit" style="background: #2e9e48; color: black; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 13px;">
+                Switch to Student Mode
+            </button>
+        </form>
+        Educator: <?php echo htmlspecialchars($username); ?>
         <div class="nav-avatar"></div>
     </div>
 </div>  
@@ -233,35 +244,35 @@
 </div>
 
     <div class="discussion">
-        <div class="title">“Best Solar Panel for Home Use?”</div>
+        <div class="title">"Best Solar Panel for Home Use?"</div>
         <div class="meta">(12 replies)</div>
         <div class="buttons">
-            <div class="btn"><img src = "Eye.png">View Thread</div>
-            <div class="btn"><img src = "Reply.png">Reply</div>
+            <div class="btn"><img src="/images/Eye.png">View Thread</div>
+            <div class="btn"><img src="/images/Reply.png">Reply</div>
             <div class="btn">Pin</div>
-            <div class="btn">Mark Helpful<img src = "mark.png"></div>
+            <div class="btn">Mark Helpful<img src="/images/mark.png"></div>
         </div>
     </div>
 
     <div class="discussion">
-        <div class="title">“How to Apply for CrowdFunding?”</div>
+        <div class="title">"How to Apply for CrowdFunding?"</div>
         <div class="meta">(8 replies)</div>
         <div class="buttons">
-            <div class="btn"><img src = "Eye.png">View Thread</div>
-            <div class="btn"><img src = "Eye.png">Reply</div>
+            <div class="btn"><img src="/images/Eye.png">View Thread</div>
+            <div class="btn"><img src="/images/Reply.png">Reply</div>
             <div class="btn">Pin</div>
-            <div class="btn">Mark Helpful<img src = "mark.png"></div>
+            <div class="btn">Mark Helpful<img src="/images/mark.png"></div>
         </div>
     </div>
 
     <div class="discussion">
-        <div class="title">“Tips for Maintaining Wind Turbines?”</div>
+        <div class="title">"Tips for Maintaining Wind Turbines?"</div>
         <div class="meta">(4 replies)</div>
         <div class="buttons">
-            <div class="btn"><img src = "Eye.png">View Thread</div>
-            <div class="btn"><img src = "Eye.png">Reply</div>
+            <div class="btn"><img src="/images/Eye.png">View Thread</div>
+            <div class="btn"><img src="/images/Reply.png">Reply</div>
             <div class="btn">Pin</div>
-            <div class="btn">Mark Helpful<img src = "mark.png"></div>
+            <div class="btn">Mark Helpful<img src="/images/mark.png"></div>
         </div>
     </div>
 
@@ -270,6 +281,7 @@
         <span class="report">Report Post 🚩</span>
     </footer>
 </div>
-<script src="navigationEducator.js"></script>
+<script src="/navigationEducator.js"></script>
 </body>
 </html>
+

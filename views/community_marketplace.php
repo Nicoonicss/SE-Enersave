@@ -1,0 +1,394 @@
+<?php
+$pageTitle = 'Marketplace';
+$role = $_SESSION['user']['role'] ?? '';
+$user = $_SESSION['user'] ?? null;
+$username = $user['username'] ?? 'Community User';
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Marketplace</title>
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+   margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f7f7f7;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+img {
+    max-width: 100%;
+    border-radius: 12px 12px 0 0;
+}
+
+button {
+    cursor: pointer;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background: white;
+    border-bottom: 1px solid #e0e0e0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 15px;
+}
+
+.nav-left img {
+    width: 30px;
+}
+
+.nav-left a,
+.nav-right a {
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #ffcc00;
+    cursor: pointer;
+}
+
+.brand-name {
+    font-weight: 900;
+    font-size: 18px;
+}
+
+header {
+    padding: 20px 30px 10px 30px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+header p {
+    margin: 6px 0 0 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.filters-search {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    padding: 0 30px 20px 30px;
+}
+
+.filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    background-color: #ddd;
+    color: #444;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.filter-btn.active {
+    background-color: lightgrey;
+    color: #333;
+}
+
+.filter-btn.wind {
+    background-color: lightgrey;
+    color: #333;
+}
+
+.filter-btn.All{
+    background-color: #98FB98;
+    color: green;
+}
+.sort-select {
+    margin-left: 10px;
+    padding: 6px 10px;
+    border-radius: 15px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.search-input {
+    margin-left: auto;
+    flex-grow: 1;
+    max-width: 300px;
+    padding: 8px 14px;
+    border-radius: 15px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    color: #666;
+}
+
+.product-listings {
+    padding: 0 30px 30px 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.product-card {
+    background: #f8f8f8;
+    border-radius: 18px;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 0.05);
+    padding-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+    box-shadow: 0 8px 18px rgb(0 0 0 / 0.1);
+}
+
+.product-image {
+    border-radius: 18px 18px 0 0;
+    overflow: hidden;
+    height: 130px;
+    background: #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.product-image img {
+    width: 215px; 
+    height: auto; 
+    object-fit: contain;
+}
+
+.product-info {
+    padding: 12px 15px 0 15px;
+    flex-grow: 1;
+}
+
+.product-info h3 {
+    font-weight: 700;
+    font-size: 15px;
+    margin: 0 0 6px 0;
+    line-height: 1.1;
+}
+
+.product-price {
+    color: #2e7d32;
+    font-weight: 700;
+    margin: 0 0 5px 0;
+    font-size: 14px;
+}
+
+.product-company {
+    color: #666;
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 0 15px 15px 15px;
+}
+
+.btn-buy {
+    background: #2e7d32;
+    color: white;
+    border: none;
+    font-weight: 700;
+    padding: 8px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+}
+
+.btn-buy:hover {
+    background: #1b4d1b;
+}
+
+.btn-add {
+    background: #a5d6a7;
+    color: #1b5e20;
+    border: none;
+    font-weight: 600;
+    padding: 6px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+}
+
+.btn-add:hover {
+    background: #81c784;
+}
+
+.btn-details {
+    background: white;
+    border: 1px solid #ccc;
+    font-weight: 700;
+    padding: 6px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 13px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-details-wishlist {
+    display: flex;
+    gap: 6px;
+}
+
+.btn-details {
+    flex: 1; 
+}
+
+.btn-wishlist {
+    width: 40px;      
+    padding: 6px 0;   
+    font-size: 16px;
+    background: white;
+    border: 1px solid #ccc;
+    color: #e53935;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-wishlist:hover {
+    background-color: #ffe6e6;
+    border-color: #e53935;
+    transform: scale(1.1);
+}
+
+
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #2e7d32;
+    color: black;
+    font-weight: 700;
+    border-radius: 20px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    border: none;
+    box-shadow: 0 3px 8px rgb(0 0 0 / 0.15);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.back-to-top:hover {
+    background: #1b4d1b;
+}
+</style>
+</head>
+<body>
+
+<div class="navbar">
+    <div class="nav-left">
+        <img src="/images/Logo.png" alt="logo">
+        <a href="/communityUserUI" class="brand-name"><strong>EnerSave</strong></a>
+        <a href="/communityUserUI" id="homeDirect">Home</a>
+        <a href="/communityMarketplaceUI" style="color: green;">Marketplace</a>
+        <a href="/communityCrowdfundingUI" id="projectDirect">Projects</a>
+        <a href="/communityLearnUI" id="learnDirect">Learn</a>
+        <a href="/communityForumUI" id="forumDirect">Community</a>
+    </div>
+
+    <div class="nav-right">
+        Community: <?php echo htmlspecialchars($username); ?>
+        <div class="nav-avatar"></div>
+    </div>
+</div>
+
+<header>
+  <h1>MARKETPLACE</h1>
+  <p>Find affordable renewable energy solutions near you.</p>
+</header>
+
+<div class="filters-search">
+  <div class="filters">
+    <button class="filter-btn active">Solar</button>
+    <button class="filter-btn wind">Wind</button>
+    <button class="filter-btn Hydro">Hydro</button>
+    <button class="filter-btn All">All</button>
+    <select class="sort-select" aria-label="Sort products">
+      <option>Sort: Price</option>
+      <option>Sort: Price</option>
+      <option>Sort: Popularity</option>
+    </select>
+  </div>
+  <input class="search-input" type="search" placeholder="Search Product..." />
+</div>
+
+<section class="product-listings">
+
+  <?php for ($i = 0; $i < 18; $i++): ?>
+  <article class="product-card">
+  <div class="product-image">
+    <img src="/images/product.png" alt="Solar Starter Kit" />
+  </div>
+  <div class="product-info">
+    <h3>Solar Starter Kit</h3>
+    <p class="product-price">₱5,000</p>
+    <p class="product-company">GreenTech</p>
+  </div>
+  <div class="btn-group">
+    <button class="btn-buy">Buy Now</button>
+    <button class="btn-add">Add to Cart</button>
+    <div class="btn-details-wishlist">
+      <button class="btn-details">View Details</button>
+      <button class="btn-wishlist" aria-label="Add to Wishlist">❤️</button>
+    </div>
+  </div>
+</article>
+  <?php endfor; ?>
+
+</section>
+
+<button class="back-to-top" aria-label="Back to top">Back to Top ⬆️</button>
+<script src="/navigationCommunity.js"></script>
+</body>
+</html>
+

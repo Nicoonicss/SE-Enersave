@@ -1,0 +1,141 @@
+<?php
+$pageTitle = 'Users Management';
+$user = $_SESSION['user'] ?? null;
+$username = $user['username'] ?? 'Admin';
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users Management - EnerSave</title>
+    <link rel="stylesheet" href="/styles.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">
+            <img src="/images/Logo.png" alt="EnerSave Logo">
+            EnerSave
+        </div>
+        <nav class="main-nav">
+            <a href="/admin" class="nav-item">Dashboard</a>
+            <a href="/admin/users" class="nav-item active">Users</a>
+            <a href="/admin/suppliers" class="nav-item">Suppliers</a>
+            <a href="/admin/projects" class="nav-item">Projects</a>
+        </nav>
+        <div class="admin-profile">
+            <span>Admin: <?php echo htmlspecialchars($username); ?></span>
+            <div class="avatar"><i class="fas fa-user-circle"></i></div>
+        </div>
+    </header>
+
+    <main class="dashboard-container">
+        <section id="users" class="page-content active-page">
+            <h1 class="page-title">USERS MANAGEMENT</h1>
+            <p class="page-subtitle">Manage all users in the EnerSave platform.</p>
+
+            <div class="data-management-panel">
+                <div class="filter-bar">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Enter name, email, or ID">
+                    </div>
+                    <div class="role-filter">
+                        <span>Filter by: Role</span>
+                        <button class="filter-btn active">All</button>
+                        <button class="filter-btn">Admin</button>
+                        <button class="filter-btn">Supplier</button>
+                        <button class="filter-btn">Community</button>
+                    </div>
+                    <div class="sort-by">
+                        <span>Sort by: Name <i class="fas fa-chevron-up"></i></span>
+                        <span>Status <i class="fas fa-chevron-up"></i></span>
+                    </div>
+                </div>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Full Name</th>
+                            <th>Role</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1024</td>
+                            <td>Steven Mitchell</td>
+                            <td>Admin</td>
+                            <td>s.mitchell@gmail.com</td>
+                            <td><span class="status-tag active">Active</span></td>
+                            <td><a href="#" class="action-link">Edit</a> / <a href="#" class="action-link danger">Ban</a></td>
+                        </tr>
+                        <tr>
+                            <td>1025</td>
+                            <td>Jer Erick</td>
+                            <td>Community</td>
+                            <td>jer.erick@gmail.com</td>
+                            <td><span class="status-tag active">Active</span></td>
+                            <td><a href="#" class="action-link">Edit</a> / <a href="#" class="action-link danger">Ban</a></td>
+                        </tr>
+                        <tr>
+                            <td>1026</td>
+                            <td>Monico Vian</td>
+                            <td>Community</td>
+                            <td>monico.vian@gmail.com</td>
+                            <td><span class="status-tag active">Active</span></td>
+                            <td><a href="#" class="action-link">Edit</a> / <a href="#" class="action-link danger">Ban</a></td>
+                        </tr>
+                        <tr>
+                            <td>1027</td>
+                            <td>Sarah Discaya</td>
+                            <td>Supplier</td>
+                            <td>sarah.discaya@gmail.com</td>
+                            <td><span class="status-tag banned">Banned</span></td>
+                            <td><a href="#" class="action-link">Edit</a> / <a href="#" class="action-link success">Unban</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 class="section-title">Users Details Panel</h2>
+            <div class="details-panel">
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">Full Name</span>
+                        <strong class="detail-value">Crist Briand Brader</strong>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Role</span>
+                        <strong class="detail-value">Community</strong>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Status</span>
+                        <strong class="detail-value status-active">Active</strong>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Email</span>
+                        <strong class="detail-value">cristbriand.brader.25@usjr.edu.ph</strong>
+                    </div>
+                    <div class="detail-item" style="grid-column: 2;">
+                        <span class="detail-label">Joined</span>
+                        <strong class="detail-value">Nov 2, 2025</strong>
+                    </div>
+                </div>
+                <div class="details-actions">
+                    <button class="btn btn-success">Update Role</button>
+                    <button class="btn btn-warning">Deactivate Account</button>
+                    <button class="btn btn-dark">Reset Password</button>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="/JavaScripts/navigationAdmin.js"></script>
+</body>
+</html>
+

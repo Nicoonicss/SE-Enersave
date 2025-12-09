@@ -11,7 +11,24 @@
 </head>
 <body>
     <div class="auth-wrap">
-        <!-- Left Column - Form Section -->
+        <!-- Left Column - Promotional Section -->
+        <div class="auth-promo-section">
+            <div class="promo-content">
+                <div class="promo-brand-top">
+                    <img src="/images/Logo.png" alt="Enersave logo">
+                    <div class="promo-brand-name-top">EnerSave</div>
+                </div>
+                <div class="promo-main-text">
+                    <div class="promo-headline">Powering Communities,</div>
+                    <div class="promo-headline-large">Sustainably.</div>
+                </div>
+                <div class="promo-call-to-action">
+                    Join Enersave to bring clean energy solutions to remote and rural areas around the globe.
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - Form Section -->
         <div class="auth-form-section">
             <div class="auth-card">
                 <div class="title" style="text-transform: uppercase;">LOG IN TO YOUR ACCOUNT</div>
@@ -59,23 +76,6 @@
                     </div>
                 </form>
                 <div class="footer-link">Don't have an account? <a href="/register" style="color: #27ae60;">Register Here</a></div>
-            </div>
-        </div>
-
-        <!-- Right Column - Promotional Section -->
-        <div class="auth-promo-section">
-            <div class="promo-content">
-                <div class="promo-brand-top">
-                    <img src="/images/logo.svg" alt="Enersave logo">
-                    <div class="promo-brand-name-top">EnerSave</div>
-                </div>
-                <div class="promo-main-text">
-                    <div class="promo-headline">Powering Communities,</div>
-                    <div class="promo-headline-large">Sustainably.</div>
-                </div>
-                <div class="promo-call-to-action">
-                    Join Enersave to bring clean energy solutions to remote and rural areas around the globe.
-                </div>
             </div>
         </div>
     </div>

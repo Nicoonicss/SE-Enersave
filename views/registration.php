@@ -15,7 +15,7 @@
         <div class="auth-promo-section">
             <div class="promo-content">
                 <div class="promo-brand-top">
-                    <img src="/images/logo.svg" alt="Enersave logo">
+                    <img src="/images/Logo.png" alt="Enersave logo">
                     <div class="promo-brand-name-top">EnerSave</div>
                 </div>
                 <div class="promo-main-text">
@@ -101,8 +101,7 @@
                             <button type="button" class="role-btn" data-role="COMMUNITY_USER" onclick="selectRole(this, 'COMMUNITY_USER')">Community User</button>
                             <button type="button" class="role-btn" data-role="SUPPLIER_INSTALLER" onclick="selectRole(this, 'SUPPLIER_INSTALLER')">Supplier</button>
                             <button type="button" class="role-btn" data-role="DONOR_NGO" onclick="selectRole(this, 'DONOR_NGO')">Donor</button>
-                            <button type="button" class="role-btn" data-role="EDUCATOR_ADVOCATE" onclick="selectRole(this, 'EDUCATOR_ADVOCATE')">Educator</button>
-                            <button type="button" class="role-btn" data-role="ADMIN" onclick="selectRole(this, 'ADMIN')">Admin</button>
+                            <button type="button" class="role-btn" data-role="EDUCATOR_ADVOCATE" onclick="selectRole(this, 'EDUCATOR_ADVOCATE')">Educator/Student</button>
                         </div>
                         <input type="hidden" id="role" name="role" required>
                         <span id="role-error" class="error-message" style="display: none; color: #ef4444; font-size: 0.8125rem; margin-top: 4px;">Please select a role</span>

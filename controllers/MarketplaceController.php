@@ -6,20 +6,28 @@ class MarketplaceController
 {
     public function index(): void
     {
-        $productModel = new Product();
+        $role = $_SESSION['user']['role'] ?? '';
         
-        // Get filter and search parameters
-        $category = $_GET['category'] ?? null;
-        $search = $_GET['search'] ?? null;
-        
-        // Fetch products
-        if ($search) {
-            $products = $productModel->search($search);
+        if ($role === 'SUPPLIER_INSTALLER') {
+            include __DIR__ . '/../views/supplier_marketplace.php';
+        } else if ($role === 'COMMUNITY_USER') {
+            include __DIR__ . '/../views/community_marketplace.php';
         } else {
-            $products = $productModel->findAll($category);
+            $productModel = new Product();
+            
+            // Get filter and search parameters
+            $category = $_GET['category'] ?? null;
+            $search = $_GET['search'] ?? null;
+            
+            // Fetch products
+            if ($search) {
+                $products = $productModel->search($search);
+            } else {
+                $products = $productModel->findAll($category);
+            }
+            
+            include __DIR__ . '/../views/marketplace.php';
         }
-        
-        include __DIR__ . '/../views/marketplace.php';
     }
 }
 

@@ -78,6 +78,44 @@ $router->get('/home', function () {
     (new HomeController())->index();
 });
 
+// Educator specific routes
+$router->get('/educatorDashboardUI', function () {
+    AuthHelper::requireRole(['EDUCATOR_ADVOCATE']);
+    $_SESSION['view_mode'] = 'educator';
+    (new HomeController())->index();
+});
+
+$router->get('/educatorLearnUI', function () {
+    AuthHelper::requireRole(['EDUCATOR_ADVOCATE']);
+    $_SESSION['view_mode'] = 'educator';
+    (new LearnController())->index();
+});
+
+$router->get('/educatorCommunityUI', function () {
+    AuthHelper::requireRole(['EDUCATOR_ADVOCATE']);
+    $_SESSION['view_mode'] = 'educator';
+    (new ForumController())->index();
+});
+
+// Student specific routes
+$router->get('/StudentDashBoard', function () {
+    AuthHelper::requireRole(['COMMUNITY_USER', 'EDUCATOR_ADVOCATE']);
+    $_SESSION['view_mode'] = 'student';
+    (new HomeController())->index();
+});
+
+$router->get('/StudentLearning', function () {
+    AuthHelper::requireRole(['COMMUNITY_USER', 'EDUCATOR_ADVOCATE']);
+    $_SESSION['view_mode'] = 'student';
+    (new LearnController())->index();
+});
+
+$router->get('/StudentCommunity', function () {
+    AuthHelper::requireRole(['COMMUNITY_USER', 'EDUCATOR_ADVOCATE']);
+    $_SESSION['view_mode'] = 'student';
+    (new ForumController())->index();
+});
+
 $router->get('/marketplace', function () {
     AuthHelper::requireRole(['COMMUNITY_USER', 'SUPPLIER_INSTALLER', 'DONOR_NGO']);
     (new MarketplaceController())->index();
@@ -104,6 +142,64 @@ $router->get('/dashboard', function () {
     (new DashboardController())->index();
 });
 
+// Supplier specific routes
+$router->get('/SupplierDashBoard', function () {
+    AuthHelper::requireRole(['SUPPLIER_INSTALLER']);
+    (new DashboardController())->index();
+});
+
+$router->get('/SupplierMarketPlace', function () {
+    AuthHelper::requireRole(['SUPPLIER_INSTALLER']);
+    (new MarketplaceController())->index();
+});
+
+$router->get('/SupplierCommunity', function () {
+    AuthHelper::requireRole(['SUPPLIER_INSTALLER']);
+    (new ForumController())->index();
+});
+
+// Donor specific routes
+$router->get('/donorHomeUI', function () {
+    AuthHelper::requireRole(['DONOR_NGO']);
+    (new HomeController())->index();
+});
+
+$router->get('/donorCrowdfundingUI', function () {
+    AuthHelper::requireRole(['DONOR_NGO']);
+    (new ProjectsController())->index();
+});
+
+$router->get('/donorCommunityUI', function () {
+    AuthHelper::requireRole(['DONOR_NGO']);
+    (new CommunityController())->index();
+});
+
+// Community User specific routes
+$router->get('/communityUserUI', function () {
+    AuthHelper::requireRole(['COMMUNITY_USER']);
+    (new HomeController())->index();
+});
+
+$router->get('/communityLearnUI', function () {
+    AuthHelper::requireRole(['COMMUNITY_USER']);
+    (new LearnController())->index();
+});
+
+$router->get('/communityMarketplaceUI', function () {
+    AuthHelper::requireRole(['COMMUNITY_USER']);
+    (new MarketplaceController())->index();
+});
+
+$router->get('/communityForumUI', function () {
+    AuthHelper::requireRole(['COMMUNITY_USER']);
+    (new ForumController())->index();
+});
+
+$router->get('/communityCrowdfundingUI', function () {
+    AuthHelper::requireRole(['COMMUNITY_USER']);
+    (new ProjectsController())->index();
+});
+
 $router->get('/products/create', function () {
     AuthHelper::requireRole(['SUPPLIER_INSTALLER']);
     (new ProductController())->create();
@@ -120,14 +216,70 @@ $router->get('/products', function () {
 });
 
 $router->get('/forum', function () {
-    AuthHelper::requireRole(['SUPPLIER_INSTALLER', 'EDUCATOR_ADVOCATE']);
+    AuthHelper::requireRole(['SUPPLIER_INSTALLER', 'EDUCATOR_ADVOCATE', 'COMMUNITY_USER']);
     (new ForumController())->index();
+});
+
+// Toggle mode for educator/student
+$router->post('/toggle-mode', function () {
+    AuthHelper::requireAuth();
+    $role = $_SESSION['user']['role'] ?? '';
+    
+    if ($role === 'EDUCATOR_ADVOCATE') {
+        $currentMode = $_SESSION['view_mode'] ?? 'educator';
+        $_SESSION['view_mode'] = ($currentMode === 'educator') ? 'student' : 'educator';
+        
+        // Redirect to appropriate page based on new mode
+        $currentPath = parse_url($_SERVER['HTTP_REFERER'] ?? '/', PHP_URL_PATH);
+        if ($currentMode === 'educator') {
+            // Switching to student mode
+            if (strpos($currentPath, 'educatorDashboardUI') !== false) {
+                header('Location: /StudentDashBoard');
+            } else if (strpos($currentPath, 'educatorLearnUI') !== false) {
+                header('Location: /StudentLearning');
+            } else if (strpos($currentPath, 'educatorCommunityUI') !== false) {
+                header('Location: /StudentCommunity');
+            } else {
+                header('Location: /StudentDashBoard');
+            }
+        } else {
+            // Switching to educator mode
+            if (strpos($currentPath, 'StudentDashBoard') !== false) {
+                header('Location: /educatorDashboardUI');
+            } else if (strpos($currentPath, 'StudentLearning') !== false) {
+                header('Location: /educatorLearnUI');
+            } else if (strpos($currentPath, 'StudentCommunity') !== false) {
+                header('Location: /educatorCommunityUI');
+            } else {
+                header('Location: /educatorDashboardUI');
+            }
+        }
+        exit;
+    }
+    
+    header('Location: /home');
+    exit;
 });
 
 // Admin routes
 $router->get('/admin', function () {
     AuthHelper::requireRole(['ADMIN']);
     (new AdminController())->index();
+});
+
+$router->get('/admin/users', function () {
+    AuthHelper::requireRole(['ADMIN']);
+    (new AdminController())->users();
+});
+
+$router->get('/admin/suppliers', function () {
+    AuthHelper::requireRole(['ADMIN']);
+    (new AdminController())->suppliers();
+});
+
+$router->get('/admin/projects', function () {
+    AuthHelper::requireRole(['ADMIN']);
+    (new AdminController())->projects();
 });
 
 $router->get('/dashboard', function () {

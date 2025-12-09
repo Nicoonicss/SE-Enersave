@@ -90,7 +90,7 @@ body {
     position: relative;
 }
 
-/* Left Column - Form Section */
+/* Right Column - Form Section */
 .auth-form-section {
     flex: 1;
     background: var(--white);
@@ -256,7 +256,7 @@ form {
     text-decoration: underline;
 }
 
-/* Right Column - Promotional Section */
+/* Left Column - Promotional Section */
 .auth-promo-section {
     flex: 1;
     position: relative;
@@ -276,7 +276,7 @@ form {
     height: 100%;
     left: 0px;
     top: 0px;
-    background: url('/images/solarpanelfarm.png');
+    background: url('/images/image 23.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -328,7 +328,6 @@ form {
     width: 40px;
     height: 40px;
     object-fit: contain;
-    filter: brightness(0) invert(1);
 }
 
 .promo-brand-name-top {
