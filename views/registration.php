@@ -1,252 +1,354 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create account · Enersave</title>
-    <link rel="stylesheet" href="/css/auth.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registration - EnerSave</title>
+    <style>
+    body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f5f5;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.left-section {
+    flex: 1.2;
+    position: relative;
+    background-image: url("/images/image 23.png"); 
+    background-size: cover;
+    background-position: center;
+}
+
+.logo-wrapper {
+    position: absolute; 
+    top: 20px;         
+    left: 40px;  
+    display: flex;     
+    align-items: center; 
+    gap: 10px;            
+    z-index: 2;
+}
+
+.logo-wrapper .logo {
+    width: 25px;       
+    height: auto;      
+}
+
+.logo-wrapper .app-name {
+    color: white;        
+    font-size: 28px;   
+    font-weight: bold;   
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 1;
+}
+
+.left-content {
+    position: absolute;
+    bottom: 50px;
+    left: 40px;
+    transform: translate(10%,-100%);
+    color: white;
+    max-width: 450px;
+    z-index: 2;
+}
+
+.left-content .logo {
+    width: 25px;
+    height: auto;
+}
+
+.left-content h1 {
+    font-size: 80px;       
+    font-weight: bold;
+    line-height: 1.2;
+    margin-bottom: 15px;
+    text-align: left;
+    white-space: nowrap;    
+}
+
+.left-content h1 .subline {
+    display: block;        
+    font-size: 48px;      
+    white-space: normal;   
+}
+
+.left-content p {
+    font-size: 16px;
+    line-height: 22px;
+}
+
+.right-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f0f0f0;
+}
+
+.form-box {
+    width: 80%;
+    max-width: 400px;
+}
+
+h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.welcome {
+    margin-bottom: 25px;
+    color: #333;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+    font-size: 14px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+.password-wrapper {
+    position: relative;
+}
+
+.toggle-eye {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 18px;
+}
+
+.forgot {
+    display: block;
+    text-align: right;
+    color: green;
+    font-size: 14px;
+    margin-bottom: 20px;
+    text-decoration: none;
+}
+
+.register-btn {
+    width: 100%;
+    padding: 14px;
+    background: #239c42;
+    color: black;
+    border: none;
+    border-radius: 6px;
+    font-size: 17px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 25px;
+    box-sizing: border-box;
+}
+
+.register {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.register a {
+    color: green;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.role-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+    margin-bottom: 15px;
+}
+
+.role-btn {
+    padding: 10px 20px;
+    border: 1.5px solid #ccc;
+    border-radius: 6px;
+    background: white;
+    color: #333;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 1;
+    min-width: 100px;
+}
+
+.role-btn:hover {
+    border-color: #239c42;
+    background: #f0f0f0;
+}
+
+.role-btn.selected {
+    background: #239c42;
+    color: white;
+    border-color: #239c42;
+}
+
+.error-message {
+    color: #ef4444;
+    font-size: 12px;
+    margin-top: 4px;
+    display: none;
+}
+</style>
 </head>
 <body>
-    <div class="auth-wrap">
-        <!-- Left Column - Promotional Section -->
-        <div class="auth-promo-section">
-            <div class="promo-content">
-                <div class="promo-brand-top">
-                    <img src="/images/Logo.png" alt="Enersave logo">
-                    <div class="promo-brand-name-top">EnerSave</div>
-                </div>
-                <div class="promo-main-text">
-                    <div class="promo-headline">Powering Communities,</div>
-                    <div class="promo-headline-large">Sustainably.</div>
-                </div>
-                <div class="promo-call-to-action">
-                    Join Enersave to bring clean energy solutions to remote and rural areas around the globe.
-                </div>
-            </div>
-        </div>
+<div class="container">
 
-        <!-- Right Column - Form Section -->
-        <div class="auth-form-section">
-            <div class="auth-card">
-                <div class="title" style="text-transform: uppercase;">CREATE YOUR ACCOUNT</div>
-                <div class="muted">Join our community and start making a difference today</div>
-                <form method="post" action="/register" id="registerForm">
-                    <div class="field">
-                        <label for="fullname">FULL NAME</label>
-                        <input 
-                            id="fullname" 
-                            type="text" 
-                            name="username" 
-                            placeholder="Enter your full name"
-                            required
-                            autocomplete="name"
-                        >
-                    </div>
-                    <div class="field">
-                        <label for="email">EMAIL ADDRESS</label>
-                        <input 
-                            id="email" 
-                            type="email" 
-                            name="email" 
-                            placeholder="Enter your email address"
-                            required
-                            autocomplete="email"
-                        >
-                    </div>
-                    <div class="field">
-                        <label for="password">PASSWORD</label>
-                        <div class="password-input-wrapper">
-                            <input 
-                                id="password" 
-                                type="password" 
-                                name="password" 
-                                placeholder="Enter your password"
-                                required
-                                autocomplete="new-password"
-                                minlength="6"
-                            >
-                            <button type="button" class="password-toggle" onclick="togglePassword('password')">
-                                <svg id="password-eye" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M10 3C5 3 1.73 7.11 1 10C1.73 12.89 5 17 10 17C15 17 18.27 12.89 19 10C18.27 7.11 15 3 10 3ZM10 15C7.24 15 5 12.76 5 10C5 7.24 7.24 5 10 5C12.76 5 15 7.24 15 10C15 12.76 12.76 15 10 15ZM10 7C8.34 7 7 8.34 7 10C7 11.66 8.34 13 10 13C11.66 13 13 11.66 13 10C13 8.34 11.66 7 10 7Z" fill="#6b7280"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label for="confirm_password">CONFIRM PASSWORD</label>
-                        <div class="password-input-wrapper">
-                            <input 
-                                id="confirm_password" 
-                                type="password" 
-                                name="confirm_password" 
-                                placeholder="Confirm your password"
-                                required
-                                autocomplete="new-password"
-                                minlength="6"
-                            >
-                            <button type="button" class="password-toggle" onclick="togglePassword('confirm_password')">
-                                <svg id="confirm_password-eye" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M10 3C5 3 1.73 7.11 1 10C1.73 12.89 5 17 10 17C15 17 18.27 12.89 19 10C18.27 7.11 15 3 10 3ZM10 15C7.24 15 5 12.76 5 10C5 7.24 7.24 5 10 5C12.76 5 15 7.24 15 10C15 12.76 12.76 15 10 15ZM10 7C8.34 7 7 8.34 7 10C7 11.66 8.34 13 10 13C11.66 13 13 11.66 13 10C13 8.34 11.66 7 10 7Z" fill="#6b7280"/>
-                                </svg>
-                            </button>
-                        </div>
-                        <span id="password-match-error" class="error-message" style="display: none; color: #ef4444; font-size: 0.8125rem; margin-top: 4px;">Passwords do not match</span>
-                    </div>
-                    <div class="field">
-                        <label>ROLE:</label>
-                        <div class="role-buttons">
-                            <button type="button" class="role-btn" data-role="COMMUNITY_USER" onclick="selectRole(this, 'COMMUNITY_USER')">Community User</button>
-                            <button type="button" class="role-btn" data-role="SUPPLIER_INSTALLER" onclick="selectRole(this, 'SUPPLIER_INSTALLER')">Supplier</button>
-                            <button type="button" class="role-btn" data-role="DONOR_NGO" onclick="selectRole(this, 'DONOR_NGO')">Donor</button>
-                            <button type="button" class="role-btn" data-role="EDUCATOR_ADVOCATE" onclick="selectRole(this, 'EDUCATOR_ADVOCATE')">Educator/Student</button>
-                        </div>
-                        <input type="hidden" id="role" name="role" required>
-                        <span id="role-error" class="error-message" style="display: none; color: #ef4444; font-size: 0.8125rem; margin-top: 4px;">Please select a role</span>
-                    </div>
-                    <div class="actions">
-                        <button class="btn" type="submit" style="background: #27ae60; color: #000000;">REGISTER</button>
-                    </div>
-                </form>
-                <div class="footer-link">Already have an account? <a href="/login" style="color: #27ae60;">Login</a></div>
-            </div>
-        </div>
-    </div>
+<div class="left-section">
+<div class="overlay"></div>
+
+<div class="logo-wrapper">
+<img src="/images/Logo.png" class="logo" alt="EnerSave Logo" />
+<span class="app-name">EnerSave</span>
+</div>
+
+<div class="left-content">
+<h1>Powering Communities,<span class="subline">Sustainably.</span></h1>
+<p>Join Enersave to bring clean energy solutions to remote and rural areas around the globe.</p>
+</div>
+</div>
+<div class="right-section">
+  <div class="form-box">
+    <h1>CREATE YOUR ACCOUNT</h1>
+
+    <form action="/register" method="POST" id="registerForm">
+      <label for="fullName">Full Name</label>
+      <input type="text" id="fullName" name="username" placeholder="Enter your full name" required />
+
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email address" required />
+
+      <label for="password">Password</label>
+      <div class="password-wrapper">
+        <input type="password" id="password" name="password" placeholder="Enter your password" required />
+        <button type="button" class="toggle-eye" onclick="togglePassword('password')">👁</button>
+      </div>
+
+      <label for="confirmPassword">Confirm Password</label>
+      <div class="password-wrapper">
+        <input type="password" id="confirmPassword" name="confirm_password" placeholder="Confirm your password" required />
+        <button type="button" class="toggle-eye" onclick="togglePassword('confirmPassword')">👁</button>
+      </div>
+      <span id="password-match-error" class="error-message">Passwords do not match</span>
+
+ <label for="role">Role:</label>
+      <div class="role-options">
+        <button type="button" class="role-btn" data-role="COMMUNITY_USER" onclick="selectRole(this, 'COMMUNITY_USER')">Community</button>
+        <button type="button" class="role-btn" data-role="DONOR_NGO" onclick="selectRole(this, 'DONOR_NGO')">Donor</button>
+        <button type="button" class="role-btn" data-role="SUPPLIER_INSTALLER" onclick="selectRole(this, 'SUPPLIER_INSTALLER')">Supplier</button>
+        <button type="button" class="role-btn" data-role="EDUCATOR_ADVOCATE" onclick="selectRole(this, 'EDUCATOR_ADVOCATE')">Educator/Student</button>
+      </div>
+      <input type="hidden" id="role" name="role" value="">
+      <span id="role-error" class="error-message">Please select a role</span>
+
+      <button type="submit" class="register-btn">Register</button>
+    </form>
+
+    <p class="register">Already have an account? <a href="/login">Login</a></p>
+  </div>
+</div>
+
+
+</div>
+
+<script>
+function togglePassword(fieldId) {
+    const field = document.getElementById(fieldId);
+    if (field.type === 'password') {
+        field.type = 'text';
+    } else {
+        field.type = 'password';
+    }
+}
+
+function selectRole(button, roleValue) {
+    // Remove selected class from all buttons
+    document.querySelectorAll('.role-btn').forEach(btn => {
+        btn.classList.remove('selected');
+    });
     
-    <style>
-        .password-input-wrapper {
-            position: relative;
-        }
-        
-        .password-input-wrapper input {
-            padding-right: 45px;
-        }
-        
-        .password-toggle {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .password-toggle:hover svg path {
-            fill: var(--blue-primary);
-        }
-        
-        .role-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 8px;
-        }
-        
-        .role-btn {
-            padding: 10px 20px;
-            border: 1.5px solid var(--border-light);
-            border-radius: 8px;
-            background: white;
-            color: var(--text-dark);
-            font-weight: 600;
-            font-size: 0.9375rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            flex: 1;
-            min-width: 120px;
-        }
-        
-        .role-btn:hover {
-            border-color: var(--blue-primary);
-            background: #f0f9ff;
-        }
-        
-        .role-btn.selected {
-            background: var(--blue-primary);
-            color: white;
-            border-color: var(--blue-primary);
-        }
-    </style>
+    // Add selected class to clicked button
+    button.classList.add('selected');
     
-    <script>
-        function togglePassword(fieldId) {
-            const field = document.getElementById(fieldId);
-            const eyeIcon = document.getElementById(fieldId + '-eye');
-            
-            if (field.type === 'password') {
-                field.type = 'text';
-                eyeIcon.innerHTML = '<path d="M2.5 2.5L17.5 17.5M17.5 2.5L2.5 17.5" stroke="#6b7280" stroke-width="2" stroke-linecap="round"/><path d="M10 3C5 3 1.73 7.11 1 10C1.73 12.89 5 17 10 17C15 17 18.27 12.89 19 10C18.27 7.11 15 3 10 3ZM10 15C7.24 15 5 12.76 5 10C5 7.24 7.24 5 10 5C12.76 5 15 7.24 15 10C15 12.76 12.76 15 10 15ZM10 7C8.34 7 7 8.34 7 10C7 11.66 8.34 13 10 13C11.66 13 13 11.66 13 10C13 8.34 11.66 7 10 7Z" fill="#6b7280"/>';
-            } else {
-                field.type = 'password';
-                eyeIcon.innerHTML = '<path d="M10 3C5 3 1.73 7.11 1 10C1.73 12.89 5 17 10 17C15 17 18.27 12.89 19 10C18.27 7.11 15 3 10 3ZM10 15C7.24 15 5 12.76 5 10C5 7.24 7.24 5 10 5C12.76 5 15 7.24 15 10C15 12.76 12.76 15 10 15ZM10 7C8.34 7 7 8.34 7 10C7 11.66 8.34 13 10 13C11.66 13 13 11.66 13 10C13 8.34 11.66 7 10 7Z" fill="#6b7280"/>';
-            }
+    // Set hidden input value
+    document.getElementById('role').value = roleValue;
+    
+    // Hide error if shown
+    document.getElementById('role-error').style.display = 'none';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('registerForm');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const errorMessage = document.getElementById('password-match-error');
+    const roleInput = document.getElementById('role');
+    const roleError = document.getElementById('role-error');
+    
+    function validatePasswords() {
+        if (confirmPassword.value === '') {
+            errorMessage.style.display = 'none';
+            confirmPassword.style.borderColor = '';
+            return false;
         }
         
-        function selectRole(button, roleValue) {
-            // Remove selected class from all buttons
-            document.querySelectorAll('.role-btn').forEach(btn => {
-                btn.classList.remove('selected');
-            });
-            
-            // Add selected class to clicked button
-            button.classList.add('selected');
-            
-            // Set hidden input value
-            document.getElementById('role').value = roleValue;
-            
-            // Hide error if shown
-            document.getElementById('role-error').style.display = 'none';
+        if (password.value !== confirmPassword.value) {
+            errorMessage.style.display = 'block';
+            confirmPassword.style.borderColor = '#ef4444';
+            return false;
+        } else {
+            errorMessage.style.display = 'none';
+            confirmPassword.style.borderColor = '';
+            return true;
+        }
+    }
+    
+    confirmPassword.addEventListener('input', validatePasswords);
+    password.addEventListener('input', validatePasswords);
+    
+    form.addEventListener('submit', function(e) {
+        if (!validatePasswords()) {
+            e.preventDefault();
+            return false;
         }
         
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('registerForm');
-            const password = document.getElementById('password');
-            const confirmPassword = document.getElementById('confirm_password');
-            const errorMessage = document.getElementById('password-match-error');
-            const roleInput = document.getElementById('role');
-            const roleError = document.getElementById('role-error');
-            
-            function validatePasswords() {
-                if (confirmPassword.value === '') {
-                    errorMessage.style.display = 'none';
-                    confirmPassword.style.borderColor = '';
-                    return false;
-                }
-                
-                if (password.value !== confirmPassword.value) {
-                    errorMessage.style.display = 'block';
-                    confirmPassword.style.borderColor = '#ef4444';
-                    return false;
-                } else {
-                    errorMessage.style.display = 'none';
-                    confirmPassword.style.borderColor = '';
-                    return true;
-                }
-            }
-            
-            confirmPassword.addEventListener('input', validatePasswords);
-            password.addEventListener('input', validatePasswords);
-            
-            form.addEventListener('submit', function(e) {
-                if (!validatePasswords()) {
-                    e.preventDefault();
-                    return false;
-                }
-                
-                if (!roleInput.value) {
-                    e.preventDefault();
-                    roleError.style.display = 'block';
-                    return false;
-                }
-            });
-        });
-    </script>
+        if (!roleInput.value) {
+            e.preventDefault();
+            roleError.style.display = 'block';
+            return false;
+        }
+    });
+});
+</script>
 </body>
 </html>
