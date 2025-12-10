@@ -9,8 +9,85 @@ $username = $user['username'] ?? 'Admin';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Users Management - EnerSave</title>
-    <link rel="stylesheet" href="/styles.css"> 
+    <link rel="stylesheet" href="/css/styles.css"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .admin-profile {
+            position: relative;
+        }
+        .avatar-container {
+            position: relative;
+            display: inline-block;
+        }
+        .avatar {
+            cursor: pointer;
+        }
+        .avatar-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            min-width: 150px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+            z-index: 1000;
+        }
+        .avatar-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .avatar-dropdown-item {
+            display: block;
+            padding: 12px 16px;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            transition: background-color 0.2s ease;
+        }
+        .avatar-dropdown-item:hover {
+            background-color: #f5f5f5;
+        }
+        .avatar-dropdown-item:first-child {
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .avatar-dropdown-item:last-child {
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        .avatar-dropdown-item.logout {
+            color: #d32f2f;
+        }
+        .avatar-dropdown-item.logout:hover {
+            background-color: #ffebee;
+        }
+        .dashboard-container {
+            max-width: 100%;
+            width: 100%;
+            padding: 30px 50px;
+            margin: 0;
+        }
+        .data-management-panel {
+            width: 100%;
+        }
+        .data-table {
+            width: 100%;
+        }
+        .details-panel {
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
 
@@ -20,14 +97,20 @@ $username = $user['username'] ?? 'Admin';
             EnerSave
         </div>
         <nav class="main-nav">
-            <a href="/admin" class="nav-item">Dashboard</a>
-            <a href="/admin/users" class="nav-item active">Users</a>
-            <a href="/admin/suppliers" class="nav-item">Suppliers</a>
-            <a href="/admin/projects" class="nav-item">Projects</a>
+            <a href="/adminDashboard" class="nav-item">Dashboard</a>
+            <a href="/usersManagement" class="nav-item active">Users</a>
+            <a href="/suppliersManagement" class="nav-item">Suppliers</a>
+            <a href="/projectsManagement" class="nav-item">Projects</a>
         </nav>
         <div class="admin-profile">
             <span>Admin: <?php echo htmlspecialchars($username); ?></span>
-            <div class="avatar"><i class="fas fa-user-circle"></i></div>
+            <div class="avatar-container">
+                <div class="avatar" id="avatarDropdown"><i class="fas fa-user-circle"></i></div>
+                <div class="avatar-dropdown" id="avatarMenu">
+                    <a href="#" class="avatar-dropdown-item">Settings</a>
+                    <a href="/logout" class="avatar-dropdown-item logout">Logout</a>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -136,6 +219,7 @@ $username = $user['username'] ?? 'Admin';
         </section>
     </main>
     <script src="/JavaScripts/navigationAdmin.js"></script>
+    <script src="/JavaScripts/avatarDropdown.js"></script>
 </body>
 </html>
 

@@ -53,13 +53,75 @@ body {
     gap: 10px;
 }
 
+.avatar-container {
+    position: relative;
+    margin-right: 15px;
+}
+
 .nav-avatar {
     width: 32px;
     height: 32px;
     border-radius: 50%;
     background: #ffcc00;
     cursor: pointer;
-    margin-right: 15px;
+}
+
+.avatar-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    min-width: 150px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+    z-index: 1000;
+}
+
+.avatar-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.avatar-dropdown-item {
+    display: block;
+    padding: 12px 16px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    transition: background-color 0.2s ease;
+}
+
+.avatar-dropdown-item:hover {
+    background-color: #f5f5f5;
+}
+
+.avatar-dropdown-item:first-child {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.avatar-dropdown-item:last-child {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.avatar-dropdown-item.logout {
+    color: #d32f2f;
+}
+
+.avatar-dropdown-item.logout:hover {
+    background-color: #ffebee;
 }
 
 .brand-name {
@@ -172,7 +234,7 @@ h1 {
     background: #27ae60;
     padding: 10px 20px;
     border-radius: 25px;
-    color: white;
+    color: black;
     font-weight: 700;
     border: none;
     cursor: pointer;
@@ -198,7 +260,13 @@ h1 {
 
     <div class="nav-right">
         Community: <?php echo htmlspecialchars($username); ?>
-        <div class="nav-avatar"></div>
+        <div class="avatar-container">
+            <div class="nav-avatar" id="avatarDropdown"></div>
+            <div class="avatar-dropdown" id="avatarMenu">
+                <a href="#" class="avatar-dropdown-item">Settings</a>
+                <a href="/logout" class="avatar-dropdown-item logout">Logout</a>
+            </div>
+        </div>
     </div>
 </div>      
 
@@ -280,6 +348,7 @@ h1 {
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="/navigationCommunity.js"></script>
+<script src="/JavaScripts/avatarDropdown.js"></script>
 </body>
 </html>
 

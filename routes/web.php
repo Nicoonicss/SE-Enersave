@@ -262,22 +262,22 @@ $router->post('/toggle-mode', function () {
 });
 
 // Admin routes
-$router->get('/admin', function () {
+$router->get('/adminDashboard', function () {
     AuthHelper::requireRole(['ADMIN']);
     (new AdminController())->index();
 });
 
-$router->get('/admin/users', function () {
+$router->get('/usersManagement', function () {
     AuthHelper::requireRole(['ADMIN']);
     (new AdminController())->users();
 });
 
-$router->get('/admin/suppliers', function () {
+$router->get('/suppliersManagement', function () {
     AuthHelper::requireRole(['ADMIN']);
     (new AdminController())->suppliers();
 });
 
-$router->get('/admin/projects', function () {
+$router->get('/projectsManagement', function () {
     AuthHelper::requireRole(['ADMIN']);
     (new AdminController())->projects();
 });
@@ -286,7 +286,8 @@ $router->get('/dashboard', function () {
     AuthHelper::requireRole(['SUPPLIER_INSTALLER', 'ADMIN']);
     $role = $_SESSION['user']['role'] ?? '';
     if ($role === 'ADMIN') {
-        (new AdminController())->index();
+        header('Location: /adminDashboard');
+        exit;
     } else {
         (new DashboardController())->index();
     }
@@ -333,7 +334,8 @@ if ($path === '/' || $path === '') {
         $role = $_SESSION['user']['role'] ?? 'COMMUNITY_USER';
         $redirectUrl = match($role) {
             'COMMUNITY_USER', 'EDUCATOR_ADVOCATE', 'DONOR_NGO' => '/home',
-            'SUPPLIER_INSTALLER', 'ADMIN' => '/dashboard',
+            'SUPPLIER_INSTALLER' => '/dashboard',
+            'ADMIN' => '/adminDashboard',
             default => '/home',
         };
         header('Location: ' . $redirectUrl);

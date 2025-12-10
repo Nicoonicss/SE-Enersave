@@ -4,10 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. GLOBAL NAVIGATION LOGIC (Updated for PHP routes)
     // ==========================================
     const pageRoutes = {
-        '/admin': '/admin',
-        '/admin/users': '/admin/users',
-        '/admin/suppliers': '/admin/suppliers',
-        '/admin/projects': '/admin/projects'
+        '/adminDashboard': '/adminDashboard',
+        '/usersManagement': '/usersManagement',
+        '/suppliersManagement': '/suppliersManagement',
+        '/projectsManagement': '/projectsManagement'
     };
 
     // Update active state based on current URL
@@ -34,9 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
         quickActions.forEach(btn => {
             btn.addEventListener('click', () => {
                 const text = btn.textContent.trim();
-                if(text.includes('Users')) window.location.href = '/admin/users';
-                if(text.includes('Suppliers')) window.location.href = '/admin/suppliers';
-                if(text.includes('Projects')) window.location.href = '/admin/projects';
+                if(text.includes('Users')) window.location.href = '/usersManagement';
+                if(text.includes('Suppliers')) window.location.href = '/suppliersManagement';
+                if(text.includes('Projects')) window.location.href = '/projectsManagement';
             });
         });
     }
