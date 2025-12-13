@@ -28,49 +28,63 @@ $username = $user['username'] ?? 'Admin';
             right: 0;
             background: white;
             border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            min-width: 150px;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+            min-width: 180px;
             opacity: 0;
             visibility: hidden;
             transform: translateY(-10px);
-            transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1000;
+            pointer-events: none;
+            overflow: hidden;
         }
         .avatar-dropdown.show {
             opacity: 1;
             visibility: visible;
             transform: translateY(0);
+            pointer-events: auto;
         }
         .avatar-dropdown-item {
-            display: block;
-            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            padding: 14px 18px;
             color: #333;
             text-decoration: none;
             font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
             border: none;
             background: none;
             width: 100%;
             text-align: left;
-            transition: background-color 0.2s ease;
-        }
-        .avatar-dropdown-item:hover {
-            background-color: #f5f5f5;
-        }
-        .avatar-dropdown-item:first-child {
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border-bottom: 1px solid #f0f0f0;
         }
         .avatar-dropdown-item:last-child {
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
+            border-bottom: none;
+        }
+        .avatar-dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: #239c42;
+            padding-left: 20px;
+        }
+        .avatar-dropdown-item:first-child {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .avatar-dropdown-item:last-child {
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
         }
         .avatar-dropdown-item.logout {
             color: #d32f2f;
+            font-weight: 600;
         }
         .avatar-dropdown-item.logout:hover {
             background-color: #ffebee;
+            color: #b71c1c;
+            padding-left: 20px;
         }
         .dashboard-container {
             max-width: 100%;
@@ -123,7 +137,7 @@ $username = $user['username'] ?? 'Admin';
             background-color: #d1fae5;
             color: #000;
             border: none;
-            border-radius: 25px;
+            border-radius: 10px;
             padding: 12px 20px;
             font-weight: 600;
             cursor: pointer;
@@ -142,36 +156,108 @@ $username = $user['username'] ?? 'Admin';
         .data-management-panel {
             width: 100%;
         }
+        .activity-list {
+            overflow: visible;
+            padding: 0;
+            margin: 0;
+        }
         .activity-list li {
             background-color: #f5f5f5;
             border-radius: 8px;
             margin-bottom: 8px;
-            padding: 14px 16px;
-            border: none;
+            padding: 14px 20px 14px 16px;
+            border: 2px solid transparent;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
         }
         .activity-list li:last-child {
             margin-bottom: 0;
         }
+        .activity-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: var(--admin-green, #27ae60);
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
+        }
+        .activity-list li:hover {
+            background-color: #f0f9f4 !important;
+            border-color: rgba(39, 174, 96, 0.2);
+            box-shadow: 0 2px 8px rgba(39, 174, 96, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+        .activity-list li:hover::before {
+            transform: scaleY(1);
+        }
+        .activity-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .activity-text {
+            transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding-left: 0;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+        .activity-list li:hover .activity-text {
+            padding-left: 4px;
+        }
+        .activity-list li:active .activity-text {
+            padding-left: 2px;
+        }
         .activity-arrow {
             color: #666;
             font-size: 0.875rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-left: 8px;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 2;
         }
-        .export-btn {
-            background-color: var(--admin-green);
-            color: white;
-            border: none;
+        .activity-list li:hover .activity-arrow {
+            color: var(--admin-green, #27ae60);
+            transform: translateX(2px);
+        }
+        .export-btn,
+        button.export-btn,
+        .btn.export-btn {
+            background-color: #27ae60 !important;
+            color: white !important;
+            border: none !important;
             border-radius: 8px;
             padding: 12px 20px;
             font-weight: 600;
             cursor: pointer;
             transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: none !important;
         }
-        .export-btn:hover {
-            background-color: #229954;
+        .export-btn:hover,
+        button.export-btn:hover,
+        .btn.export-btn:hover {
+            background-color: #229954 !important;
         }
-        .export-btn i {
-            color: white;
+        .export-btn i,
+        button.export-btn i,
+        .btn.export-btn i {
+            color: white !important;
             margin-right: 8px;
         }
         .view-all-btn {
@@ -271,28 +357,28 @@ $username = $user['username'] ?? 'Admin';
                 <div class="recent-activity-panel">
                     <h2>Recent Activity</h2>
                     <ul class="activity-list">
-                        <li>
+                        <li class="activity-item" data-activity-type="supplier" onclick="redirectToManagement('/suppliersManagement')">
                             <div class="activity-text">
                                 <div class="activity-title">New Supplier Registered: <strong>GreenTech Power</strong></div>
                                 <div class="activity-time">2 hours ago</div>
                             </div>
                             <i class="fas fa-chevron-right activity-arrow"></i>
                         </li>
-                        <li>
+                        <li class="activity-item" data-activity-type="project" onclick="redirectToManagement('/projectsManagement')">
                             <div class="activity-text">
                                 <div class="activity-title">New Project Submitted: <strong>Solar for Hope</strong></div>
                                 <div class="activity-time">5 hours ago</div>
                             </div>
                             <i class="fas fa-chevron-right activity-arrow"></i>
                         </li>
-                        <li>
+                        <li class="activity-item" data-activity-type="project" onclick="redirectToManagement('/projectsManagement')">
                             <div class="activity-text">
                                 <div class="activity-title">Donation Received: <strong>P5,000 from EcoFund Inc.</strong></div>
                                 <div class="activity-time">1 day ago</div>
                             </div>
                             <i class="fas fa-chevron-right activity-arrow"></i>
                         </li>
-                        <li>
+                        <li class="activity-item" data-activity-type="user" onclick="redirectToManagement('/usersManagement')">
                             <div class="activity-text">
                                 <div class="activity-title">User Account Updated: <strong>Sarah Discaya (Community)</strong></div>
                                 <div class="activity-time">2 days ago</div>
@@ -327,5 +413,10 @@ $username = $user['username'] ?? 'Admin';
     </main>
     <script src="/JavaScripts/navigationAdmin.js"></script>
     <script src="/JavaScripts/avatarDropdown.js"></script>
+    <script>
+        function redirectToManagement(page) {
+            window.location.href = page;
+        }
+    </script>
 </body>
 </html>

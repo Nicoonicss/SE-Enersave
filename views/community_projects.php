@@ -72,56 +72,71 @@ $username = $user['username'] ?? 'Community User';
     right: 0;
     background: white;
     border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    min-width: 150px;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+    min-width: 180px;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
-    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1000;
+    pointer-events: none;
+    overflow: hidden;
 }
 
 .avatar-dropdown.show {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
+    pointer-events: auto;
 }
 
 .avatar-dropdown-item {
-    display: block;
-    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    padding: 14px 18px;
     color: #333;
     text-decoration: none;
     font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
     border: none;
     background: none;
     width: 100%;
     text-align: left;
-    transition: background-color 0.2s ease;
-}
-
-.avatar-dropdown-item:hover {
-    background-color: #f5f5f5;
-}
-
-.avatar-dropdown-item:first-child {
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    border-bottom: 1px solid #f0f0f0;
 }
 
 .avatar-dropdown-item:last-child {
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
+    border-bottom: none;
+}
+
+.avatar-dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #239c42;
+    padding-left: 20px;
+}
+
+.avatar-dropdown-item:first-child {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.avatar-dropdown-item:last-child {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 .avatar-dropdown-item.logout {
     color: #d32f2f;
+    font-weight: 600;
 }
 
 .avatar-dropdown-item.logout:hover {
     background-color: #ffebee;
+    color: #b71c1c;
+    padding-left: 20px;
 }
 
 .brand-name {
@@ -306,6 +321,247 @@ $username = $user['username'] ?? 'Community User';
   .start-fundraiser-btn:hover {
     background: #1e8449;
   }
+
+  /* Project Details Modal */
+  .project-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s ease;
+  }
+
+  .project-modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .modal-content {
+    background-color: white;
+    margin: auto;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.3s ease;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e0e0e0;
+  }
+
+  .modal-header h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+  }
+
+  .close-modal {
+    background: none;
+    border: none;
+    font-size: 28px;
+    font-weight: bold;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+  }
+
+  .close-modal:hover {
+    background-color: #f0f0f0;
+    color: #333;
+  }
+
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .modal-project-name {
+    font-size: 22px;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+  }
+
+  .modal-project-description {
+    line-height: 1.6;
+    color: #555;
+    font-size: 15px;
+    margin: 0;
+  }
+
+  /* Fundraiser Modal Styles */
+  .fundraiser-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s ease;
+  }
+
+  .fundraiser-modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .fundraiser-modal .modal-content {
+    background-color: white;
+    margin: auto;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.3s ease;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+  }
+
+  .form-group label.required::after {
+    content: " *";
+    color: #d32f2f;
+  }
+
+  .form-group label.optional::after {
+    content: " (optional)";
+    font-weight: normal;
+    color: #999;
+    font-size: 12px;
+  }
+
+  .form-group input[type="text"],
+  .form-group input[type="number"],
+  .form-group textarea,
+  .form-group input[type="file"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
+  }
+
+  .form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .form-group input[type="file"] {
+    padding: 8px;
+    cursor: pointer;
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 25px;
+  }
+
+  .btn-cancel {
+    background: #f0f0f0;
+    color: #333;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.2s ease;
+  }
+
+  .btn-cancel:hover {
+    background: #e0e0e0;
+  }
+
+  .btn-add-fundraiser {
+    background: #27ae60;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.2s ease;
+  }
+
+  .btn-add-fundraiser:hover {
+    background: #1e8449;
+  }
+
+  .image-preview {
+    margin-top: 10px;
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 8px;
+    display: none;
+  }
+
+  .image-preview.show {
+    display: block;
+  }
 </style>
 </head>
 <body>
@@ -354,7 +610,7 @@ $username = $user['username'] ?? 'Community User';
               <path d="M2 6h20v12H2V6zm2 2v8h16V8H4zm8 1a3 3 0 110 6 3 3 0 010-6z"/>
               </svg>
             </button>
-            <button class="btn-details">View Details</button>
+            <button class="btn-details" data-project-name="Solar for School">View Details</button>
           </div>
         </div>
       </article>
@@ -375,14 +631,14 @@ $username = $user['username'] ?? 'Community User';
               <path d="M2 6h20v12H2V6zm2 2v8h16V8H4zm8 1a3 3 0 110 6 3 3 0 010-6z"/>
               </svg>
             </button>
-            <button class="btn-details">View Details</button>
+            <button class="btn-details" data-project-name="Solar for School">View Details</button>
           </div>
         </div>
       </article>
     </section>
 
     <aside class="summary">
-      <button class="start-fundraiser-btn">Start a Fundraiser</button>
+      <button class="start-fundraiser-btn" id="startFundraiserBtn">Start a Fundraiser</button>
 
       <h3>My Donation Summary</h3>
 
@@ -405,8 +661,330 @@ $username = $user['username'] ?? 'Community User';
       </div>
     </aside>
   </main>
+  <!-- Project Details Modal -->
+  <div id="projectDetailsModal" class="project-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Project Details</h2>
+        <button class="close-modal" id="closeProjectModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <h3 class="modal-project-name" id="modalProjectName">Project Name</h3>
+        <p class="modal-project-description" id="modalProjectDescription">Project description will appear here.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fundraiser Modal -->
+  <div id="fundraiserModal" class="fundraiser-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Start a Fundraiser</h2>
+        <button class="close-modal" id="closeFundraiserModal">&times;</button>
+      </div>
+      <form id="fundraiserForm">
+        <div class="form-group">
+          <label for="fundraiserImage" class="required">Upload Image</label>
+          <input type="file" id="fundraiserImage" accept="image/*" required>
+          <img id="imagePreview" class="image-preview" alt="Preview">
+        </div>
+        <div class="form-group">
+          <label for="fundraiserName" class="required">Crowdfunding Name</label>
+          <input type="text" id="fundraiserName" required placeholder="Enter crowdfunding name">
+        </div>
+        <div class="form-group">
+          <label for="fundraiserDescription" class="optional">Description</label>
+          <textarea id="fundraiserDescription" placeholder="Enter description (optional)"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="fundraiserAmount" class="required">Target Amount</label>
+          <input type="number" id="fundraiserAmount" required placeholder="Enter target amount" min="1">
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" id="cancelFundraiserBtn">Cancel</button>
+          <button type="submit" class="btn-add-fundraiser">Add Crowdfunding Project</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script src="/navigationCommunity.js"></script>
   <script src="/JavaScripts/avatarDropdown.js"></script>
+  <script>
+  // Global function for inline onclick
+  function openFundraiserModal(e) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    const modal = document.getElementById('fundraiserModal');
+    if (modal) {
+      modal.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  // Project Details Modal Functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('projectDetailsModal');
+    const closeModalBtn = document.getElementById('closeProjectModal');
+    const viewDetailsButtons = document.querySelectorAll('.btn-details');
+    
+    // Project descriptions
+    const projectDescriptions = {
+      'Solar for School': 'This initiative aims to install solar panels in local schools to provide clean, renewable energy and reduce electricity costs. The project will benefit multiple schools in the community, providing them with sustainable power for classrooms, computer labs, and other facilities. By implementing solar energy, we can help schools save money on electricity bills while teaching students about renewable energy and environmental sustainability.',
+      'Hydro for Hope': 'The Hydro for Hope project focuses on developing small-scale hydroelectric power systems for remote communities. This renewable energy solution will provide reliable electricity to areas that currently lack access to the power grid. The project includes the installation of micro-hydro turbines that can generate clean energy from flowing water sources, bringing light and power to underserved communities while promoting sustainable development.'
+    };
+    
+    // Function to open modal with project data
+    function openProjectModal(projectCard) {
+      const projectName = projectCard.querySelector('.project-title')?.textContent.trim() || 
+                         projectCard.closest('.project-card').querySelector('.project-title')?.textContent.trim() || 
+                         'Unknown Project';
+      
+      // Get description from our descriptions object or use a default
+      const description = projectDescriptions[projectName] || 
+                         'This is a sustainable energy project aimed at bringing renewable energy solutions to communities. The project focuses on environmental sustainability and community empowerment through clean energy initiatives.';
+      
+      // Populate modal
+      document.getElementById('modalProjectName').textContent = projectName;
+      document.getElementById('modalProjectDescription').textContent = description;
+      
+      // Show modal
+      modal.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    // Function to close modal
+    function closeProjectModal() {
+      modal.classList.remove('show');
+      document.body.style.overflow = 'auto';
+    }
+    
+    // Add event listeners to all "View Details" buttons
+    viewDetailsButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const projectCard = this.closest('.project-card');
+        if (projectCard) {
+          openProjectModal(projectCard);
+        }
+      });
+    });
+    
+    // Close modal when clicking the X button
+    closeModalBtn.addEventListener('click', closeProjectModal);
+    
+    // Close modal when clicking outside the modal content
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        closeProjectModal();
+      }
+    });
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && modal.classList.contains('show')) {
+        closeProjectModal();
+      }
+    });
+
+    // Fundraiser Modal Functionality
+    const fundraiserModal = document.getElementById('fundraiserModal');
+    const startFundraiserBtn = document.getElementById('startFundraiserBtn');
+    const closeFundraiserModalBtn = document.getElementById('closeFundraiserModal');
+    const cancelFundraiserBtn = document.getElementById('cancelFundraiserBtn');
+    const fundraiserForm = document.getElementById('fundraiserForm');
+    const imageInput = document.getElementById('fundraiserImage');
+    const imagePreview = document.getElementById('imagePreview');
+
+    // Function to close fundraiser modal
+    function closeFundraiserModal() {
+      if (fundraiserModal) {
+        fundraiserModal.classList.remove('show');
+        document.body.style.overflow = 'auto';
+        if (fundraiserForm) {
+          fundraiserForm.reset();
+        }
+        if (imagePreview) {
+          imagePreview.classList.remove('show');
+          imagePreview.src = '';
+        }
+      }
+    }
+
+    // Event listeners for fundraiser modal
+    if (startFundraiserBtn) {
+      startFundraiserBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        openFundraiserModal(e);
+      });
+    }
+
+    if (closeFundraiserModalBtn) {
+      closeFundraiserModalBtn.addEventListener('click', closeFundraiserModal);
+    }
+
+    if (cancelFundraiserBtn) {
+      cancelFundraiserBtn.addEventListener('click', closeFundraiserModal);
+    }
+
+    // Close modal when clicking outside
+    if (fundraiserModal) {
+      fundraiserModal.addEventListener('click', function(e) {
+        if (e.target === fundraiserModal) {
+          closeFundraiserModal();
+        }
+      });
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && fundraiserModal && fundraiserModal.classList.contains('show')) {
+        closeFundraiserModal();
+      }
+    });
+
+    // Image preview functionality
+    if (imageInput && imagePreview) {
+      imageInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            imagePreview.src = e.target.result;
+            imagePreview.classList.add('show');
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    // Storage key (same as donor_projects.php to share data)
+    const STORAGE_KEY = 'donor_crowdfunding_projects';
+
+    // Function to add project to current page
+    function addProjectToPage(project) {
+      const projectsSection = document.querySelector('.projects');
+      if (!projectsSection) return;
+
+      // Find the subtitle to insert after
+      const subtitle = projectsSection.querySelector('.subtitle');
+      if (!subtitle) return;
+
+      // Create project card
+      const projectCard = document.createElement('article');
+      projectCard.className = 'project-card';
+      projectCard.setAttribute('data-project-id', project.id);
+      projectCard.innerHTML = `
+        <img class="project-image" src="${project.image}" alt="${project.name}" />
+        <div class="project-content">
+          <div class="project-title">${project.name}</div>
+          <p class="project-raised">Raised<br><strong>₱${project.raised.toLocaleString()}</strong> / ${project.amount.toLocaleString()}</p>
+          <div class="progress-bar-container" aria-label="Progress toward funding goal">
+            <div class="progress-bar" style="width: ${project.progress}%;"></div>
+          </div>
+          <div class="progress-text">${project.progress}%</div>
+          <div class="btn-group">
+            <button class="btn-donate" aria-label="Donate to ${project.name}">
+              Donate
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M2 6h20v12H2V6zm2 2v8h16V8H4zm8 1a3 3 0 110 6 3 3 0 010-6z"/>
+              </svg>
+            </button>
+            <button class="btn-details" data-project-name="${project.name}">View Details</button>
+          </div>
+        </div>
+      `;
+
+      // Insert after subtitle
+      subtitle.parentNode.insertBefore(projectCard, subtitle.nextSibling);
+
+      // Add event listener to the new View Details button
+      const newViewDetailsBtn = projectCard.querySelector('.btn-details');
+      if (newViewDetailsBtn) {
+        newViewDetailsBtn.addEventListener('click', function() {
+          const projectCard = this.closest('.project-card');
+          if (projectCard) {
+            openProjectModal(projectCard);
+          }
+        });
+      }
+    }
+
+    // Form submission
+    if (fundraiserForm) {
+      fundraiserForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const name = document.getElementById('fundraiserName').value.trim();
+        const description = document.getElementById('fundraiserDescription').value.trim();
+        const amount = document.getElementById('fundraiserAmount').value;
+        const imageFile = imageInput ? imageInput.files[0] : null;
+
+        if (!name || !amount || !imageFile) {
+          alert('Please fill in all required fields');
+          return;
+        }
+
+        // Read image as base64
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const imageData = e.target.result;
+
+          // Create new crowdfunding project
+          const newProject = {
+            id: Date.now().toString(),
+            name: name,
+            description: description || 'No description provided',
+            amount: parseFloat(amount),
+            image: imageData,
+            dateCreated: new Date().toLocaleDateString('en-US', { 
+              year: 'numeric', 
+              month: 'short', 
+              day: 'numeric' 
+            }),
+            raised: 0,
+            progress: 0
+          };
+
+          // Get existing projects from localStorage
+          let projects = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+          projects.push(newProject);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+
+          // Add to current page
+          addProjectToPage(newProject);
+
+          // Close modal
+          closeFundraiserModal();
+
+          // Show success message
+          alert('Crowdfunding project added successfully!');
+        };
+        reader.readAsDataURL(imageFile);
+      });
+    }
+
+    // Load existing projects on page load
+    function loadExistingProjects() {
+      const projects = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      if (projects.length > 0) {
+        projects.forEach(project => {
+          // Check if project already exists on page (by ID)
+          const existingProject = document.querySelector(`[data-project-id="${project.id}"]`);
+          if (!existingProject) {
+            addProjectToPage(project);
+          }
+        });
+      }
+    }
+
+    // Load existing projects when page loads
+    loadExistingProjects();
+  });
+  </script>
 </body>
 </html>
+
 

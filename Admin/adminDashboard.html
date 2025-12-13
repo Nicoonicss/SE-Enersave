@@ -64,28 +64,28 @@
                 <div class="recent-activity-panel">
                     <h2>Recent Activity</h2>
                     <ul class="activity-list">
-                        <li>
+                        <li class="activity-item" data-activity-type="supplier" onclick="redirectToManagement('suppliersManagement.html')">
                             <div class="activity-text">
                                 <div class="activity-title">New Supplier Registered: <strong>GreenTech Power</strong></div>
                                 <div class="activity-time">2 hours ago</div>
                             </div>
                             <i class="fas fa-chevron-right activity-arrow"></i>
                         </li>
-                        <li>
+                        <li class="activity-item" data-activity-type="project" onclick="redirectToManagement('projectsManagement.html')">
                             <div class="activity-text">
                                 <div class="activity-title">New Project Submitted: <strong>Solar for Hope</strong></div>
                                 <div class="activity-time">5 hours ago</div>
                             </div>
                             <i class="fas fa-chevron-right activity-arrow"></i>
                         </li>
-                        <li>
+                        <li class="activity-item" data-activity-type="project" onclick="redirectToManagement('projectsManagement.html')">
                             <div class="activity-text">
                                 <div class="activity-title">Donation Received: <strong>P5,000 from EcoFund Inc.</strong></div>
                                 <div class="activity-time">1 day ago</div>
                             </div>
                             <i class="fas fa-chevron-right activity-arrow"></i>
                         </li>
-                        <li>
+                        <li class="activity-item" data-activity-type="user" onclick="redirectToManagement('usersManagement.html')">
                             <div class="activity-text">
                                 <div class="activity-title">User Account Updated: <strong>Sarah Discaya (Community)</strong></div>
                                 <div class="activity-time">2 days ago</div>
@@ -117,6 +117,133 @@
                 </div>
             </div>
             <script src="navigationAdmin.js"></script>
+            <script>
+                function redirectToManagement(page) {
+                    window.location.href = page;
+                }
+            </script>
+            <style>
+                .action-buttons {
+                    display: flex;
+                    flex-direction: row;
+                    gap: 15px;
+                }
+                .action-buttons button {
+                    flex: 1;
+                    justify-content: center;
+                    background-color: #d1fae5;
+                    color: #000;
+                    border: none;
+                    border-radius: 10px;
+                    padding: 12px 20px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: background-color 0.2s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                }
+                .action-buttons button i {
+                    color: #000;
+                }
+                .action-buttons button:hover {
+                    background-color: #a7f3d0;
+                }
+                .export-btn,
+                button.export-btn,
+                .btn.export-btn {
+                    background-color: #27ae60 !important;
+                    color: white !important;
+                    border: none !important;
+                    border-radius: 8px;
+                    padding: 12px 20px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: background-color 0.2s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    box-shadow: none !important;
+                }
+                .export-btn:hover,
+                button.export-btn:hover,
+                .btn.export-btn:hover {
+                    background-color: #229954 !important;
+                }
+                .export-btn i,
+                button.export-btn i,
+                .btn.export-btn i {
+                    color: white !important;
+                    margin-right: 8px;
+                }
+                .activity-list {
+                    overflow: visible;
+                    padding: 0;
+                    margin: 0;
+                }
+                .activity-list li {
+                    overflow: hidden;
+                    position: relative;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    padding: 14px 20px 14px 16px;
+                    border: 2px solid transparent;
+                    cursor: pointer;
+                }
+                .activity-item {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    position: relative;
+                    width: 100%;
+                    margin: 0;
+                    padding: 0;
+                }
+                .activity-item::before {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    height: 100%;
+                    width: 3px;
+                    background: #27ae60;
+                    transform: scaleY(0);
+                    transform-origin: bottom;
+                    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    z-index: 1;
+                }
+                .activity-list li:hover {
+                    background-color: #f0f9f4 !important;
+                    border-color: rgba(39, 174, 96, 0.2);
+                    box-shadow: 0 2px 8px rgba(39, 174, 96, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1);
+                    transform: translateY(-1px);
+                }
+                .activity-item:hover::before {
+                    transform: scaleY(1);
+                }
+                .activity-text {
+                    transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    padding-left: 0;
+                    flex: 1;
+                }
+                .activity-item:hover .activity-text {
+                    padding-left: 4px;
+                }
+                .activity-item:active .activity-text {
+                    padding-left: 2px;
+                }
+                .activity-arrow {
+                    color: #666;
+                    font-size: 0.875rem;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    margin-left: 8px;
+                    flex-shrink: 0;
+                }
+                .activity-item:hover .activity-arrow {
+                    color: #27ae60;
+                    transform: translateX(2px);
+                }
+            </style>
         </section>
     </main>
 </body>

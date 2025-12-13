@@ -25,7 +25,7 @@ $selectedUser = $users[4] ?? null; // Default to last user
                     <path d="M9 17C13.4183 17 17 13.4183 17 9C17 4.58172 13.4183 1 9 1C4.58172 1 1 4.58172 1 9C1 13.4183 4.58172 17 9 17Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M19 19L14.65 14.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <input type="text" id="searchInput" placeholder="Enter name, email, or ID" onkeyup="filterUsers()">
+                <input type="text" id="searchInput" placeholder="Enter full name, email, or ID" onkeyup="filterUsers()">
             </div>
             <div class="filter-sort-row">
                 <div class="filter-group">
@@ -101,28 +101,15 @@ $selectedUser = $users[4] ?? null; // Default to last user
         <!-- User Details Panel -->
         <div class="details-panel">
             <h2 class="details-panel-title">Users Details Panel</h2>
-            <div class="details-grid" id="userDetails">
-                <div class="detail-item">
-                    <div class="detail-label">Full Name</div>
-                    <div class="detail-value" id="detailName"><?php echo htmlspecialchars($selectedUser['name']); ?></div>
+            <div id="userDetails">
+                <div class="detail-row">
+                    <div class="detail-item"><span>Full Name</span><strong id="detailName"><?php echo htmlspecialchars($selectedUser['name']); ?></strong></div>
+                    <div class="detail-item"><span>Role</span><strong id="detailRole"><?php echo htmlspecialchars($selectedUser['role']); ?></strong></div>
+                    <div class="detail-item"><span>Email</span><strong id="detailEmail"><?php echo htmlspecialchars($selectedUser['email']); ?></strong></div>
                 </div>
-                <div class="detail-item">
-                    <div class="detail-label">Role</div>
-                    <div class="detail-value" id="detailRole"><?php echo htmlspecialchars($selectedUser['role']); ?></div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">Email</div>
-                    <div class="detail-value" id="detailEmail"><?php echo htmlspecialchars($selectedUser['email']); ?></div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">Status</div>
-                    <div class="detail-value status-<?php echo strtolower($selectedUser['status']); ?>" id="detailStatus">
-                        <?php echo htmlspecialchars($selectedUser['status']); ?>
-                    </div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">Joined</div>
-                    <div class="detail-value" id="detailJoined"><?php echo htmlspecialchars($selectedUser['joined']); ?></div>
+                <div class="detail-row">
+                    <div class="detail-item"><span>Status</span><strong class="text-active" id="detailStatus"><?php echo htmlspecialchars($selectedUser['status']); ?></strong></div>
+                    <div class="detail-item"><span>Joined</span><strong id="detailJoined"><?php echo htmlspecialchars($selectedUser['joined']); ?></strong></div>
                 </div>
             </div>
             <div class="details-actions">
