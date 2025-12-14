@@ -4,10 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. GLOBAL NAVIGATION LOGIC (Updated for PHP routes)
     // ==========================================
     const pageRoutes = {
-        '/admin': '/admin',
-        '/admin/users': '/admin/users',
-        '/admin/suppliers': '/admin/suppliers',
-        '/admin/projects': '/admin/projects'
+        '/adminDashboard': '/adminDashboard',
+        '/usersManagement': '/usersManagement',
+        '/suppliersManagement': '/suppliersManagement',
+        '/projectsManagement': '/projectsManagement'
     };
 
     // Update active state based on current URL
@@ -34,9 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
         quickActions.forEach(btn => {
             btn.addEventListener('click', () => {
                 const text = btn.textContent.trim();
-                if(text.includes('Users')) window.location.href = '/admin/users';
-                if(text.includes('Suppliers')) window.location.href = '/admin/suppliers';
-                if(text.includes('Projects')) window.location.href = '/admin/projects';
+                if(text.includes('Users')) window.location.href = '/usersManagement';
+                if(text.includes('Suppliers')) window.location.href = '/suppliersManagement';
+                if(text.includes('Projects')) window.location.href = '/projectsManagement';
             });
         });
     }
@@ -98,45 +98,22 @@ document.addEventListener('DOMContentLoaded', () => {
             const row = link.closest('tr');
             const statusSpan = row.querySelector('.status-tag');
             
-            if (action === 'Ban') {
-                if(confirm('Are you sure you want to BAN this user? 🚫')) {
-                    statusSpan.textContent = 'Banned';
-                    statusSpan.className = 'status-tag banned';
-                    statusSpan.style.backgroundColor = '#ffebee';
-                    statusSpan.style.color = '#c62828';
-
-                    link.textContent = 'Unban';
-                    link.classList.remove('danger');
-                    link.classList.add('success');
-                }
-            } 
-            else if (action === 'Unban') {
-                if(confirm('Unban this user? ✅')) {
-                    statusSpan.textContent = 'Active';
-                    statusSpan.className = 'status-tag active';
-                    statusSpan.style.backgroundColor = '#e8f5e9';
-                    statusSpan.style.color = '#2e7d32';
-
-                    link.textContent = 'Ban';
-                    link.classList.remove('success');
-                    link.classList.add('danger');
-                }
+            // Ban/Unban functionality is now handled by modal scripts in admin pages
+            // Approve/Reject/Restore functionality is handled by modal scripts in projects management
+            // Only handle actions that don't have dedicated modals
+            if (action === 'Ban' || action === 'Unban') {
+                // Handled by modal scripts
+                return;
             }
             else if (action === 'Edit') {
-                alert('Opening Edit Modal... ✏️');
+                // Edit functionality is handled by inline scripts in admin pages
+                // Do nothing here to avoid conflicts
+                return;
             }
-            else if (action === 'Approve') {
-                statusSpan.textContent = 'Active';
-                statusSpan.className = 'status-tag project-active';
-                statusSpan.style.backgroundColor = '#e8f5e9';
-                statusSpan.style.color = '#2e7d32';
-                alert('Project Approved! 🚀');
-            }
-            else if (action === 'Reject') {
-                statusSpan.textContent = 'Rejected';
-                statusSpan.className = 'status-tag project-rejected';
-                statusSpan.style.backgroundColor = '#ffebee';
-                statusSpan.style.color = '#c62828';
+            else if (action === 'Approve' || action === 'Reject' || action === 'Restore') {
+                // Handled by modal scripts in projects management
+                // Do nothing here to avoid conflicts
+                return;
             }
             else if (action === 'Close') {
                 statusSpan.textContent = 'Completed';
@@ -144,14 +121,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 statusSpan.style.backgroundColor = '#e3f2fd';
                 statusSpan.style.color = '#1565c0';
             }
-            else if (action === 'Restore') {
-                statusSpan.textContent = 'Pending';
-                statusSpan.className = 'status-tag project-pending';
-                statusSpan.style.backgroundColor = '#fff3e0';
-                statusSpan.style.color = '#ef6c00';
-            }
             else if (action === 'View') {
-                alert('Viewing Project Details... 📄');
+                // View functionality is handled by modal scripts in admin pages
+                // Do nothing here to avoid conflicts
+                return;
             }
         });
     });

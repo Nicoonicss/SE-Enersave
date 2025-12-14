@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Users Management - EnerSave</title>
-    <link rel="stylesheet" href="styles.css"> 
+    <title>Suppliers Management - EnerSave</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -16,8 +16,8 @@
         </div>
         <nav class="main-nav">
             <a href="dashboard.html" class="nav-item">Dashboard</a>
-            <a href="users.html" class="nav-item active">Users</a>
-            <a href="suppliers.html" class="nav-item">Suppliers</a>
+            <a href="users.html" class="nav-item">Users</a>
+            <a href="suppliers.html" class="nav-item active">Suppliers</a>
             <a href="projects.html" class="nav-item">Projects</a>
         </nav>
         <div class="admin-profile">
@@ -27,15 +27,15 @@
     </header>
 
     <main class="dashboard-container">
-        <section id="users" class="page-content active-page">
-            <h1 class="page-title">USERS MANAGEMENT</h1>
-            <p class="page-subtitle">Manage all users in the EnerSave platform.</p>
+        <section id="suppliers" class="page-content active-page">
+            <h1 class="page-title">SUPPLIERS MANAGEMENT</h1>
+            <p class="page-subtitle">Manage all suppliers in the EnerSave platform.</p>
 
             <div class="data-management-panel">
                 <div class="filter-bar">
                     <div class="search-box">
                         <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Enter name, email, or ID">
+                        <input type="text" placeholder="Enter supplier name, email, or ID">
                     </div>
                     <div class="role-filter">
                         <span>Filter by: Role</span>
@@ -54,7 +54,7 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Full Name</th>
+                            <th>Supplier Name</th>
                             <th>Role</th>
                             <th>Email</th>
                             <th>Status</th>
@@ -63,7 +63,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>1024</td>
+                            <td>S024</td>
                             <td>Steven Mitchell</td>
                             <td>Admin</td>
                             <td>s.mitchell@gmail.com</td>
@@ -71,7 +71,7 @@
                             <td><a href="#" class="action-link">Edit</a> / <a href="#" class="action-link danger">Ban</a></td>
                         </tr>
                         <tr>
-                            <td>1025</td>
+                            <td>S025</td>
                             <td>Jer Erick</td>
                             <td>Community</td>
                             <td>jer.erick@gmail.com</td>
@@ -79,7 +79,7 @@
                             <td><a href="#" class="action-link">Edit</a> / <a href="#" class="action-link danger">Ban</a></td>
                         </tr>
                         <tr>
-                            <td>1026</td>
+                            <td>S026</td>
                             <td>Monico Vian</td>
                             <td>Community</td>
                             <td>monico.vian@gmail.com</td>
@@ -87,7 +87,7 @@
                             <td><a href="#" class="action-link">Edit</a> / <a href="#" class="action-link danger">Ban</a></td>
                         </tr>
                         <tr>
-                            <td>1027</td>
+                            <td>S027</td>
                             <td>Sarah Discaya</td>
                             <td>Supplier</td>
                             <td>sarah.discaya@gmail.com</td>
@@ -100,27 +100,14 @@
 
             <h2 class="section-title">Users Details Panel</h2>
             <div class="details-panel">
-                <div class="details-grid">
-                    <div class="detail-item">
-                        <span class="detail-label">Full Name</span>
-                        <strong class="detail-value">Crist Briand Brader</strong>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Role</span>
-                        <strong class="detail-value">Community</strong>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Status</span>
-                        <strong class="detail-value status-active">Active</strong>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Email</span>
-                        <strong class="detail-value">cristbriand.brader.25@usjr.edu.ph</strong>
-                    </div>
-                    <div class="detail-item" style="grid-column: 2;">
-                        <span class="detail-label">Joined</span>
-                        <strong class="detail-value">Nov 2, 2025</strong>
-                    </div>
+                <div class="detail-row">
+                    <div class="detail-item"><span>Full Name</span><strong>Crist Briand Brader</strong></div>
+                    <div class="detail-item"><span>Role</span><strong>Community</strong></div>
+                    <div class="detail-item"><span>Email</span><strong>cristbriand.brader.25@usjr.edu.ph</strong></div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-item"><span>Status</span><strong class="text-active">Active</strong></div>
+                    <div class="detail-item"><span>Joined</span><strong>Nov 2, 2025</strong></div>
                 </div>
                 <div class="details-actions">
                     <button class="btn btn-success">Update Role</button>

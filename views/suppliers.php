@@ -15,7 +15,7 @@ $selectedSupplier = $suppliers[4] ?? null;
 ?>
         <div class="management-header">
             <h1 class="management-title">SUPPLIERS MANAGEMENT</h1>
-            <p class="management-subtitle">Manage supplier registration, verification, and details.</p>
+            <p class="management-subtitle">Manage all suppliers in the EnerSave platform.</p>
         </div>
         
         <!-- Search and Filter Panel -->

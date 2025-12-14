@@ -57,13 +57,90 @@ $username = $user['username'] ?? 'Student';
     margin-right:-15px;
     }
 
+    .avatar-container {
+        position: relative;
+        margin-right: 15px;
+    }
+
     .nav-avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #ffcc00;
-    cursor: pointer;
-    margin-right: 15px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #ffcc00;
+        cursor: pointer;
+    }
+
+    .avatar-dropdown {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+        min-width: 180px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1000;
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    .avatar-dropdown.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+
+    .avatar-dropdown-item {
+        display: flex;
+        align-items: center;
+        padding: 14px 18px;
+        color: #333;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        border: none;
+        background: none;
+        width: 100%;
+        text-align: left;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .avatar-dropdown-item:last-child {
+        border-bottom: none;
+    }
+
+    .avatar-dropdown-item:hover {
+        background-color: #f8f9fa;
+        color: #239c42;
+        padding-left: 20px;
+    }
+
+    .avatar-dropdown-item:first-child {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .avatar-dropdown-item:last-child {
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    .avatar-dropdown-item.logout {
+        color: #d32f2f;
+        font-weight: 600;
+    }
+
+    .avatar-dropdown-item.logout:hover {
+        background-color: #ffebee;
+        color: #b71c1c;
+        padding-left: 20px;
     }
 
     .brand-name {
@@ -362,13 +439,19 @@ $username = $user['username'] ?? 'Student';
     <div class="nav-right">
         <?php if ($role === 'EDUCATOR_ADVOCATE'): ?>
         <form method="post" action="/toggle-mode" style="display: inline; margin-right: 10px;">
-            <button type="submit" style="background: #2e9e48; color: black; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 13px;">
+            <button type="submit" style="background: #2e9e48; color: black; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 14px;">
                 Switch to Educator Mode
             </button>
         </form>
         <?php endif; ?>
         Student: <?php echo htmlspecialchars($username); ?>
-        <div class="nav-avatar"></div>
+        <div class="avatar-container">
+            <div class="nav-avatar" id="avatarDropdown"></div>
+            <div class="avatar-dropdown" id="avatarMenu">
+                <a href="#" class="avatar-dropdown-item">Settings</a>
+                <a href="/logout" class="avatar-dropdown-item logout">Logout</a>
+            </div>
+        </div>
     </div>
 </div>      
 
@@ -478,6 +561,7 @@ $username = $user['username'] ?? 'Student';
         </div>
     </div>
     <script src="/navigationStudent.js"></script>
+    <script src="/JavaScripts/avatarDropdown.js"></script>
 </body>
 </html>
 

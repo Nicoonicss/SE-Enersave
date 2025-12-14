@@ -1,0 +1,1238 @@
+/* --- 1. Global Setup & Variables --- */
+:root {
+    --green-primary: #38a169; /* Main EnerSave Green */
+    --gray-bg: #f7fafc;      /* Light background for body/page */
+    --white-bg: #ffffff;     /* Activity/Status Panel background */
+    --card-bg: #f9f9f9;      /* Slightly off-white background for metrics cards */
+    --text-dark: #2d3748;    /* Dark text for headings/values */
+    --text-light: #718096;   /* Light gray text for labels/subtitles */
+    --border-light: #e2e8f0; /* Light gray border/divider */
+    
+    /* Status Colors */
+    --status-active: #68d391;     /* Light Green for Active */
+    --status-banned: #e53e3e;     /* Dark Red for Banned/Rejected */
+    --status-pending: #f6ad55;    /* Orange/Yellow for Pending/Moderate */
+    --status-completed: #4299e1;  /* Blue for Completed */
+    
+    --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --radius: 8px;
+    
+    /* Admin-specific variables */
+    --admin-green: #27ae60;
+    --admin-green-light: #d1fae5;
+    --admin-yellow: #f59e0b;
+    --admin-yellow-light: #fef3c7;
+    --admin-red: #ef4444;
+    --admin-red-light: #fee2e2;
+    --admin-blue: #3b82f6;
+    --admin-blue-light: #dbeafe;
+    
+    /* Compatibility variables for new styles */
+    --text: var(--text-dark);
+    --muted: var(--text-light);
+    --border: var(--border-light);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    background-color: var(--gray-bg);
+    color: var(--text-dark);
+}
+
+a {
+    color: var(--green-primary);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: #2b7a4b;
+}
+
+/* --- 2. Navbar & Header --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: var(--white-bg);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-bottom: 2px solid var(--green-primary);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    font-size: 1.5em;
+    color: var(--green-primary);
+}
+
+.logo img {
+    height: 30px; 
+    width: auto;
+    margin-right: 8px;
+}
+
+.main-nav a {
+    margin: 0 15px;
+    padding: 5px 0;
+    color: var(--text-light);
+    transition: color 0.2s, border-bottom 0.2s;
+    font-weight: 500;
+}
+
+.main-nav a:hover,
+.main-nav a.active {
+    color: var(--green-primary);
+    border-bottom: 2px solid var(--green-primary);
+}
+
+.admin-profile {
+    display: flex;
+    align-items: center;
+    color: var(--text-dark);
+}
+
+.avatar {
+    margin-left: 10px;
+    font-size: 1.8em;
+    color: #f6ad55; /* Orange/Amber color for the user avatar icon */
+}
+
+/* --- 3. Page Layout & Typography --- */
+.dashboard-container {
+    padding: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.page-title {
+    font-size: 1.8em;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 5px;
+}
+
+.page-subtitle {
+    color: var(--admin-green);
+    margin-bottom: 20px;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.section-title {
+    font-size: 1.25rem;
+    margin: 0 0 16px 0;
+    font-weight: 600;
+    color: #000;
+}
+
+.data-management-panel .section-title {
+    margin-top: 0;
+    margin-bottom: 16px;
+}
+
+.quick-actions-panel h2,
+.recent-activity-panel h2,
+.system-status-panel h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #000;
+    margin: 0 0 16px 0;
+}
+
+/* --- 4. Metrics Cards (Dashboard & Projects) --- */
+.metrics-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background-color: #f5f5f5; 
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.metric-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-light);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.metric-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-top: 0;
+    color: #000;
+}
+
+/* --- 5. Dashboard Overview Specifics (Grid) --- */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 20px;
+}
+
+.quick-actions-panel {
+    grid-column: 1 / span 2; 
+    margin-bottom: 20px;
+}
+
+.recent-activity-panel, .system-status-panel {
+    background-color: var(--white-bg);
+    padding: 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-light);
+}
+
+.recent-activity-panel { grid-column: 1 / 2; }
+.system-status-panel { grid-column: 2 / 3; }
+
+/* Quick Actions Buttons */
+.action-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.action-buttons button {
+    display: flex;
+    align-items: center;
+    background-color: var(--admin-green);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    color: white;
+    transition: all 0.2s ease;
+    flex: 1;
+}
+
+.action-buttons button:hover {
+    background-color: #229954;
+}
+
+.action-buttons button i {
+    margin-right: 8px;
+    font-size: 1.1em;
+    color: white;
+}
+
+/* Recent Activity List */
+.activity-list {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0 0;
+}
+
+.activity-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.activity-list li:hover {
+    background-color: #e8e8e8;
+}
+
+.activity-list li:last-child { 
+    margin-bottom: 0; 
+}
+
+.activity-text {
+    flex: 1;
+}
+
+.activity-title {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: #000;
+    margin-bottom: 4px;
+    line-height: 1.4;
+}
+
+.activity-title strong {
+    font-weight: 600;
+    color: #000;
+}
+
+.activity-time {
+    font-size: 0.875rem;
+    color: var(--text-light);
+    margin-top: 2px;
+}
+
+.activity-arrow {
+    color: var(--text-light);
+    font-size: 0.875rem;
+    margin-left: 12px;
+    align-self: center;
+}
+
+/* System Status */
+.status-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-weight: 500;
+    font-size: 1.0em;
+}
+.status-item:last-child { border-bottom: none; }
+
+.status-value { 
+    font-weight: 700; 
+    color: #000;
+}
+
+.status-value.green { 
+    color: var(--admin-green); 
+}
+
+.status-value.red { 
+    color: var(--admin-red); 
+}
+
+.status-value.high { 
+    color: var(--admin-green); 
+}
+
+.status-value.moderate { 
+    color: var(--status-pending); 
+}
+
+/* Activity Footer Buttons */
+.activity-footer {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+.export-btn { 
+    background-color: var(--admin-green); 
+    color: white; 
+    border: none;
+}
+
+.export-btn:hover {
+    background-color: #229954;
+}
+
+.view-all-btn { 
+    background-color: #f3f4f6; 
+    color: #000; 
+    border: 1px solid var(--border-light);
+}
+
+.view-all-btn:hover {
+    background-color: #e5e7eb;
+}
+
+.export-btn i, .view-all-btn i {
+    margin-right: 8px;
+}
+
+/* --- 6. Management Panel (Users/Suppliers/Projects) --- */
+
+.data-management-panel {
+    background-color: #f9fafb;
+    padding: 24px;
+    border-radius: 12px;
+    border: 1px solid var(--border-light);
+    margin-bottom: 30px;
+}
+
+.filter-bar {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Search Box */
+.search-box {
+    display: flex;
+    align-items: center;
+    padding: 8px 15px;
+    border: 1px solid var(--border-light);
+    border-radius: 50px;
+    width: 350px;
+    margin-right: 0;
+    background-color: white;
+}
+
+.search-box.full-width-search {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+}
+
+.search-box i {
+    color: var(--text-light);
+    margin-right: 10px;
+}
+
+.search-box input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 1em;
+    background: transparent;
+}
+
+/* Filters */
+.role-filter, .sort-by {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-right: 0;
+}
+
+.role-filter span, .sort-by span {
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: 0.9375rem;
+}
+
+.filter-btn {
+    background: white;
+    border: 1.5px solid var(--border-light);
+    padding: 6px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #000;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+    border-color: var(--admin-green);
+}
+
+.filter-btn.active {
+    background-color: var(--admin-green);
+    color: white;
+    border-color: var(--admin-green);
+}
+
+.sort-by span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.sort-by i {
+    font-size: 0.75rem;
+    color: var(--text-light);
+}
+
+/* Tables */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.data-table th, .data-table td {
+    padding: 16px;
+    text-align: left;
+    font-size: 0.9375rem;
+}
+
+.data-table td:last-child {
+    white-space: nowrap;
+}
+
+.data-table td:last-child a {
+    margin-right: 8px;
+}
+
+.data-table td:last-child a:last-of-type {
+    margin-right: 0;
+}
+
+.data-table thead {
+    background-color: #f9fafb;
+}
+
+.data-table thead th {
+    font-weight: 600;
+    color: var(--text-light);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.data-table tbody tr {
+    border-bottom: 1px solid var(--border-light);
+    background-color: white;
+}
+
+.data-table tbody tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.data-table tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Coloring for ID and Names in User/Supplier Table */
+.data-table td:first-child { color: var(--green-primary); font-weight: 600; }
+.data-table td:nth-child(2) { color: var(--text-dark); font-weight: 600; }
+
+/* Status Tags */
+.status-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+
+.status-tag.active, .status-tag.project-active { 
+    background-color: var(--admin-green);
+    color: white;
+}
+
+.status-tag.banned, .status-tag.project-rejected { 
+    background-color: var(--admin-red);
+    color: white;
+}
+
+.status-tag.project-pending { 
+    background-color: var(--admin-yellow-light);
+    color: #000;
+}
+
+.status-tag.project-completed { 
+    background-color: var(--admin-blue);
+    color: white;
+}
+
+/* Action Links */
+.action-link {
+    color: var(--admin-blue);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-right: 12px;
+    cursor: pointer;
+}
+
+.action-link:last-child {
+    margin-right: 0;
+}
+
+.action-link:hover {
+    text-decoration: underline;
+}
+
+.action-link.success {
+    color: var(--admin-green);
+}
+
+.action-link.danger {
+    color: var(--admin-red);
+}
+
+.project-table .action-approve { color: var(--admin-green); }
+.project-table .action-reject { color: var(--admin-red); }
+
+/* Details Panel (Users/Suppliers) */
+.details-panel {
+    background-color: #f5f5f5;
+    padding: 24px;
+    border-radius: 12px;
+    border: 1px solid var(--border-light);
+}
+
+.detail-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-bottom: 20px;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.detail-item span,
+.detail-label {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--text-light);
+    font-weight: 500;
+    margin-bottom: 0;
+}
+
+.detail-item strong,
+.detail-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #000;
+}
+
+.detail-value.status-active {
+    color: var(--admin-green);
+}
+
+.text-active { 
+    color: var(--admin-green); 
+}
+
+.details-actions {
+    margin-top: 24px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+/* Specific Detail Panel Buttons */
+.btn-success { 
+    background-color: var(--admin-green); 
+    color: white; 
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-success:hover {
+    background-color: #229954;
+}
+
+.btn-warning { 
+    background-color: var(--admin-yellow); 
+    color: #000; 
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-warning:hover {
+    background-color: #d97706;
+}
+
+.btn-dark { 
+    background-color: #6b7280; 
+    color: white; 
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-dark:hover {
+    background-color: #4b5563;
+}
+
+/* ============================================
+   Admin-specific styles
+   ============================================ */
+
+.admin-user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: 20px;
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.9375rem;
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--admin-green);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+/* Admin Dashboard */
+.admin-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #000;
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.admin-subtitle {
+    font-size: 1rem;
+    color: var(--admin-green);
+    margin: 0 0 32px 0;
+    font-weight: 500;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 32px;
+}
+
+.metric-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.metric-label {
+    font-size: 0.875rem;
+    color: var(--muted);
+    font-weight: 500;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.quick-actions {
+    margin-bottom: 32px;
+}
+
+.quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.action-btn {
+    background: var(--admin-green);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.action-btn:hover {
+    background: #229954;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+}
+
+.action-btn-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.activity-panel, .status-panel {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.activity-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-item:hover {
+    background: #f9fafb;
+    margin: 0 -24px;
+    padding: 16px 24px;
+}
+
+.activity-text {
+    flex: 1;
+}
+
+.activity-title {
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 4px;
+}
+
+.activity-time {
+    font-size: 0.875rem;
+    color: var(--muted);
+}
+
+.activity-arrow {
+    color: var(--muted);
+    margin-left: 12px;
+}
+
+.status-label {
+    font-weight: 500;
+    color: #000;
+}
+
+.status-value.green {
+    color: var(--admin-green);
+}
+
+.status-value.red {
+    color: var(--admin-red);
+}
+
+.status-value.black {
+    color: #000;
+}
+
+.admin-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.btn-export, .btn-notifications {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.btn-export {
+    background: var(--admin-green);
+    color: white;
+}
+
+.btn-export:hover {
+    background: #229954;
+}
+
+.btn-notifications {
+    background: #f3f4f6;
+    color: #000;
+}
+
+.btn-notifications:hover {
+    background: #e5e7eb;
+}
+
+/* Management Pages */
+.management-header {
+    margin-bottom: 32px;
+}
+
+.management-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #000;
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.management-subtitle {
+    font-size: 1rem;
+    color: var(--admin-green);
+    margin: 0;
+    font-weight: 500;
+}
+
+.search-filter-panel {
+    background: #f9fafb;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.search-bar {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 12px 16px 12px 44px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.9375rem;
+    outline: none;
+}
+
+.search-bar .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    color: var(--muted);
+}
+
+.filter-sort-row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.filter-group, .sort-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.filter-label, .sort-label {
+    font-weight: 600;
+    color: #000;
+    font-size: 0.9375rem;
+}
+
+.filter-pills {
+    display: flex;
+    gap: 8px;
+}
+
+.filter-pill {
+    padding: 6px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    background: white;
+    color: #000;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-pill:hover {
+    border-color: var(--admin-green);
+}
+
+.filter-pill.active {
+    background: var(--admin-green);
+    color: white;
+    border-color: var(--admin-green);
+}
+
+.sort-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    color: #000;
+    font-size: 0.9375rem;
+    cursor: pointer;
+}
+
+.sort-arrow {
+    width: 16px;
+    height: 16px;
+    color: var(--muted);
+}
+
+.data-table-panel {
+    background: #f9fafb;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.table-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #000;
+    margin: 0 0 16px 0;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.admin-table thead {
+    background: #f9fafb;
+}
+
+.admin-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.admin-table td {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9375rem;
+}
+
+.admin-table tbody tr:hover {
+    background: #f9fafb;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.8125rem;
+}
+
+.status-badge.active {
+    background: var(--admin-green-light);
+    color: var(--admin-green);
+}
+
+.status-badge.banned, .status-badge.rejected {
+    background: var(--admin-red-light);
+    color: var(--admin-red);
+}
+
+.status-badge.pending {
+    background: var(--admin-yellow-light);
+    color: var(--admin-yellow);
+}
+
+.status-badge.completed {
+    background: var(--admin-blue-light);
+    color: var(--admin-blue);
+}
+
+.action-links {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.action-link {
+    color: var(--admin-blue);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+.action-link:hover {
+    text-decoration: underline;
+}
+
+.action-link.danger {
+    color: var(--admin-red);
+}
+
+.action-link.success {
+    color: var(--admin-green);
+}
+
+/* User Details Panel */
+.details-panel-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #000;
+    margin: 0 0 24px 0;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+.detail-label {
+    font-size: 0.875rem;
+    color: var(--muted);
+    font-weight: 500;
+}
+
+.detail-value {
+    font-size: 1rem;
+    color: #000;
+    font-weight: 600;
+}
+
+.detail-value.status-active {
+    color: var(--admin-green);
+}
+
+.detail-value.status-banned {
+    color: var(--admin-red);
+}
+
+.btn-update-role {
+    background: var(--admin-green);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-deactivate {
+    background: var(--admin-yellow);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-reset-password {
+    background: #6b7280;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-update-role:hover {
+    background: #229954;
+}
+
+.btn-deactivate:hover {
+    background: #d97706;
+}
+
+.btn-reset-password:hover {
+    background: #4b5563;
+}
+
+/* Summary Cards for Projects */
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 32px;
+}
+
+.summary-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.summary-card-label {
+    font-size: 0.875rem;
+    color: var(--muted);
+    font-weight: 500;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.summary-card-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #000;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .metrics-grid,
+    .quick-actions-grid,
+    .summary-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .filter-sort-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
