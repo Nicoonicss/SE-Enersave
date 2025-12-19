@@ -326,7 +326,7 @@ $username = $user['username'] ?? 'Donor';
   .fundraiser-modal {
     display: none;
     position: fixed;
-    z-index: 1000;
+    z-index: 10000;
     left: 0;
     top: 0;
     width: 100%;
@@ -337,7 +337,7 @@ $username = $user['username'] ?? 'Donor';
   }
 
   .fundraiser-modal.show {
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
   }
@@ -420,6 +420,12 @@ $username = $user['username'] ?? 'Donor';
     font-weight: 600;
     color: #333;
     font-size: 14px;
+  }
+
+  .form-group label.required::after {
+    content: " *";
+    color: #d32f2f;
+    font-weight: 600;
   }
 
   .form-group label.optional::after {
@@ -563,6 +569,90 @@ $username = $user['username'] ?? 'Donor';
     color: #27ae60;
     font-weight: 700;
   }
+
+  /* Project Details Modal Styles */
+  .project-modal {
+    display: none;
+    position: fixed;
+    z-index: 10001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s ease;
+  }
+
+  .project-modal.show {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .project-modal .modal-content {
+    background-color: white;
+    margin: auto;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.3s ease;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .project-modal .modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .modal-project-image {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+
+  .modal-project-description {
+    line-height: 1.6;
+    color: #555;
+    font-size: 15px;
+    margin: 0;
+  }
+
+  .modal-project-initiator {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+  }
+
+  .modal-project-initiator-label {
+    font-weight: 600;
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+
+  .modal-project-initiator-name {
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+  }
 </style>
 </head>
 <body>
@@ -637,7 +727,7 @@ $username = $user['username'] ?? 'Donor';
     </section>
 
     <aside class="summary">
-      <button type="button" class="start-fundraiser-btn" id="startFundraiserBtn" onclick="openFundraiserModal()">Start a Fundraiser</button>
+      <button type="button" class="start-fundraiser-btn" id="startFundraiserBtn" onclick="openFundraiserModal(event)">Start a Fundraiser</button>
 
       <h3>My Donation Summary</h3>
 
@@ -661,6 +751,24 @@ $username = $user['username'] ?? 'Donor';
     </aside>
   </main>
 
+  <!-- Project Details Modal -->
+  <div id="projectDetailsModal" class="project-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalProjectName">Project Name</h2>
+        <button class="close-modal" id="closeProjectModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <img id="modalProjectImage" class="modal-project-image" src="" alt="Project Image" style="display: none;">
+        <p class="modal-project-description" id="modalProjectDescription">Project description will appear here.</p>
+        <div class="modal-project-initiator">
+          <div class="modal-project-initiator-label">Project Initiator:</div>
+          <div class="modal-project-initiator-name" id="modalProjectInitiator">Loading...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Fundraiser Modal -->
   <div id="fundraiserModal" class="fundraiser-modal">
     <div class="modal-content">
@@ -670,12 +778,12 @@ $username = $user['username'] ?? 'Donor';
       </div>
       <form id="fundraiserForm">
         <div class="form-group">
-          <label for="fundraiserImage">Upload Image</label>
+          <label for="fundraiserImage" class="required">Upload Image</label>
           <input type="file" id="fundraiserImage" accept="image/*" required>
           <img id="imagePreview" class="image-preview" alt="Preview">
         </div>
         <div class="form-group">
-          <label for="fundraiserName">Crowdfunding Name</label>
+          <label for="fundraiserName" class="required">Crowdfunding Name</label>
           <input type="text" id="fundraiserName" required placeholder="Enter crowdfunding name">
         </div>
         <div class="form-group">
@@ -683,12 +791,12 @@ $username = $user['username'] ?? 'Donor';
           <textarea id="fundraiserDescription" placeholder="Enter description (optional)"></textarea>
         </div>
         <div class="form-group">
-          <label for="fundraiserAmount">Amount</label>
+          <label for="fundraiserAmount" class="required">Target Amount</label>
           <input type="number" id="fundraiserAmount" required placeholder="Enter target amount" min="1">
         </div>
         <div class="form-actions">
           <button type="button" class="btn-cancel" id="cancelFundraiserBtn">Cancel</button>
-          <button type="submit" class="btn-add">Add Crowdfunding</button>
+          <button type="submit" class="btn-add">Add Crowdfunding Project</button>
         </div>
       </form>
     </div>
@@ -713,21 +821,33 @@ $username = $user['username'] ?? 'Donor';
     </table>
   </div>
 
-<script src="/navigationDonor.js"></script>
-<script src="/JavaScripts/avatarDropdown.js"></script>
 <script>
-  // Global function for inline onclick
+  // Define function immediately - before DOM is ready
   function openFundraiserModal(e) {
+    console.log('openFundraiserModal called', e);
     if (e) {
       e.preventDefault();
       e.stopPropagation();
     }
     const modal = document.getElementById('fundraiserModal');
+    console.log('Modal element:', modal);
     if (modal) {
+      console.log('Adding show class to modal');
       modal.classList.add('show');
       document.body.style.overflow = 'hidden';
+      console.log('Modal classes:', modal.className);
+      console.log('Modal display style:', window.getComputedStyle(modal).display);
+    } else {
+      console.error('Modal not found!');
     }
   }
+  
+  // Also attach to window for safety
+  window.openFundraiserModal = openFundraiserModal;
+</script>
+<script src="/navigationDonor.js"></script>
+<script src="/JavaScripts/avatarDropdown.js"></script>
+<script>
 
   // Wait for DOM to be fully loaded
   document.addEventListener('DOMContentLoaded', function() {
@@ -736,7 +856,7 @@ $username = $user['username'] ?? 'Donor';
     // Modal elements
     const fundraiserModal = document.getElementById('fundraiserModal');
     const startFundraiserBtn = document.getElementById('startFundraiserBtn');
-    const closeFundraiserModal = document.getElementById('closeFundraiserModal');
+    const closeFundraiserModalBtn = document.getElementById('closeFundraiserModal');
     const cancelFundraiserBtn = document.getElementById('cancelFundraiserBtn');
     const fundraiserForm = document.getElementById('fundraiserForm');
     const imageInput = document.getElementById('fundraiserImage');
@@ -792,12 +912,14 @@ $username = $user['username'] ?? 'Donor';
     function addProjectToTable(project) {
       if (!crowdfundingTableBody || !crowdfundingTableContainer) return;
       const row = document.createElement('tr');
+      const projectName = project.name || project.title || 'Untitled';
+      const projectImage = project.image || '';
       row.innerHTML = `
-        <td><img src="${project.image}" alt="${project.name}" class="table-image"></td>
-        <td><strong>${project.name}</strong></td>
-        <td>${project.description}</td>
-        <td class="table-amount">₱${project.amount.toLocaleString()}</td>
-        <td>${project.dateCreated}</td>
+        <td><img src="${projectImage}" alt="${projectName}" class="table-image"></td>
+        <td><strong>${projectName}</strong></td>
+        <td>${project.description || ''}</td>
+        <td class="table-amount">₱${(project.amount || 0).toLocaleString()}</td>
+        <td>${project.dateCreated || ''}</td>
       `;
       crowdfundingTableBody.appendChild(row);
       crowdfundingTableContainer.style.display = 'block';
@@ -812,17 +934,22 @@ $username = $user['username'] ?? 'Donor';
       const projectCard = document.createElement('article');
       projectCard.className = 'project-card';
       projectCard.setAttribute('data-project-id', project.id);
+      const projectName = project.name || project.title || 'Untitled';
+      const projectImage = project.image || '';
+      const projectRaised = project.raised || 0;
+      const projectAmount = project.amount || 0;
+      const projectProgress = project.progress || 0;
       projectCard.innerHTML = `
-        <img class="project-image" src="${project.image}" alt="${project.name}" />
+        <img class="project-image" src="${projectImage}" alt="${projectName}" />
         <div class="project-content">
-          <div class="project-title">${project.name}</div>
-          <p class="project-raised">Raised<br><strong>₱${project.raised.toLocaleString()}</strong> / ${project.amount.toLocaleString()}</p>
+          <div class="project-title">${projectName}</div>
+          <p class="project-raised">Raised<br><strong>₱${projectRaised.toLocaleString()}</strong> / ${projectAmount.toLocaleString()}</p>
           <div class="progress-bar-container" aria-label="Progress toward funding goal">
-            <div class="progress-bar" style="width: ${project.progress}%;"></div>
+            <div class="progress-bar" style="width: ${projectProgress}%;"></div>
           </div>
-          <div class="progress-text">${project.progress}%</div>
+          <div class="progress-text">${projectProgress}%</div>
           <div class="btn-group">
-            <button class="btn-donate" aria-label="Donate to ${project.name}">
+            <button class="btn-donate" aria-label="Donate to ${projectName}">
               Donate
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M2 6h20v12H2V6zm2 2v8h16V8H4zm8 1a3 3 0 110 6 3 3 0 010-6z"/>
@@ -857,56 +984,114 @@ $username = $user['username'] ?? 'Donor';
         reader.onload = function(e) {
           const imageData = e.target.result;
 
-          // Create new crowdfunding project
-          const newProject = {
-            id: Date.now().toString(),
-            name: name,
+          // Get current username
+          const currentUsername = '<?php echo addslashes(htmlspecialchars($username, ENT_QUOTES, 'UTF-8')); ?>';
+          
+          // Prepare project data for API
+          const projectData = {
+            title: name,
             description: description || 'No description provided',
-            amount: parseFloat(amount),
-            image: imageData,
-            dateCreated: new Date().toLocaleDateString('en-US', { 
-              year: 'numeric', 
-              month: 'short', 
-              day: 'numeric' 
-            }),
-            raised: 0,
-            progress: 0
+            goal_amount: parseFloat(amount),
+            image: imageData
           };
 
-          // Get existing projects from localStorage
-          let projects = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-          projects.push(newProject);
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+          // Save to database via API
+          fetch('/api/projects', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(projectData)
+          })
+          .then(response => {
+            console.log('Response status:', response.status);
+            if (!response.ok) {
+              return response.json().then(err => {
+                throw new Error(err.error || 'Server error');
+              });
+            }
+            return response.json();
+          })
+          .then(data => {
+            console.log('Response data:', data);
+            if (data.success) {
+              // Create project object for display
+              const newProject = {
+                id: data.id.toString(),
+                name: name,
+                description: description || 'No description provided',
+                amount: parseFloat(amount),
+                image: imageData,
+                initiator: currentUsername || 'Donor',
+                dateCreated: new Date().toLocaleDateString('en-US', { 
+                  year: 'numeric', 
+                  month: 'short', 
+                  day: 'numeric' 
+                }),
+                raised: 0,
+                progress: 0
+              };
 
-          // Add to table
-          addProjectToTable(newProject);
+              // Also save to localStorage for backward compatibility (can be removed later)
+              let projects = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+              projects.push(newProject);
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
 
-          // Add to donor_projects.php page
-          addProjectToDonorProjects(newProject);
+              // Add to table
+              addProjectToTable(newProject);
 
-          // Close modal
-          closeFundraiserModal();
+              // Add to donor_projects.php page
+              addProjectToDonorProjects(newProject);
 
-          // Show success message
-          alert('Crowdfunding project added successfully!');
+              // Close modal
+              closeFundraiserModal();
+
+              // Show success message
+              alert('Crowdfunding project added successfully! Saved to database.');
+            } else {
+              alert('Error: ' + (data.error || 'Failed to create project'));
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('Error creating project: ' + error.message + '. Check browser console for details.');
+          });
         };
         reader.readAsDataURL(imageFile);
       });
     }
 
-    // Load existing projects on page load
+    // Load existing projects from database
     function loadExistingProjects() {
-      const projects = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-      if (projects.length > 0) {
-        projects.forEach(project => {
-          // Check if project already exists on page (by ID)
-          const existingProject = document.querySelector(`[data-project-id="${project.id}"]`);
-          if (!existingProject) {
-            addProjectToTable(project);
-            addProjectToDonorProjects(project);
+      // First, load from database
+      fetch('/api/projects')
+        .then(response => response.json())
+        .then(data => {
+          if (data.success && data.projects) {
+            data.projects.forEach(project => {
+              // Check if project already exists on page (by ID)
+              const existingProject = document.querySelector(`[data-project-id="${project.id}"]`);
+              if (!existingProject) {
+                addProjectToTable(project);
+                addProjectToDonorProjects(project);
+              }
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error loading projects from database:', error);
+          // Fallback to localStorage if database fails
+          const projects = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+          if (projects.length > 0) {
+            projects.forEach(project => {
+              const existingProject = document.querySelector(`[data-project-id="${project.id}"]`);
+              if (!existingProject) {
+                addProjectToTable(project);
+                addProjectToDonorProjects(project);
+              }
+            });
           }
         });
-      }
     }
 
     // Event listeners
@@ -915,16 +1100,33 @@ $username = $user['username'] ?? 'Donor';
       startFundraiserBtn.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
-        openFundraiserModal(e);
+        console.log('Button clicked, opening modal');
+        if (window.openFundraiserModal) {
+          window.openFundraiserModal(e);
+        } else {
+          // Fallback: directly open modal
+          if (fundraiserModal) {
+            fundraiserModal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+          }
+        }
       });
     } else {
       console.error('startFundraiserBtn not found!');
     }
-    if (closeFundraiserModal) {
-      closeFundraiserModal.addEventListener('click', closeFundraiserModal);
+    if (closeFundraiserModalBtn) {
+      closeFundraiserModalBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeFundraiserModal();
+      });
     }
     if (cancelFundraiserBtn) {
-      cancelFundraiserBtn.addEventListener('click', closeFundraiserModal);
+      cancelFundraiserBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeFundraiserModal();
+      });
     }
 
     // Close modal when clicking outside
@@ -945,6 +1147,135 @@ $username = $user['username'] ?? 'Donor';
 
     // Load existing projects on page load
     loadExistingProjects();
+  });
+
+  // Project Details Modal Functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const projectModal = document.getElementById('projectDetailsModal');
+    const closeProjectModalBtn = document.getElementById('closeProjectModal');
+    
+    // Project data for hardcoded projects
+    const projectData = {
+      'Solar for School': {
+        description: 'This initiative aims to install solar panels in local schools to provide clean, renewable energy and reduce electricity costs. The project will benefit multiple schools in the community, providing them with sustainable power for classrooms, computer labs, and other facilities. By implementing solar energy, we can help schools save money on electricity bills while teaching students about renewable energy and environmental sustainability.',
+        initiator: 'Community Energy Initiative',
+        image: '/images/crowdfundingPic1.png'
+      },
+      'Hydro for Hope': {
+        description: 'A community-driven project to install small-scale hydroelectric systems in rural areas with access to flowing water. This sustainable energy solution will provide reliable electricity to remote communities, improving quality of life and supporting local economic development. The project includes community training on maintenance and operation of the hydro systems.',
+        initiator: 'Rural Development Foundation',
+        image: '/images/crowdfundingPic2.png'
+      }
+    };
+
+    // Function to open project details modal
+    function openProjectModal(projectCard) {
+      const projectTitle = projectCard.querySelector('.project-title');
+      const projectImage = projectCard.querySelector('.project-image');
+      
+      if (!projectTitle || !projectModal) {
+        console.error('Project elements not found');
+        return;
+      }
+
+      const projectName = projectTitle.textContent.trim();
+      const imageUrl = projectImage ? projectImage.src : '';
+      const imageAlt = projectImage ? projectImage.alt : projectName;
+      
+      // Get project data
+      let description = 'No description provided.';
+      let initiator = 'Unknown';
+      
+      if (projectData[projectName]) {
+        description = projectData[projectName].description;
+        initiator = projectData[projectName].initiator;
+      } else {
+        // Check if this is a dynamically added project from localStorage
+        const projectId = projectCard.getAttribute('data-project-id');
+        if (projectId) {
+          const projects = JSON.parse(localStorage.getItem('donor_crowdfunding_projects') || '[]');
+          const project = projects.find(p => p.id === projectId);
+          if (project) {
+            description = project.description || 'No description provided.';
+            initiator = project.initiator || 'Donor';
+          }
+        }
+      }
+      
+      // Populate modal
+      const modalImage = document.getElementById('modalProjectImage');
+      const modalName = document.getElementById('modalProjectName');
+      const modalDescription = document.getElementById('modalProjectDescription');
+      const modalInitiator = document.getElementById('modalProjectInitiator');
+      
+      if (!modalImage || !modalName || !modalDescription || !modalInitiator) {
+        console.error('Modal elements not found');
+        return;
+      }
+      
+      // Set project name in header
+      modalName.textContent = projectName;
+      
+      if (imageUrl) {
+        modalImage.src = imageUrl;
+        modalImage.alt = imageAlt;
+        modalImage.style.display = 'block';
+      } else {
+        modalImage.style.display = 'none';
+      }
+      modalDescription.textContent = description;
+      modalInitiator.textContent = initiator;
+      
+      // Show modal
+      projectModal.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    // Function to close modal
+    function closeProjectModal() {
+      if (projectModal) {
+        projectModal.classList.remove('show');
+        document.body.style.overflow = 'auto';
+      }
+    }
+    
+    // Add event listeners using event delegation for both existing and dynamically added buttons
+    document.addEventListener('click', function(e) {
+      const btnDetails = e.target.closest('.btn-details');
+      if (btnDetails) {
+        e.preventDefault();
+        e.stopPropagation();
+        const projectCard = btnDetails.closest('.project-card');
+        if (projectCard) {
+          openProjectModal(projectCard);
+        }
+      }
+    });
+    
+    // Close modal button
+    if (closeProjectModalBtn) {
+      closeProjectModalBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeProjectModal();
+      });
+    }
+    
+    // Close modal when clicking outside
+    if (projectModal) {
+      projectModal.addEventListener('click', function(e) {
+        if (e.target === projectModal) {
+          closeProjectModal();
+        }
+      });
+    }
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && projectModal && projectModal.classList.contains('show')) {
+        closeProjectModal();
+      }
+    });
   });
 </script>
 </body>

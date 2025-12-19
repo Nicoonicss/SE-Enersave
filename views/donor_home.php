@@ -519,10 +519,6 @@ $username = $user['username'] ?? 'Donor';
     <div class="hero-text">
         <h1>Empowering Communities <br> with Sustainable Energy</h1>
         <p>Connecting local and rural communities with sustainable energy solutions to build a <br>brighter, greener future.</p>
-        <div class="hero-buttons">
-            <button class="btn-green">Explore Marketplace</button>
-            <button class="btn-white">Learn About Clean Energy</button>
-        </div>
     </div>
 </div>
 <br>

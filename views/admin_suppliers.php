@@ -12,15 +12,111 @@ $username = $user['username'] ?? 'Admin';
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f7f7;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 15px;
+        }
+
+        .nav-left img {
+            width: 30px;
+        }
+
+        .nav-left a,
+        .nav-right a {
+            text-decoration: none;
+            color: black;
+            font-weight: 500;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-right: 15px;
+        }
+
+        .brand-name {
+            font-weight: 900;
+            font-size: 18px;
+        }
+
+        .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-left: 20px;
+        }
+
+        .main-nav .nav-item {
+            text-decoration: none;
+            color: black;
+            font-weight: 500;
+            font-size: 15px;
+            padding: 5px 0;
+            transition: color 0.2s ease;
+        }
+
+        .main-nav .nav-item:hover {
+            color: #239c42;
+        }
+
+        .main-nav .nav-item.active {
+            color: #239c42;
+            font-weight: 600;
+        }
+
         .admin-profile {
             position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .avatar-container {
             position: relative;
-            display: inline-block;
+            margin-right: 15px;
+        }
+        .nav-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #ffcc00;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 20px;
         }
         .avatar {
             cursor: pointer;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 20px;
         }
         .avatar-dropdown {
             position: absolute;
@@ -357,25 +453,42 @@ $username = $user['username'] ?? 'Admin';
             margin-bottom: 0;
             line-height: 1.6;
         }
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: #239c42;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .verified-badge i {
+            color: #239c42;
+        }
+        .verify-btn {
+            color: #239c42;
+        }
+        .verify-btn:hover {
+            color: #1e7e34;
+        }
     </style>
 </head>
 <body>
 
     <header class="navbar">
-        <div class="logo">
+        <div class="nav-left">
             <img src="/images/Logo.png" alt="EnerSave Logo">
-            EnerSave
+            <a href="/adminDashboard" class="brand-name"><strong>EnerSave</strong></a>
+            <nav class="main-nav">
+                <a href="/adminDashboard" class="nav-item">Dashboard</a>
+                <a href="/usersManagement" class="nav-item">Users</a>
+                <a href="/suppliersManagement" class="nav-item active">Suppliers</a>
+                <a href="/projectsManagement" class="nav-item">Projects</a>
+            </nav>
         </div>
-        <nav class="main-nav">
-            <a href="/adminDashboard" class="nav-item">Dashboard</a>
-            <a href="/usersManagement" class="nav-item">Users</a>
-            <a href="/suppliersManagement" class="nav-item active">Suppliers</a>
-            <a href="/projectsManagement" class="nav-item">Projects</a>
-        </nav>
-        <div class="admin-profile">
+        <div class="nav-right">
             <span>Admin: <?php echo htmlspecialchars($username); ?></span>
             <div class="avatar-container">
-                <div class="avatar" id="avatarDropdown"><i class="fas fa-user-circle"></i></div>
+                <div class="nav-avatar" id="avatarDropdown"><?php echo strtoupper(substr($username, 0, 1)); ?></div>
                 <div class="avatar-dropdown" id="avatarMenu">
                     <a href="#" class="avatar-dropdown-item">Settings</a>
                     <a href="/logout" class="avatar-dropdown-item logout">Logout</a>
@@ -428,39 +541,8 @@ $username = $user['username'] ?? 'Admin';
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr data-id="S024" data-name="Steven Mitchell" data-role="Admin" data-email="s.mitchell@gmail.com" data-status="active">
-                            <td>S024</td>
-                            <td>Steven Mitchell</td>
-                            <td>Admin</td>
-                            <td>s.mitchell@gmail.com</td>
-                            <td><span class="status-tag active">Active</span></td>
-                            <td><a href="#" class="action-link edit-btn">Edit</a> / <a href="#" class="action-link danger ban-btn">Ban</a></td>
-                        </tr>
-                        <tr data-id="S025" data-name="Jer Erick" data-role="Community" data-email="jer.erick@gmail.com" data-status="active">
-                            <td>S025</td>
-                            <td>Jer Erick</td>
-                            <td>Community</td>
-                            <td>jer.erick@gmail.com</td>
-                            <td><span class="status-tag active">Active</span></td>
-                            <td><a href="#" class="action-link edit-btn">Edit</a> / <a href="#" class="action-link danger ban-btn">Ban</a></td>
-                        </tr>
-                        <tr data-id="S026" data-name="Monico Vian" data-role="Community" data-email="monico.vian@gmail.com" data-status="active">
-                            <td>S026</td>
-                            <td>Monico Vian</td>
-                            <td>Community</td>
-                            <td>monico.vian@gmail.com</td>
-                            <td><span class="status-tag active">Active</span></td>
-                            <td><a href="#" class="action-link edit-btn">Edit</a> / <a href="#" class="action-link danger ban-btn">Ban</a></td>
-                        </tr>
-                        <tr data-id="S027" data-name="Sarah Discaya" data-role="Supplier" data-email="sarah.discaya@gmail.com" data-status="banned">
-                            <td>S027</td>
-                            <td>Sarah Discaya</td>
-                            <td>Supplier</td>
-                            <td>sarah.discaya@gmail.com</td>
-                            <td><span class="status-tag banned">Banned</span></td>
-                            <td><a href="#" class="action-link edit-btn">Edit</a> / <a href="#" class="action-link success unban-btn">Unban</a></td>
-                        </tr>
+                    <tbody id="suppliersTableBody">
+                        <!-- Suppliers will be loaded dynamically from database -->
                     </tbody>
                 </table>
             </div>
@@ -561,13 +643,217 @@ $username = $user['username'] ?? 'Admin';
         </div>
     </div>
 
+    <!-- Verify Supplier Modal -->
+    <div id="verifySupplierModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Verify Supplier</h3>
+                <button class="close-modal" onclick="closeVerifySupplierModal()" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="confirmation-message">Are you sure you want to verify this supplier?</p>
+                <div id="verifySupplierInfo" style="margin-top: 15px; padding: 10px; background: #f5f5f5; border-radius: 5px;">
+                    <strong id="verifySupplierName"></strong><br>
+                    <span id="verifySupplierEmail" style="color: #666; font-size: 14px;"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" onclick="closeVerifySupplierModal()">Cancel</button>
+                <button class="modal-btn modal-btn-primary" onclick="confirmVerifySupplier()">Verify Supplier</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Unverify Supplier Modal -->
+    <div id="unverifySupplierModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Unverify Supplier</h3>
+                <button class="close-modal" onclick="closeUnverifySupplierModal()" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="confirmation-message">Are you sure you want to unverify this supplier?</p>
+                <div id="unverifySupplierInfo" style="margin-top: 15px; padding: 10px; background: #f5f5f5; border-radius: 5px;">
+                    <strong id="unverifySupplierName"></strong><br>
+                    <span id="unverifySupplierEmail" style="color: #666; font-size: 14px;"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" onclick="closeUnverifySupplierModal()">Cancel</button>
+                <button class="modal-btn modal-btn-primary" onclick="confirmUnverifySupplier()">Unverify Supplier</button>
+            </div>
+        </div>
+    </div>
+
     <script src="/JavaScripts/navigationAdmin.js"></script>
     <script src="/JavaScripts/avatarDropdown.js"></script>
     <script>
+        let currentVerifySupplierId = null;
+        let currentUnverifySupplierId = null;
+        const verifySupplierModal = document.getElementById('verifySupplierModal');
+        const unverifySupplierModal = document.getElementById('unverifySupplierModal');
+        
+        // Load suppliers from database
+        function loadSuppliers() {
+            fetch('/api/suppliers')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.suppliers) {
+                        const tbody = document.getElementById('suppliersTableBody');
+                        tbody.innerHTML = '';
+                        
+                        data.suppliers.forEach(supplier => {
+                            const status = supplier.status || 'active';
+                            const statusClass = status === 'banned' ? 'banned' : 'active';
+                            const statusText = status === 'banned' ? 'Banned' : 'Active';
+                            const banText = status === 'banned' ? 'Unban' : 'Ban';
+                            const banClass = status === 'banned' ? 'success unban-btn' : 'danger ban-btn';
+                            
+                            const verifiedBadge = supplier.is_verified 
+                                ? '<span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>'
+                                : '';
+                            
+                            const verifyButton = supplier.is_verified 
+                                ? `<a href="#" class="action-link verify-btn" style="color: #d32f2f;" onclick="event.stopPropagation(); openUnverifySupplierModal(${supplier.id}, '${supplier.username}', '${supplier.email}')">Unverify</a> / ` 
+                                : `<a href="#" class="action-link verify-btn" onclick="event.stopPropagation(); openVerifySupplierModal(${supplier.id}, '${supplier.username}', '${supplier.email}')">Verify</a> / `;
+                            
+                            const row = document.createElement('tr');
+                            row.setAttribute('data-id', supplier.id);
+                            row.setAttribute('data-name', supplier.username);
+                            row.setAttribute('data-role', 'Supplier');
+                            row.setAttribute('data-email', supplier.email);
+                            row.setAttribute('data-status', status);
+                            row.setAttribute('data-verified', supplier.is_verified ? 'true' : 'false');
+                            row.onclick = () => updateSupplierDetailsPanel(row);
+                            
+                            row.innerHTML = `
+                                <td>${supplier.id}</td>
+                                <td>${supplier.username} ${verifiedBadge}</td>
+                                <td>Supplier</td>
+                                <td>${supplier.email}</td>
+                                <td><span class="status-tag ${statusClass}">${statusText}</span></td>
+                                <td>
+                                    ${verifyButton}
+                                    <a href="#" class="action-link edit-btn" onclick="event.stopPropagation(); editSupplier(${supplier.id})">Edit</a> / 
+                                    <a href="#" class="action-link ${banClass}" onclick="event.stopPropagation(); toggleBan(${supplier.id}, '${status}')">${banText}</a>
+                                </td>
+                            `;
+                            
+                            tbody.appendChild(row);
+                        });
+                        
+                        // Reapply filters after loading
+                        applySortAndFilter();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading suppliers:', error);
+                });
+        }
+        
+        // Load suppliers on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSuppliers();
+        });
+
+        // Verify Supplier Modal Functions
+        function openVerifySupplierModal(supplierId, supplierName, supplierEmail) {
+            currentVerifySupplierId = supplierId;
+            document.getElementById('verifySupplierName').textContent = supplierName;
+            document.getElementById('verifySupplierEmail').textContent = supplierEmail;
+            verifySupplierModal.classList.add('show');
+        }
+
+        function closeVerifySupplierModal() {
+            verifySupplierModal.classList.remove('show');
+            currentVerifySupplierId = null;
+        }
+
+        function confirmVerifySupplier() {
+            if (!currentVerifySupplierId) {
+                return;
+            }
+
+            fetch('/api/suppliers/verify', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    supplier_id: currentVerifySupplierId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closeVerifySupplierModal();
+                    loadSuppliers(); // Reload suppliers to show updated verification status
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to verify supplier'));
+                }
+            })
+            .catch(error => {
+                console.error('Error verifying supplier:', error);
+                alert('Error verifying supplier. Please try again.');
+            });
+        }
+
+        // Close verify modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === verifySupplierModal) {
+                closeVerifySupplierModal();
+            }
+            if (event.target === unverifySupplierModal) {
+                closeUnverifySupplierModal();
+            }
+        });
+
+        // Unverify Supplier Modal Functions
+        function openUnverifySupplierModal(supplierId, supplierName, supplierEmail) {
+            currentUnverifySupplierId = supplierId;
+            document.getElementById('unverifySupplierName').textContent = supplierName;
+            document.getElementById('unverifySupplierEmail').textContent = supplierEmail;
+            unverifySupplierModal.classList.add('show');
+        }
+
+        function closeUnverifySupplierModal() {
+            unverifySupplierModal.classList.remove('show');
+            currentUnverifySupplierId = null;
+        }
+
+        function confirmUnverifySupplier() {
+            if (!currentUnverifySupplierId) {
+                return;
+            }
+
+            fetch('/api/suppliers/unverify', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    supplier_id: currentUnverifySupplierId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closeUnverifySupplierModal();
+                    loadSuppliers(); // Reload suppliers to show updated verification status
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to unverify supplier'));
+                }
+            })
+            .catch(error => {
+                console.error('Error unverifying supplier:', error);
+                alert('Error unverifying supplier. Please try again.');
+            });
+        }
+
         // Search, Sort, and Filter functionality
         const searchInput = document.getElementById('searchInput');
         const table = document.getElementById('suppliersTable');
-        const tbody = table.getElementsByTagName('tbody')[0];
+        const tbody = document.getElementById('suppliersTableBody');
         
         let currentNameSort = 'asc'; // 'asc' or 'desc'
         let currentStatusFilter = 'clear'; // 'clear', 'active', 'banned'

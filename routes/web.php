@@ -16,6 +16,7 @@ require_once __DIR__ . '/../controllers/AuthController.php';
 require_once __DIR__ . '/../controllers/ProductController.php';
 require_once __DIR__ . '/../controllers/AdminController.php';
 require_once __DIR__ . '/../models/Product.php';
+require_once __DIR__ . '/../models/Project.php';
 
 $router = new Router();
 
@@ -213,6 +214,77 @@ $router->post('/products/create', function () {
 $router->get('/products', function () {
     AuthHelper::requireRole(['SUPPLIER_INSTALLER']);
     (new ProductController())->list();
+});
+
+// Project routes
+$router->post('/api/projects', function () {
+    AuthHelper::requireAuth();
+    (new ProjectsController())->create();
+});
+
+$router->get('/api/projects', function () {
+    AuthHelper::requireAuth();
+    (new ProjectsController())->getAll();
+});
+
+$router->get('/api/products', function () {
+    AuthHelper::requireAuth();
+    (new ProductController())->getAll();
+});
+
+$router->get('/api/forum/posts', function () {
+    AuthHelper::requireAuth();
+    (new ForumController())->getAllPosts();
+});
+
+$router->post('/api/forum/posts', function () {
+    AuthHelper::requireAuth();
+    (new ForumController())->createPost();
+});
+
+$router->get('/api/forum/replies', function () {
+    AuthHelper::requireAuth();
+    (new ForumController())->getReplies();
+});
+
+$router->post('/api/forum/replies', function () {
+    AuthHelper::requireAuth();
+    (new ForumController())->createReply();
+});
+
+$router->get('/api/learning-resources', function () {
+    AuthHelper::requireAuth();
+    (new LearnController())->getAll();
+});
+
+$router->post('/api/learning-resources', function () {
+    AuthHelper::requireAuth();
+    (new LearnController())->create();
+});
+
+$router->get('/api/users', function () {
+    AuthHelper::requireAuth();
+    (new UsersController())->getAll();
+});
+
+$router->get('/api/users/counts', function () {
+    AuthHelper::requireAuth();
+    (new UsersController())->getCounts();
+});
+
+$router->get('/api/suppliers', function () {
+    AuthHelper::requireAuth();
+    (new SuppliersController())->getAll();
+});
+
+$router->post('/api/suppliers/verify', function () {
+    AuthHelper::requireAuth();
+    (new SuppliersController())->verify();
+});
+
+$router->post('/api/suppliers/unverify', function () {
+    AuthHelper::requireAuth();
+    (new SuppliersController())->unverify();
 });
 
 $router->get('/forum', function () {

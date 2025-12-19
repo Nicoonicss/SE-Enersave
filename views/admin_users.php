@@ -12,15 +12,111 @@ $username = $user['username'] ?? 'Admin';
     <link rel="stylesheet" href="/css/styles.css"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f7f7;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 15px;
+        }
+
+        .nav-left img {
+            width: 30px;
+        }
+
+        .nav-left a,
+        .nav-right a {
+            text-decoration: none;
+            color: black;
+            font-weight: 500;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-right: 15px;
+        }
+
+        .brand-name {
+            font-weight: 900;
+            font-size: 18px;
+        }
+
+        .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-left: 20px;
+        }
+
+        .main-nav .nav-item {
+            text-decoration: none;
+            color: black;
+            font-weight: 500;
+            font-size: 15px;
+            padding: 5px 0;
+            transition: color 0.2s ease;
+        }
+
+        .main-nav .nav-item:hover {
+            color: #239c42;
+        }
+
+        .main-nav .nav-item.active {
+            color: #239c42;
+            font-weight: 600;
+        }
+
         .admin-profile {
             position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .avatar-container {
             position: relative;
-            display: inline-block;
+            margin-right: 15px;
+        }
+        .nav-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #ffcc00;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 20px;
         }
         .avatar {
             cursor: pointer;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 20px;
         }
         .avatar-dropdown {
             position: absolute;
@@ -362,20 +458,20 @@ $username = $user['username'] ?? 'Admin';
 <body>
 
     <header class="navbar">
-        <div class="logo">
+        <div class="nav-left">
             <img src="/images/Logo.png" alt="EnerSave Logo">
-            EnerSave
+            <a href="/adminDashboard" class="brand-name"><strong>EnerSave</strong></a>
+            <nav class="main-nav">
+                <a href="/adminDashboard" class="nav-item">Dashboard</a>
+                <a href="/usersManagement" class="nav-item active">Users</a>
+                <a href="/suppliersManagement" class="nav-item">Suppliers</a>
+                <a href="/projectsManagement" class="nav-item">Projects</a>
+            </nav>
         </div>
-        <nav class="main-nav">
-            <a href="/adminDashboard" class="nav-item">Dashboard</a>
-            <a href="/usersManagement" class="nav-item active">Users</a>
-            <a href="/suppliersManagement" class="nav-item">Suppliers</a>
-            <a href="/projectsManagement" class="nav-item">Projects</a>
-        </nav>
-        <div class="admin-profile">
+        <div class="nav-right">
             <span>Admin: <?php echo htmlspecialchars($username); ?></span>
             <div class="avatar-container">
-                <div class="avatar" id="avatarDropdown"><i class="fas fa-user-circle"></i></div>
+                <div class="nav-avatar" id="avatarDropdown"><?php echo strtoupper(substr($username, 0, 1)); ?></div>
                 <div class="avatar-dropdown" id="avatarMenu">
                     <a href="#" class="avatar-dropdown-item">Settings</a>
                     <a href="/logout" class="avatar-dropdown-item logout">Logout</a>
@@ -428,39 +524,8 @@ $username = $user['username'] ?? 'Admin';
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr data-id="1024" data-name="Steven Mitchell" data-role="Admin" data-email="s.mitchell@gmail.com" data-status="active">
-                            <td>1024</td>
-                            <td>Steven Mitchell</td>
-                            <td>Admin</td>
-                            <td>s.mitchell@gmail.com</td>
-                            <td><span class="status-tag active">Active</span></td>
-                            <td><a href="#" class="action-link edit-btn">Edit</a> / <a href="#" class="action-link danger ban-btn">Ban</a></td>
-                        </tr>
-                        <tr data-id="1025" data-name="Jer Erick" data-role="Community" data-email="jer.erick@gmail.com" data-status="active">
-                            <td>1025</td>
-                            <td>Jer Erick</td>
-                            <td>Community</td>
-                            <td>jer.erick@gmail.com</td>
-                            <td><span class="status-tag active">Active</span></td>
-                            <td><a href="#" class="action-link edit-btn">Edit</a> / <a href="#" class="action-link danger ban-btn">Ban</a></td>
-                        </tr>
-                        <tr data-id="1026" data-name="Monico Vian" data-role="Community" data-email="monico.vian@gmail.com" data-status="active">
-                            <td>1026</td>
-                            <td>Monico Vian</td>
-                            <td>Community</td>
-                            <td>monico.vian@gmail.com</td>
-                            <td><span class="status-tag active">Active</span></td>
-                            <td><a href="#" class="action-link edit-btn">Edit</a> / <a href="#" class="action-link danger ban-btn">Ban</a></td>
-                        </tr>
-                        <tr data-id="1027" data-name="Sarah Discaya" data-role="Supplier" data-email="sarah.discaya@gmail.com" data-status="banned">
-                            <td>1027</td>
-                            <td>Sarah Discaya</td>
-                            <td>Supplier</td>
-                            <td>sarah.discaya@gmail.com</td>
-                            <td><span class="status-tag banned">Banned</span></td>
-                            <td><a href="#" class="action-link edit-btn">Edit</a> / <a href="#" class="action-link success unban-btn">Unban</a></td>
-                        </tr>
+                    <tbody id="usersTableBody">
+                        <!-- Users will be loaded dynamically from database -->
                     </tbody>
                 </table>
             </div>
@@ -840,6 +905,62 @@ $username = $user['username'] ?? 'Admin';
             
             closeConfirmModal();
         }
+
+        // Load users from database
+        function loadUsers() {
+            fetch('/api/users')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.users) {
+                        const tbody = document.getElementById('usersTableBody');
+                        tbody.innerHTML = '';
+                        
+                        data.users.forEach(user => {
+                            const roleDisplay = user.role === 'COMMUNITY_USER' ? 'Community' : 
+                                              user.role === 'SUPPLIER_INSTALLER' ? 'Supplier' :
+                                              user.role === 'ADMIN' ? 'Admin' : user.role;
+                            const status = user.status || 'active';
+                            const statusClass = status === 'banned' ? 'banned' : 'active';
+                            const statusText = status === 'banned' ? 'Banned' : 'Active';
+                            const banText = status === 'banned' ? 'Unban' : 'Ban';
+                            const banClass = status === 'banned' ? 'success unban-btn' : 'danger ban-btn';
+                            
+                            const row = document.createElement('tr');
+                            row.setAttribute('data-id', user.id);
+                            row.setAttribute('data-name', user.username);
+                            row.setAttribute('data-role', roleDisplay);
+                            row.setAttribute('data-email', user.email);
+                            row.setAttribute('data-status', status);
+                            row.onclick = () => updateUserDetailsPanel(row);
+                            
+                            row.innerHTML = `
+                                <td>${user.id}</td>
+                                <td>${user.username}</td>
+                                <td>${roleDisplay}</td>
+                                <td>${user.email}</td>
+                                <td><span class="status-tag ${statusClass}">${statusText}</span></td>
+                                <td>
+                                    <a href="#" class="action-link edit-btn" onclick="event.stopPropagation(); editUser(${user.id})">Edit</a> / 
+                                    <a href="#" class="action-link ${banClass}" onclick="event.stopPropagation(); toggleBan(${user.id}, '${status}')">${banText}</a>
+                                </td>
+                            `;
+                            
+                            tbody.appendChild(row);
+                        });
+                        
+                        // Reapply filters after loading
+                        applySortAndFilter();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading users:', error);
+                });
+        }
+        
+        // Load users on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUsers();
+        });
 
         // Update User Details Panel when clicking on a table row
         function updateUserDetailsPanel(row) {

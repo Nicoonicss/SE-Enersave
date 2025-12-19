@@ -676,7 +676,7 @@ $username = $user['username'] ?? 'Community User';
             });
         }
 
-        // Filter tab click handlers
+        // Filter tab click handlers - reload from database
         filterTabs.forEach(tab => {
             tab.addEventListener('click', function() {
                 // Remove active class from all tabs
@@ -685,22 +685,38 @@ $username = $user['username'] ?? 'Community User';
                 this.classList.add('active');
                 // Update current filter
                 currentFilter = this.getAttribute('data-filter') || 'all';
-                // Apply filters
-                applyFiltersAndSearch();
+                // Reload discussions from database with filter
+                const searchTerm = searchInput ? searchInput.value.trim() : '';
+                if (window.loadDiscussions) {
+                    window.loadDiscussions(currentFilter !== 'all' ? currentFilter : null, searchTerm || null);
+                }
             });
         });
 
-        // Search input handler
+        // Search input handler - reload from database
         if (searchInput) {
+            let searchTimeout;
             searchInput.addEventListener('input', function() {
-                applyFiltersAndSearch();
+                clearTimeout(searchTimeout);
+                const searchTerm = this.value.trim();
+                
+                // Debounce search - wait 300ms after user stops typing
+                searchTimeout = setTimeout(function() {
+                    // Get current filter
+                    const activeTab = document.querySelector('.filter-tab.active');
+                    const filter = activeTab ? (activeTab.getAttribute('data-filter') || 'all') : 'all';
+                    
+                    if (window.loadDiscussions) {
+                        window.loadDiscussions(filter !== 'all' ? filter : null, searchTerm || null);
+                    }
+                }, 300);
             });
         }
 
         // Initial filter application
         applyFiltersAndSearch();
 
-        // Storage key for discussions
+        // Storage key for discussions (kept for backward compatibility, but we use database now)
         const STORAGE_KEY = 'community_forum_discussions';
 
         // Start New Discussion Modal
@@ -738,15 +754,27 @@ $username = $user['username'] ?? 'Community User';
         function addDiscussionToPage(discussion) {
             if (!discussionsContainer) return;
 
+            // Check if discussion already exists on page
+            const existing = document.querySelector(`[data-discussion-id="${discussion.id}"]`);
+            if (existing) {
+                // Update existing discussion
+                const replyCountEl = existing.querySelector('.reply-count');
+                if (replyCountEl) {
+                    replyCountEl.textContent = discussion.reply_count || 0;
+                }
+                existing.setAttribute('data-replies', discussion.reply_count || 0);
+                return;
+            }
+
             const discussionElement = document.createElement('div');
             discussionElement.className = 'discussion';
-            discussionElement.setAttribute('data-category', discussion.category);
-            discussionElement.setAttribute('data-replies', discussion.replies);
+            discussionElement.setAttribute('data-category', discussion.category || 'all');
+            discussionElement.setAttribute('data-replies', discussion.reply_count || 0);
             discussionElement.setAttribute('data-discussion-id', discussion.id);
             
             discussionElement.innerHTML = `
                 <div class="title">"${discussion.title}"</div>
-                <div class="meta">(<span class="reply-count">${discussion.replies}</span> replies)</div>
+                <div class="meta">(<span class="reply-count">${discussion.reply_count || 0}</span> replies)</div>
                 <div class="buttons">
                     <div class="btn"><img src="/images/Eye.png">View Thread</div>
                     <div class="btn reply-btn"><img src="/images/Reply.png">Reply</div>
@@ -782,17 +810,55 @@ $username = $user['username'] ?? 'Community User';
             replyButtons = document.querySelectorAll('.reply-btn');
         }
 
-        // Function to load discussions from localStorage
-        function loadDiscussions() {
-            const savedDiscussions = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-            savedDiscussions.forEach(discussion => {
-                // Check if discussion already exists on page
-                const existing = document.querySelector(`[data-discussion-id="${discussion.id}"]`);
-                if (!existing) {
-                    addDiscussionToPage(discussion);
-                }
-            });
+        // Function to load discussions from database
+        function loadDiscussions(category = null, searchQuery = null) {
+            let url = '/api/forum/posts';
+            const params = new URLSearchParams();
+            if (category && category !== 'all') {
+                params.append('category', category);
+            }
+            if (searchQuery) {
+                params.append('search', searchQuery);
+            }
+            if (params.toString()) {
+                url += '?' + params.toString();
+            }
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.posts) {
+                        // Clear container
+                        if (discussionsContainer) {
+                            discussionsContainer.innerHTML = '';
+                        }
+                        
+                        // Add all discussions
+                        data.posts.forEach(discussion => {
+                            addDiscussionToPage(discussion);
+                        });
+                        
+                        // Re-apply filters
+                        applyFiltersAndSearch();
+                    } else {
+                        console.error('Error loading discussions:', data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading discussions:', error);
+                    // Fallback to localStorage if database fails
+                    const savedDiscussions = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+                    savedDiscussions.forEach(discussion => {
+                        const existing = document.querySelector(`[data-discussion-id="${discussion.id}"]`);
+                        if (!existing) {
+                            addDiscussionToPage(discussion);
+                        }
+                    });
+                });
         }
+        
+        // Make loadDiscussions accessible globally for filter/search
+        window.loadDiscussions = loadDiscussions;
 
         // Function to open new discussion modal
         function openNewDiscussionModal() {
@@ -928,39 +994,50 @@ $username = $user['username'] ?? 'Community User';
             }
         }
 
-        // Function to display replies
+        // Function to display replies from database
         function displayReplies(discussionId) {
             if (!repliesContainer) return;
             
-            // Get replies from localStorage
-            const repliesKey = 'community_forum_replies';
-            const allReplies = JSON.parse(localStorage.getItem(repliesKey) || '{}');
-            const discussionReplies = allReplies[discussionId] || [];
+            // Show loading state
+            repliesContainer.innerHTML = '<div class="no-replies">Loading replies...</div>';
             
-            if (discussionReplies.length === 0) {
-                repliesContainer.innerHTML = '<div class="no-replies">No replies yet. Be the first to reply!</div>';
-                return;
-            }
-            
-            // Sort replies by date (oldest first)
-            discussionReplies.sort((a, b) => new Date(a.date) - new Date(b.date));
-            
-            // Display replies
-            repliesContainer.innerHTML = discussionReplies.map(reply => `
-                <div class="reply-item">
-                    <div class="reply-header">
-                        <span class="reply-author">${reply.author || 'Anonymous'}</span>
-                        <span class="reply-date">${new Date(reply.date).toLocaleDateString('en-US', { 
-                            year: 'numeric', 
-                            month: 'short', 
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                        })}</span>
-                    </div>
-                    <div class="reply-content">${reply.text}</div>
-                </div>
-            `).join('');
+            // Fetch replies from database
+            fetch(`/api/forum/replies?post_id=${discussionId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.replies) {
+                        if (data.replies.length === 0) {
+                            repliesContainer.innerHTML = '<div class="no-replies">No replies yet. Be the first to reply!</div>';
+                            return;
+                        }
+                        
+                        // Display replies
+                        repliesContainer.innerHTML = data.replies.map(reply => {
+                            const date = new Date(reply.created_at);
+                            return `
+                                <div class="reply-item">
+                                    <div class="reply-header">
+                                        <span class="reply-author">${reply.author_name || 'Anonymous'}</span>
+                                        <span class="reply-date">${date.toLocaleDateString('en-US', { 
+                                            year: 'numeric', 
+                                            month: 'short', 
+                                            day: 'numeric',
+                                            hour: '2-digit',
+                                            minute: '2-digit'
+                                        })}</span>
+                                    </div>
+                                    <div class="reply-content">${reply.content}</div>
+                                </div>
+                            `;
+                        }).join('');
+                    } else {
+                        repliesContainer.innerHTML = '<div class="no-replies">Error loading replies.</div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading replies:', error);
+                    repliesContainer.innerHTML = '<div class="no-replies">Error loading replies.</div>';
+                });
         }
 
         // Event listener for close view thread modal
@@ -983,30 +1060,35 @@ $username = $user['username'] ?? 'Community User';
                 // Determine category from title
                 const category = determineCategory(title);
 
-                // Create new discussion object
-                const newDiscussion = {
-                    id: 'discussion-' + Date.now(),
-                    title: title,
-                    description: description || '',
-                    category: category,
-                    replies: 0,
-                    dateCreated: new Date().toISOString()
-                };
-
-                // Get existing discussions from localStorage
-                let discussions = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-                discussions.unshift(newDiscussion); // Add to beginning (most recent first)
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(discussions));
-
-                // Add to page
-                addDiscussionToPage(newDiscussion);
-
-                // Re-apply filters to show the new discussion if it matches current filter
-                applyFiltersAndSearch();
-
-                // Show success message
-                alert('Discussion added successfully!');
-                closeNewDiscussionModal();
+                // Save to database via API
+                fetch('/api/forum/posts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title: title,
+                        content: description || '',
+                        category: category !== 'all' ? category : null
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Reload discussions from database
+                        loadDiscussions();
+                        
+                        // Show success message
+                        alert('Discussion added successfully!');
+                        closeNewDiscussionModal();
+                    } else {
+                        alert('Error: ' + (data.error || 'Failed to create discussion'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error creating discussion:', error);
+                    alert('Error creating discussion. Please try again.');
+                });
             });
         }
 
@@ -1026,46 +1108,51 @@ $username = $user['username'] ?? 'Community User';
                     // Get discussion ID
                     const discussionId = discussionElement.getAttribute('data-discussion-id');
                     
-                    // Get current reply count
-                    const replyCountElement = discussionElement.querySelector('.reply-count');
-                    if (replyCountElement) {
-                        let currentCount = parseInt(replyCountElement.textContent) || 0;
-                        currentCount++;
-                        replyCountElement.textContent = currentCount;
-                        // Update data attribute
-                        discussionElement.setAttribute('data-replies', currentCount);
-
-                        // Save reply to localStorage
-                        if (discussionId) {
-                            const repliesKey = 'community_forum_replies';
-                            const allReplies = JSON.parse(localStorage.getItem(repliesKey) || '{}');
-                            if (!allReplies[discussionId]) {
-                                allReplies[discussionId] = [];
-                            }
-                            
-                            // Add new reply
-                            const currentUsername = '<?php echo addslashes(htmlspecialchars($username, ENT_QUOTES, 'UTF-8')); ?>';
-                            allReplies[discussionId].push({
-                                text: replyText,
-                                author: currentUsername || 'Anonymous',
-                                date: new Date().toISOString()
-                            });
-                            
-                            localStorage.setItem(repliesKey, JSON.stringify(allReplies));
-
-                            // Update discussion reply count in localStorage
-                            let discussions = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-                            const discussion = discussions.find(d => d.id === discussionId);
-                            if (discussion) {
-                                discussion.replies = currentCount;
-                                localStorage.setItem(STORAGE_KEY, JSON.stringify(discussions));
-                            }
-                        }
+                    if (!discussionId) {
+                        alert('Error: Discussion ID not found');
+                        return;
                     }
-                }
 
-                alert('Reply added successfully!');
-                closeReplyModal();
+                    // Save reply to database via API
+                    fetch('/api/forum/replies', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            post_id: parseInt(discussionId),
+                            content: replyText
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Update reply count in the discussion element
+                            const replyCountElement = discussionElement.querySelector('.reply-count');
+                            if (replyCountElement) {
+                                replyCountElement.textContent = data.reply_count || 0;
+                            }
+                            discussionElement.setAttribute('data-replies', data.reply_count || 0);
+                            
+                            // If view thread modal is open, reload replies
+                            if (viewThreadModal && viewThreadModal.classList.contains('show')) {
+                                const modalDiscussionId = viewThreadModal.getAttribute('data-discussion-id');
+                                if (modalDiscussionId === discussionId) {
+                                    displayReplies(discussionId);
+                                }
+                            }
+                            
+                            alert('Reply added successfully!');
+                            closeReplyModal();
+                        } else {
+                            alert('Error: ' + (data.error || 'Failed to create reply'));
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error creating reply:', error);
+                        alert('Error creating reply. Please try again.');
+                    });
+                }
             });
         }
 

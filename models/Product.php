@@ -27,7 +27,8 @@ class Product
 
     public function findAll(?string $category = null): array
     {
-        if ($category && $category !== 'all') {
+        if ($category && strtolower($category) !== 'all') {
+            // Use exact match for category (database has: Solar, Wind, Hydro)
             return $this->db->query(
                 'SELECT p.*, u.username as supplier_name FROM products p 
                  LEFT JOIN users u ON p.supplier_id = u.id 

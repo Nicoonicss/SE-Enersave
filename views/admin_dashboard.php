@@ -2,6 +2,10 @@
 $pageTitle = 'Admin Dashboard Overview';
 $user = $_SESSION['user'] ?? null;
 $username = $user['username'] ?? 'Admin';
+
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,15 +16,111 @@ $username = $user['username'] ?? 'Admin';
     <link rel="stylesheet" href="/css/styles.css"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f7f7;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 15px;
+        }
+
+        .nav-left img {
+            width: 30px;
+        }
+
+        .nav-left a,
+        .nav-right a {
+            text-decoration: none;
+            color: black;
+            font-weight: 500;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-right: 15px;
+        }
+
+        .brand-name {
+            font-weight: 900;
+            font-size: 18px;
+        }
+
+        .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-left: 20px;
+        }
+
+        .main-nav .nav-item {
+            text-decoration: none;
+            color: black;
+            font-weight: 500;
+            font-size: 15px;
+            padding: 5px 0;
+            transition: color 0.2s ease;
+        }
+
+        .main-nav .nav-item:hover {
+            color: #239c42;
+        }
+
+        .main-nav .nav-item.active {
+            color: #239c42;
+            font-weight: 600;
+        }
+
         .admin-profile {
             position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .avatar-container {
             position: relative;
-            display: inline-block;
+            margin-right: 15px;
+        }
+        .nav-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #ffcc00;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 20px;
         }
         .avatar {
             cursor: pointer;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 20px;
         }
         .avatar-dropdown {
             position: absolute;
@@ -297,20 +397,20 @@ $username = $user['username'] ?? 'Admin';
 <body>
 
     <header class="navbar">
-        <div class="logo">
-            <img src="/images/Logo.png" alt="EnerSave Logo"> 
-            EnerSave
+        <div class="nav-left">
+            <img src="/images/Logo.png" alt="EnerSave Logo">
+            <a href="/adminDashboard" class="brand-name"><strong>EnerSave</strong></a>
+            <nav class="main-nav">
+                <a href="/adminDashboard" class="nav-item active">Dashboard</a>
+                <a href="/usersManagement" class="nav-item">Users</a>
+                <a href="/suppliersManagement" class="nav-item">Suppliers</a>
+                <a href="/projectsManagement" class="nav-item">Projects</a>
+            </nav>
         </div>
-        <nav class="main-nav">
-            <a href="/adminDashboard" class="nav-item active">Dashboard</a>
-            <a href="/usersManagement" class="nav-item">Users</a>
-            <a href="/suppliersManagement" class="nav-item">Suppliers</a>
-            <a href="/projectsManagement" class="nav-item">Projects</a>
-        </nav>
-        <div class="admin-profile">
+        <div class="nav-right">
             <span>Admin: <?php echo htmlspecialchars($username); ?></span>
             <div class="avatar-container">
-                <div class="avatar" id="avatarDropdown"><i class="fas fa-user-circle"></i></div>
+                <div class="nav-avatar" id="avatarDropdown"><?php echo strtoupper(substr($username, 0, 1)); ?></div>
                 <div class="avatar-dropdown" id="avatarMenu">
                     <a href="#" class="avatar-dropdown-item">Settings</a>
                     <a href="/logout" class="avatar-dropdown-item logout">Logout</a>
@@ -327,15 +427,15 @@ $username = $user['username'] ?? 'Admin';
             <div class="metrics-cards">
                 <div class="card">
                     <span class="metric-title">Total Users</span>
-                    <span class="metric-value">340</span>
+                    <span class="metric-value" id="totalUsers">0</span>
                 </div>
                 <div class="card">
                     <span class="metric-title">Total Suppliers</span>
-                    <span class="metric-value">42</span>
+                    <span class="metric-value" id="totalSuppliers">0</span>
                 </div>
                 <div class="card">
                     <span class="metric-title">Active Projects</span>
-                    <span class="metric-value">18</span>
+                    <span class="metric-value" id="activeProjects">0</span>
                 </div>
                 <div class="card">
                     <span class="metric-title">Total Donations</span>
@@ -401,11 +501,11 @@ $username = $user['username'] ?? 'Admin';
                     </div>
                     <div class="status-item">
                         <span>Pending Supplier Verifications:</span>
-                        <span class="status-value red">3</span>
+                        <span class="status-value red" id="pendingVerifications">0</span>
                     </div>
                     <div class="status-item">
                         <span>Active Crowdfunding Projects:</span>
-                        <span class="status-value">18</span>
+                        <span class="status-value" id="activeProjectsStatus">0</span>
                     </div>
                 </div>
             </div>
@@ -417,6 +517,49 @@ $username = $user['username'] ?? 'Admin';
         function redirectToManagement(page) {
             window.location.href = page;
         }
+
+        // Load dynamic counts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load user counts
+            fetch('/api/users/counts')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.counts) {
+                        document.getElementById('totalUsers').textContent = data.counts.total || 0;
+                        document.getElementById('totalSuppliers').textContent = data.counts.suppliers || 0;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading user counts:', error);
+                });
+
+            // Load suppliers to count pending verifications
+            fetch('/api/suppliers')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.suppliers) {
+                        const unverified = data.suppliers.filter(s => !s.is_verified);
+                        document.getElementById('pendingVerifications').textContent = unverified.length;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading suppliers:', error);
+                });
+
+            // Load projects count
+            fetch('/api/projects')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.projects) {
+                        const active = data.projects.filter(p => p.status === 'active' || !p.status);
+                        document.getElementById('activeProjects').textContent = active.length;
+                        document.getElementById('activeProjectsStatus').textContent = active.length;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading projects:', error);
+                });
+        });
     </script>
 </body>
 </html>

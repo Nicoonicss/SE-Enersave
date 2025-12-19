@@ -96,6 +96,41 @@ class User
     {
         $this->db->execute('DELETE FROM password_reset_tokens WHERE token = :token', [':token' => $token]);
     }
+
+    public function findAll(): array
+    {
+        return $this->db->query('SELECT * FROM users ORDER BY created_at DESC');
+    }
+
+    public function findByRole(string $role): array
+    {
+        return $this->db->query(
+            'SELECT * FROM users WHERE role = :role ORDER BY created_at DESC',
+            [':role' => $role]
+        );
+    }
+
+    public function updateVerification(int $userId, bool $verified): void
+    {
+        $this->db->execute(
+            'UPDATE users SET is_verified = :verified WHERE id = :id',
+            [
+                ':verified' => $verified ? 1 : 0,
+                ':id' => $userId,
+            ]
+        );
+    }
+
+    public function updateStatus(int $userId, string $status): void
+    {
+        $this->db->execute(
+            'UPDATE users SET status = :status WHERE id = :id',
+            [
+                ':status' => $status,
+                ':id' => $userId,
+            ]
+        );
+    }
 }
 
 
