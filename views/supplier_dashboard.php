@@ -429,7 +429,7 @@ $username = $user['username'] ?? 'Supplier';
             </div>
             <div class="status-card">
                 <h3 class="card-title">Verification Status</h3>
-                <div class="verification-status">
+                <div class="verification-status" id="verificationStatusCard">
                     <i class="fa-solid fa-circle-check verified-icon"></i>
                     <span>Verified</span>
                 </div>
@@ -547,6 +547,49 @@ $username = $user['username'] ?? 'Supplier';
     </div>
 <script src="/navigationSupplier.js"></script>
 <script src="/JavaScripts/avatarDropdown.js"></script>
+<script>
+    // Load verification status
+    function loadVerificationStatus() {
+        fetch('/api/suppliers')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.suppliers) {
+                    // Get current user ID from session (we'll need to pass it or get it from the page)
+                    const currentUserId = <?php echo json_encode($user['id'] ?? null); ?>;
+                    
+                    if (currentUserId) {
+                        const currentSupplier = data.suppliers.find(s => s.id === currentUserId);
+                        const verificationCard = document.getElementById('verificationStatusCard');
+                        
+                        if (currentSupplier) {
+                            if (currentSupplier.is_verified) {
+                                verificationCard.innerHTML = `
+                                    <i class="fa-solid fa-circle-check verified-icon"></i>
+                                    <span>Verified</span>
+                                `;
+                            } else {
+                                verificationCard.innerHTML = `
+                                    <i class="fa-solid fa-clock" style="color: #ff9800; font-size: 2.2rem;"></i>
+                                    <span style="color: #666;">Pending Verification</span>
+                                `;
+                            }
+                        }
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error loading verification status:', error);
+            });
+    }
+    
+    // Load verification status on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        loadVerificationStatus();
+        
+        // Poll for verification status updates every 5 seconds
+        setInterval(loadVerificationStatus, 5000);
+    });
+</script>
 </body>
 </html>
 

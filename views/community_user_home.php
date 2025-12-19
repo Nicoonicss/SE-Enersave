@@ -528,10 +528,11 @@ $username = $user['username'] ?? 'Community User';
     .modal-product-image {
         width: 100%;
         max-height: 300px;
-        object-fit: contain;
+        object-fit: cover;
         border-radius: 8px;
         background: #f5f5f5;
         padding: 10px;
+        margin-bottom: 20px;
     }
 
     .modal-product-info {
@@ -575,26 +576,46 @@ $username = $user['username'] ?? 'Community User';
         font-weight: 600;
     }
 
+    .modal-project-initiator {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .modal-project-initiator-label {
+        font-weight: 600;
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+    .modal-project-initiator-name {
+        font-size: 16px;
+        color: #333;
+        font-weight: 500;
+    }
+
     .view-details-link {
         display: block;
         width: 100%;
         background: white;
-        border: 1px solid #e0e0e0;
+        border: none;
         color: #000 !important;
         font-weight: 700;
         padding: 10px 20px;
         border-radius: 8px;
         text-decoration: none;
         cursor: pointer;
-        transition: background-color 0.2s ease, border-color 0.2s ease;
+        transition: box-shadow 0.2s ease, transform 0.2s ease;
         text-align: center;
         font-size: 14px;
         box-sizing: border-box;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .view-details-link:hover {
-        background-color: #f5f5f5;
-        border-color: #d0d0d0;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+        transform: translateY(-1px);
         color: #000 !important;
     }
 
@@ -766,6 +787,29 @@ $username = $user['username'] ?? 'Community User';
     </div>
 </div>
 
+<!-- Project Details Modal -->
+<div id="projectModal" class="product-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalProjectTitle">Project Title</h2>
+            <button class="close-modal" id="closeProjectModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <img id="modalProjectImage" src="" alt="Project Image" class="modal-product-image">
+            <div class="modal-product-info">
+                <div class="modal-info-row">
+                    <span class="modal-info-label">Description</span>
+                    <p class="modal-product-description" id="modalProjectDescription">Project description will appear here.</p>
+                </div>
+                <div class="modal-project-initiator">
+                    <div class="modal-project-initiator-label">Project Initiator:</div>
+                    <div class="modal-project-initiator-name" id="modalProjectInitiator">Loading...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <footer>
     © 2025 EnerSave. All Rights Reserved.
     <div class="links">
@@ -853,6 +897,76 @@ $username = $user['username'] ?? 'Community User';
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && modal.classList.contains('show')) {
             closeProductModal();
+        }
+    });
+
+    // Project Modal Functionality
+    const projectModal = document.getElementById('projectModal');
+    const closeProjectModalBtn = document.getElementById('closeProjectModal');
+    const viewProjectBtn = document.querySelector('.view-project');
+
+    // Project data
+    const projectData = {
+        title: 'Light for Rural School',
+        image: '/images/Crowdfunding.png',
+        description: 'Help bring solar-powered electrification to low-income rural schools. Support the installation of solar lighting systems. This initiative aims to provide sustainable and reliable electricity to schools in underserved communities, enabling better learning environments and educational opportunities for students.',
+        initiator: 'Community Energy Initiative'
+    };
+
+    // Function to open project modal
+    function openProjectModal() {
+        if (!projectModal) {
+            console.error('Project modal not found');
+            return;
+        }
+
+        // Populate modal
+        document.getElementById('modalProjectImage').src = projectData.image;
+        document.getElementById('modalProjectImage').alt = projectData.title;
+        document.getElementById('modalProjectTitle').textContent = projectData.title;
+        document.getElementById('modalProjectDescription').textContent = projectData.description;
+        document.getElementById('modalProjectInitiator').textContent = projectData.initiator;
+
+        // Show modal
+        projectModal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Function to close project modal
+    function closeProjectModal() {
+        if (projectModal) {
+            projectModal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    // Add event listener to "View Project" button
+    if (viewProjectBtn) {
+        viewProjectBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            openProjectModal();
+        });
+    }
+
+    // Close modal when clicking the X button
+    if (closeProjectModalBtn) {
+        closeProjectModalBtn.addEventListener('click', closeProjectModal);
+    }
+
+    // Close modal when clicking outside the modal content
+    if (projectModal) {
+        projectModal.addEventListener('click', function(e) {
+            if (e.target === projectModal) {
+                closeProjectModal();
+            }
+        });
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && projectModal && projectModal.classList.contains('show')) {
+            closeProjectModal();
         }
     });
 </script>

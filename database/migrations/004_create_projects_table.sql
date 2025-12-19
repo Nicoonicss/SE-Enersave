@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS projects (
     goal_amount DECIMAL(12, 2) NOT NULL,
     raised_amount DECIMAL(12, 2) DEFAULT 0.00,
     status ENUM('active', 'completed', 'cancelled') DEFAULT 'active',
-    image_url VARCHAR(500),
+    image_url TEXT,
     created_by INT UNSIGNED,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

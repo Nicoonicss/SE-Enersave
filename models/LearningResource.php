@@ -26,23 +26,43 @@ class LearningResource
         return (int)($row[0]['id'] ?? 0);
     }
 
-    public function findAll(bool $downloadableOnly = false): array
+    public function findAll(?string $category = null, bool $downloadableOnly = false): array
     {
+        $whereConditions = [];
+        $params = [];
+        
         if ($downloadableOnly) {
-            return $this->db->query(
-                'SELECT lr.*, u.username as educator_name FROM learning_resources lr 
-                 LEFT JOIN users u ON lr.educator_id = u.id 
-                 WHERE lr.is_downloadable = 1 
-                 ORDER BY lr.created_at DESC'
-            );
+            $whereConditions[] = 'lr.is_downloadable = 1';
         } else {
-            return $this->db->query(
-                'SELECT lr.*, u.username as educator_name FROM learning_resources lr 
-                 LEFT JOIN users u ON lr.educator_id = u.id 
-                 WHERE lr.is_downloadable = 0 
-                 ORDER BY lr.created_at DESC'
-            );
+            $whereConditions[] = 'lr.is_downloadable = 0';
         }
+        
+        if ($category && strtolower($category) !== 'all') {
+            $whereConditions[] = 'lr.category = :category';
+            $params[':category'] = $category;
+        }
+        
+        $whereClause = !empty($whereConditions) ? 'WHERE ' . implode(' AND ', $whereConditions) : '';
+        
+        return $this->db->query(
+            "SELECT lr.*, u.username as educator_name FROM learning_resources lr 
+             LEFT JOIN users u ON lr.educator_id = u.id 
+             {$whereClause}
+             ORDER BY lr.created_at DESC",
+            $params
+        );
+    }
+
+    public function search(string $query): array
+    {
+        $searchTerm = '%' . $query . '%';
+        return $this->db->query(
+            'SELECT lr.*, u.username as educator_name FROM learning_resources lr 
+             LEFT JOIN users u ON lr.educator_id = u.id 
+             WHERE lr.title LIKE :query OR lr.description LIKE :query 
+             ORDER BY lr.created_at DESC',
+            [':query' => $searchTerm]
+        );
     }
 
     public function findByEducator(int $educatorId): array

@@ -1212,31 +1212,8 @@ header p {
   </div>
 </div>
 
-<section class="product-listings">
-
-  <?php for ($i = 0; $i < 18; $i++): ?>
-  <article class="product-card">
-  <div class="product-image">
-    <img src="/images/product.png" alt="Solar Starter Kit" />
-  </div>
-  <div class="product-info">
-    <h3>Solar Starter Kit</h3>
-    <p class="product-price">₱5,000</p>
-    <p class="product-company">GreenTech</p>
-  </div>
-  <div class="btn-group">
-    <button class="btn-buy">Buy Now</button>
-    <button class="btn-add">Add to Cart</button>
-    <div class="btn-details-wishlist">
-      <button class="btn-details">View Details</button>
-      <button class="btn-wishlist" aria-label="Add to Wishlist">
-        <img src="/images/finalwishlisticon.jpg" alt="Add to Wishlist" style="width: 18px; height: 18px; object-fit: contain;">
-      </button>
-    </div>
-  </div>
-</article>
-  <?php endfor; ?>
-
+<section class="product-listings" id="productsContainer">
+  <!-- Products will be loaded dynamically from database -->
 </section>
 
 <!-- Product Details Modal -->
@@ -1309,8 +1286,185 @@ header p {
 <script src="/navigationCommunity.js"></script>
 <script src="/JavaScripts/avatarDropdown.js"></script>
 <script>
-// Product Details Modal Functionality
+// Load products from database
 document.addEventListener('DOMContentLoaded', function() {
+    const productsContainer = document.getElementById('productsContainer');
+    
+    // Make formatPrice global
+    window.formatPrice = function(price) {
+        return '₱' + parseFloat(price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    };
+    
+    function createProductCard(product) {
+        const card = document.createElement('article');
+        card.className = 'product-card';
+        card.setAttribute('data-product-id', product.id);
+        card.setAttribute('data-product-name', product.name);
+        card.setAttribute('data-product-price', product.price);
+        card.setAttribute('data-product-description', product.description || '');
+        card.setAttribute('data-product-supplier', product.supplier_name || 'Unknown Supplier');
+        card.setAttribute('data-product-category', product.category || '');
+        
+        const imageUrl = product.image_url || '/images/product.png';
+        
+        card.innerHTML = `
+            <div class="product-image">
+                <img src="${imageUrl}" alt="${product.name}" />
+            </div>
+            <div class="product-info">
+                <h3>${product.name}</h3>
+                <p class="product-price">${formatPrice(product.price)}</p>
+                <p class="product-company">${product.supplier_name || 'Unknown Supplier'}</p>
+            </div>
+            <div class="btn-group">
+                <button class="btn-buy">Buy Now</button>
+                <button class="btn-add">Add to Cart</button>
+                <div class="btn-details-wishlist">
+                    <button class="btn-details">View Details</button>
+                    <button class="btn-wishlist" aria-label="Add to Wishlist">
+                        <img src="/images/finalwishlisticon.jpg" alt="Add to Wishlist" style="width: 18px; height: 18px; object-fit: contain;">
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        return card;
+    }
+    
+    function loadProducts(category = null, searchQuery = null) {
+        let url = '/api/products';
+        const params = new URLSearchParams();
+        if (category && category !== 'all' && category !== null) {
+            params.append('category', category);
+        }
+        if (searchQuery) {
+            params.append('search', searchQuery);
+        }
+        if (params.toString()) {
+            url += '?' + params.toString();
+        }
+        
+        console.log('Loading products with category:', category, 'search:', searchQuery, 'URL:', url);
+        
+        fetch(url)
+            .then(response => {
+                console.log('API Response status:', response.status);
+                return response.json();
+            })
+            .then(data => {
+                console.log('API Response data:', data);
+                if (data.success && data.products) {
+                    productsContainer.innerHTML = '';
+                    if (data.products.length === 0) {
+                        productsContainer.innerHTML = '<p style="text-align: center; padding: 40px; color: #666;">No products found.</p>';
+                    } else {
+                        console.log('Rendering', data.products.length, 'products');
+                        data.products.forEach(product => {
+                            const card = createProductCard(product);
+                            productsContainer.appendChild(card);
+                        });
+                        // Re-initialize event listeners for dynamically added products
+                        if (typeof initializeProductModals === 'function') {
+                            initializeProductModals();
+                        }
+                        // Buy Now and Cart/Wishlist will be handled by event delegation
+                        // Re-attach event listeners
+                        setTimeout(function() {
+                            if (typeof initializeBuyNowModals === 'function') {
+                                initializeBuyNowModals();
+                            }
+                            if (typeof initializeCartAndWishlist === 'function') {
+                                initializeCartAndWishlist();
+                            }
+                        }, 100);
+                    }
+                } else {
+                    console.error('API returned error:', data);
+                    productsContainer.innerHTML = '<p style="text-align: center; padding: 40px; color: #666;">Error loading products.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error loading products:', error);
+                productsContainer.innerHTML = '<p style="text-align: center; padding: 40px; color: #666;">Error loading products. Please refresh the page.</p>';
+            });
+    }
+    
+    // Make loadProducts accessible globally for filter/search
+    window.loadProducts = loadProducts;
+    
+    // Load products on page load (all products, no filter)
+    loadProducts(null, null);
+});
+
+// Product Details Modal Functionality
+function initializeProductModals() {
+    const modal = document.getElementById('productModal');
+    if (!modal) return;
+    
+    const closeModalBtn = document.getElementById('closeModal');
+    const viewDetailsButtons = document.querySelectorAll('.btn-details');
+    
+    // Function to open modal with product data
+    function openProductModal(productCard) {
+        const productName = productCard.getAttribute('data-product-name') || productCard.querySelector('.product-info h3').textContent.trim();
+        const productPrice = productCard.getAttribute('data-product-price') || productCard.querySelector('.product-price').textContent.trim();
+        const productSupplier = productCard.getAttribute('data-product-supplier') || productCard.querySelector('.product-company').textContent.trim();
+        const productDescription = productCard.getAttribute('data-product-description') || 'No description available.';
+        const productImage = productCard.querySelector('.product-image img').src;
+        const productImageAlt = productCard.querySelector('.product-image img').alt || productName;
+        
+        // Populate modal
+        document.getElementById('modalProductName').textContent = productName;
+        document.getElementById('modalProductPrice').textContent = productPrice.startsWith('₱') ? productPrice : formatPrice(productPrice);
+        document.getElementById('modalProductDescription').textContent = productDescription || 'No description available.';
+        document.getElementById('modalProductSupplier').textContent = productSupplier;
+        document.getElementById('modalProductImage').src = productImage;
+        document.getElementById('modalProductImage').alt = productImageAlt;
+        
+        // Show modal
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    // Function to close modal
+    function closeProductModal() {
+        modal.classList.remove('show');
+        document.body.style.overflow = 'auto';
+    }
+    
+    // Add event listeners to all "View Details" buttons
+    viewDetailsButtons.forEach(button => {
+        // Remove existing listeners to avoid duplicates
+        const newButton = button.cloneNode(true);
+        button.parentNode.replaceChild(newButton, button);
+        newButton.addEventListener('click', function() {
+            const productCard = this.closest('.product-card');
+            openProductModal(productCard);
+        });
+    });
+    
+    // Close modal when clicking the X button
+    if (closeModalBtn) {
+        closeModalBtn.onclick = closeProductModal;
+    }
+    
+    // Close modal when clicking outside the modal content
+    modal.onclick = function(e) {
+        if (e.target === modal) {
+            closeProductModal();
+        }
+    };
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('show')) {
+            closeProductModal();
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    initializeProductModals();
     const modal = document.getElementById('productModal');
     const closeModalBtn = document.getElementById('closeModal');
     const viewDetailsButtons = document.querySelectorAll('.btn-details');
@@ -2188,61 +2342,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Filter Functionality
+// Filter Functionality - Updated to use API
 document.addEventListener('DOMContentLoaded', function() {
     const filterButtons = document.querySelectorAll('.filter-btn');
-    const productCards = document.querySelectorAll('.product-card');
     let currentFilter = 'All';
-    
-    // Function to check if product matches filter
-    function matchesFilter(card, category) {
-        if (category === 'All') {
-            return true;
-        }
-        
-        const productName = card.querySelector('.product-info h3')?.textContent.trim().toLowerCase() || '';
-        const productAlt = card.querySelector('.product-image img')?.alt.toLowerCase() || '';
-        const searchableText = `${productName} ${productAlt}`;
-        
-        if (category === 'Solar') {
-            return searchableText.includes('solar');
-        } else if (category === 'Wind') {
-            return searchableText.includes('wind');
-        } else if (category === 'Hydro') {
-            return searchableText.includes('hydro');
-        }
-        
-        return false;
-    }
-    
-    // Function to apply both filter and search
-    function applyFilters() {
-        const searchInput = document.querySelector('.search-input');
-        const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
-        
-        productCards.forEach(card => {
-            // Check filter match
-            const filterMatch = matchesFilter(card, currentFilter);
-            
-            // Check search match
-            let searchMatch = true;
-            if (searchTerm) {
-                const productName = card.querySelector('.product-info h3')?.textContent.toLowerCase() || '';
-                const productPrice = card.querySelector('.product-price')?.textContent.toLowerCase() || '';
-                const productCompany = card.querySelector('.product-company')?.textContent.toLowerCase() || '';
-                const productAlt = card.querySelector('.product-image img')?.alt.toLowerCase() || '';
-                const searchableText = `${productName} ${productPrice} ${productCompany} ${productAlt}`;
-                searchMatch = searchableText.includes(searchTerm);
-            }
-            
-            // Show if both filter and search match
-            if (filterMatch && searchMatch) {
-                card.style.display = '';
-            } else {
-                card.style.display = 'none';
-            }
-        });
-    }
     
     // Add click event listeners to filter buttons
     filterButtons.forEach(button => {
@@ -2258,22 +2361,56 @@ document.addEventListener('DOMContentLoaded', function() {
             // Get filter category from button text
             currentFilter = this.textContent.trim();
             
-            // Apply filters
-            applyFilters();
+            // Map button text to category value (null for "All")
+            let category = null;
+            if (currentFilter === 'Solar') {
+                category = 'Solar';
+            } else if (currentFilter === 'Wind') {
+                category = 'Wind';
+            } else if (currentFilter === 'Hydro') {
+                category = 'Hydro';
+            }
+            // If "All" is selected, category remains null
+            
+            // Reload products with filter
+            const searchInput = document.querySelector('.search-input');
+            const searchTerm = searchInput ? searchInput.value.trim() : '';
+            if (window.loadProducts) {
+                window.loadProducts(category, searchTerm);
+            }
         });
     });
     
     // Update search to also consider filter
     const searchInput = document.querySelector('.search-input');
     if (searchInput) {
-        const originalSearchHandler = searchInput.oninput;
+        let searchTimeout;
         searchInput.addEventListener('input', function() {
-            applyFilters();
+            clearTimeout(searchTimeout);
+            const searchTerm = this.value.trim();
+            
+            // Debounce search - wait 300ms after user stops typing
+            searchTimeout = setTimeout(function() {
+                // Get current filter
+                const activeFilter = document.querySelector('.filter-btn.active');
+                let category = null;
+                if (activeFilter) {
+                    const filterText = activeFilter.textContent.trim();
+                    if (filterText === 'Solar') {
+                        category = 'Solar';
+                    } else if (filterText === 'Wind') {
+                        category = 'Wind';
+                    } else if (filterText === 'Hydro') {
+                        category = 'Hydro';
+                    }
+                }
+                
+                if (window.loadProducts) {
+                    window.loadProducts(category, searchTerm || null);
+                }
+            }, 300);
         });
     }
-    
-    // Initialize with "All" filter
-    applyFilters();
 });
 
 // Sort Functionality

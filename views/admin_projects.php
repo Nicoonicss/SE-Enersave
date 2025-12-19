@@ -12,15 +12,111 @@ $username = $user['username'] ?? 'Admin';
     <link rel="stylesheet" href="/css/styles.css"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f7f7;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 15px;
+        }
+
+        .nav-left img {
+            width: 30px;
+        }
+
+        .nav-left a,
+        .nav-right a {
+            text-decoration: none;
+            color: black;
+            font-weight: 500;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-right: 15px;
+        }
+
+        .brand-name {
+            font-weight: 900;
+            font-size: 18px;
+        }
+
+        .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-left: 20px;
+        }
+
+        .main-nav .nav-item {
+            text-decoration: none;
+            color: black;
+            font-weight: 500;
+            font-size: 15px;
+            padding: 5px 0;
+            transition: color 0.2s ease;
+        }
+
+        .main-nav .nav-item:hover {
+            color: #239c42;
+        }
+
+        .main-nav .nav-item.active {
+            color: #239c42;
+            font-weight: 600;
+        }
+
         .admin-profile {
             position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .avatar-container {
             position: relative;
-            display: inline-block;
+            margin-right: 15px;
+        }
+        .nav-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #ffcc00;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 20px;
         }
         .avatar {
             cursor: pointer;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 20px;
         }
         .avatar-dropdown {
             position: absolute;
@@ -387,20 +483,20 @@ $username = $user['username'] ?? 'Admin';
 <body>
 
     <header class="navbar">
-        <div class="logo">
+        <div class="nav-left">
             <img src="/images/Logo.png" alt="EnerSave Logo">
-            EnerSave
+            <a href="/adminDashboard" class="brand-name"><strong>EnerSave</strong></a>
+            <nav class="main-nav">
+                <a href="/adminDashboard" class="nav-item">Dashboard</a>
+                <a href="/usersManagement" class="nav-item">Users</a>
+                <a href="/suppliersManagement" class="nav-item">Suppliers</a>
+                <a href="/projectsManagement" class="nav-item active">Projects</a>
+            </nav>
         </div>
-        <nav class="main-nav">
-            <a href="/adminDashboard" class="nav-item">Dashboard</a>
-            <a href="/usersManagement" class="nav-item">Users</a>
-            <a href="/suppliersManagement" class="nav-item">Suppliers</a>
-            <a href="/projectsManagement" class="nav-item active">Projects</a>
-        </nav>
-        <div class="admin-profile">
+        <div class="nav-right">
             <span>Admin: <?php echo htmlspecialchars($username); ?></span>
             <div class="avatar-container">
-                <div class="avatar" id="avatarDropdown"><i class="fas fa-user-circle"></i></div>
+                <div class="nav-avatar" id="avatarDropdown"><?php echo strtoupper(substr($username, 0, 1)); ?></div>
                 <div class="avatar-dropdown" id="avatarMenu">
                     <a href="#" class="avatar-dropdown-item">Settings</a>
                     <a href="/logout" class="avatar-dropdown-item logout">Logout</a>
@@ -417,19 +513,19 @@ $username = $user['username'] ?? 'Admin';
             <div class="metrics-cards">
                 <div class="card">
                     <span class="metric-title">Pending Projects</span>
-                    <span class="metric-value">340</span>
+                    <span class="metric-value" id="pendingProjects">0</span>
                 </div>
                 <div class="card">
                     <span class="metric-title">Active Projects</span>
-                    <span class="metric-value">42</span>
+                    <span class="metric-value" id="activeProjects">0</span>
                 </div>
                 <div class="card">
                     <span class="metric-title">Completed Projects</span>
-                    <span class="metric-value">18</span>
+                    <span class="metric-value" id="completedProjects">0</span>
                 </div>
                 <div class="card">
                     <span class="metric-title">Rejected Projects</span>
-                    <span class="metric-value">P280K</span>
+                    <span class="metric-value" id="rejectedProjects">0</span>
                 </div>
             </div>
 
@@ -453,49 +549,8 @@ $username = $user['username'] ?? 'Admin';
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr data-name="Solar Initiative - PV1024" data-description="A comprehensive solar panel installation project aimed at providing renewable energy to local communities in Greenwood Valley." data-community="Greenwood Valley" data-date="2023 - 08 - 15" data-status="Active">
-                            <td>Solar Initiative - PV1024</td>
-                            <td>Greenwood Valley</td>
-                            <td>2023 - 08 - 15</td>
-                            <td><span class="status-tag project-active">Active</span></td>
-                            <td><a href="#" class="action-link view-btn">View</a> <a href="#" class="action-link success">Close</a></td>
-                        </tr>
-                        <tr data-name="Solar Initiative - PV1024" data-description="A comprehensive solar panel installation project aimed at providing renewable energy to local communities in Greenwood Valley." data-community="Greenwood Valley" data-date="2023 - 08 - 15" data-status="Pending">
-                            <td>Solar Initiative - PV1024</td>
-                            <td>Greenwood Valley</td>
-                            <td>2023 - 08 - 15</td>
-                            <td><span class="status-tag project-pending">Pending</span></td>
-                            <td><a href="#" class="action-link view-btn">View</a> <a href="#" class="action-link success approve-btn">Approve</a> <a href="#" class="action-link danger reject-btn">Reject</a></td>
-                        </tr>
-                        <tr data-name="Solar Initiative - PV1024" data-description="A comprehensive solar panel installation project aimed at providing renewable energy to local communities in Greenwood Valley." data-community="Greenwood Valley" data-date="2023 - 08 - 15" data-status="Completed">
-                            <td>Solar Initiative - PV1024</td>
-                            <td>Greenwood Valley</td>
-                            <td>2023 - 08 - 15</td>
-                            <td><span class="status-tag project-completed">Completed</span></td>
-                            <td><a href="#" class="action-link view-btn">View</a></td>
-                        </tr>
-                        <tr data-name="Solar Initiative - PV1024" data-description="A comprehensive solar panel installation project aimed at providing renewable energy to local communities in Greenwood Valley." data-community="Greenwood Valley" data-date="2023 - 08 - 15" data-status="Rejected">
-                            <td>Solar Initiative - PV1024</td>
-                            <td>Greenwood Valley</td>
-                            <td>2023 - 08 - 15</td>
-                            <td><span class="status-tag project-rejected">Rejected</span></td>
-                            <td><a href="#" class="action-link view-btn">View</a> <a href="#" class="action-link success restore-btn">Restore</a></td>
-                        </tr>
-                        <tr data-name="Solar Initiative - PV1024" data-description="A comprehensive solar panel installation project aimed at providing renewable energy to local communities in Greenwood Valley." data-community="Greenwood Valley" data-date="2023 - 08 - 15" data-status="Active">
-                            <td>Solar Initiative - PV1024</td>
-                            <td>Greenwood Valley</td>
-                            <td>2023 - 08 - 15</td>
-                            <td><span class="status-tag project-active">Active</span></td>
-                            <td><a href="#" class="action-link view-btn">View</a> <a href="#" class="action-link success">Close</a></td>
-                        </tr>
-                        <tr data-name="Solar Initiative - PV1024" data-description="A comprehensive solar panel installation project aimed at providing renewable energy to local communities in Greenwood Valley." data-community="Greenwood Valley" data-date="2023 - 08 - 15" data-status="Active">
-                            <td>Solar Initiative - PV1024</td>
-                            <td>Greenwood Valley</td>
-                            <td>2023 - 08 - 15</td>
-                            <td><span class="status-tag project-active">Active</span></td>
-                            <td><a href="#" class="action-link view-btn">View</a> <a href="#" class="action-link success">Close</a></td>
-                        </tr>
+                    <tbody id="projectsTableBody">
+                        <!-- Projects will be loaded dynamically from database -->
                     </tbody>
                 </table>
             </div>
@@ -557,13 +612,187 @@ $username = $user['username'] ?? 'Admin';
     <script src="/JavaScripts/navigationAdmin.js"></script>
     <script src="/JavaScripts/avatarDropdown.js"></script>
     <script>
+        // Load projects from database
+        function loadProjects() {
+            fetch('/api/projects')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.projects) {
+                        const tbody = document.getElementById('projectsTableBody');
+                        tbody.innerHTML = '';
+                        
+                        // Count projects by status
+                        let pendingCount = 0;
+                        let activeCount = 0;
+                        let completedCount = 0;
+                        let rejectedCount = 0;
+                        
+                        data.projects.forEach(project => {
+                            const status = (project.status || 'active').toLowerCase();
+                            
+                            // Count by status
+                            if (status === 'pending') {
+                                pendingCount++;
+                            } else if (status === 'active') {
+                                activeCount++;
+                            } else if (status === 'completed') {
+                                completedCount++;
+                            } else if (status === 'rejected' || status === 'cancelled') {
+                                rejectedCount++;
+                            } else {
+                                // Default to active if status is unknown
+                                activeCount++;
+                            }
+                            
+                            // Format date
+                            const dateObj = new Date(project.dateCreated);
+                            const formattedDate = dateObj.toLocaleDateString('en-US', { 
+                                year: 'numeric', 
+                                month: '2-digit', 
+                                day: '2-digit' 
+                            }).replace(/\//g, ' - ');
+                            
+                            // Determine status class and text
+                            let statusClass = 'project-active';
+                            let statusText = 'Active';
+                            if (status === 'pending') {
+                                statusClass = 'project-pending';
+                                statusText = 'Pending';
+                            } else if (status === 'completed') {
+                                statusClass = 'project-completed';
+                                statusText = 'Completed';
+                            } else if (status === 'rejected' || status === 'cancelled') {
+                                statusClass = 'project-rejected';
+                                statusText = status === 'cancelled' ? 'Cancelled' : 'Rejected';
+                            }
+                            
+                            // Build actions based on status
+                            let actionsHtml = `<a href="#" class="action-link view-btn">View</a>`;
+                            if (status === 'pending') {
+                                actionsHtml += ` <a href="#" class="action-link success approve-btn">Approve</a> <a href="#" class="action-link danger reject-btn">Reject</a>`;
+                            } else if (status === 'active') {
+                                actionsHtml += ` <a href="#" class="action-link success">Close</a>`;
+                            } else if (status === 'rejected' || status === 'cancelled') {
+                                actionsHtml += ` <a href="#" class="action-link success restore-btn">Restore</a>`;
+                            }
+                            
+                            const row = document.createElement('tr');
+                            row.setAttribute('data-name', project.name);
+                            row.setAttribute('data-description', project.description || '');
+                            row.setAttribute('data-community', project.initiator || 'Unknown');
+                            row.setAttribute('data-date', formattedDate);
+                            row.setAttribute('data-status', statusText);
+                            row.setAttribute('data-project-id', project.id);
+                            
+                            row.innerHTML = `
+                                <td>${project.name}</td>
+                                <td>${project.initiator || 'Unknown'}</td>
+                                <td>${formattedDate}</td>
+                                <td><span class="status-tag ${statusClass}">${statusText}</span></td>
+                                <td>${actionsHtml}</td>
+                            `;
+                            
+                            tbody.appendChild(row);
+                        });
+                        
+                        // Update statistics
+                        document.getElementById('pendingProjects').textContent = pendingCount;
+                        document.getElementById('activeProjects').textContent = activeCount;
+                        document.getElementById('completedProjects').textContent = completedCount;
+                        document.getElementById('rejectedProjects').textContent = rejectedCount;
+                        
+                        // Reattach event listeners for dynamically added buttons
+                        attachEventListeners();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading projects:', error);
+                });
+        }
+        
+        // Attach event listeners to dynamically added buttons
+        function attachEventListeners() {
+            // View buttons
+            const viewBtns = document.querySelectorAll('.view-btn');
+            viewBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const row = this.closest('tr');
+                    openViewModal(row);
+                });
+            });
+            
+            // Approve buttons
+            const approveBtns = document.querySelectorAll('.approve-btn');
+            approveBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const row = this.closest('tr');
+                    currentActionRow = row;
+                    currentAction = 'approve';
+                    
+                    const projectName = row.getAttribute('data-name');
+                    confirmModalTitle.textContent = 'Approve Project';
+                    confirmMessage.textContent = `Are you sure you want to approve "${projectName}"? This will activate the project and make it visible to users.`;
+                    confirmBtn.textContent = 'Approve Project';
+                    confirmBtn.className = 'modal-btn modal-btn-primary';
+                    confirmModal.classList.add('show');
+                });
+            });
+            
+            // Reject buttons
+            const rejectBtns = document.querySelectorAll('.reject-btn');
+            rejectBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const row = this.closest('tr');
+                    currentActionRow = row;
+                    currentAction = 'reject';
+                    
+                    const projectName = row.getAttribute('data-name');
+                    confirmModalTitle.textContent = 'Reject Project';
+                    confirmMessage.textContent = `Are you sure you want to reject "${projectName}"? This action cannot be undone easily.`;
+                    confirmBtn.textContent = 'Reject Project';
+                    confirmBtn.className = 'modal-btn modal-btn-danger';
+                    confirmModal.classList.add('show');
+                });
+            });
+            
+            // Restore buttons
+            const restoreBtns = document.querySelectorAll('.restore-btn');
+            restoreBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const row = this.closest('tr');
+                    currentActionRow = row;
+                    currentAction = 'restore';
+                    
+                    const projectName = row.getAttribute('data-name');
+                    confirmModalTitle.textContent = 'Restore Project';
+                    confirmMessage.textContent = `Are you sure you want to restore "${projectName}"? This will change the status back to Pending.`;
+                    confirmBtn.textContent = 'Restore Project';
+                    confirmBtn.className = 'modal-btn modal-btn-primary';
+                    confirmModal.classList.add('show');
+                });
+            });
+        }
+        
+        // Load projects on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProjects();
+        });
+        
         // Search functionality
         const searchInput = document.getElementById('searchInput');
         const table = document.getElementById('projectsTable');
         
         function performSearch() {
             const searchTerm = searchInput.value.toLowerCase().trim();
-            const tbody = table.getElementsByTagName('tbody')[0];
+            const tbody = document.getElementById('projectsTableBody');
             const tableRows = tbody.getElementsByTagName('tr');
             
             Array.from(tableRows).forEach(row => {
@@ -601,15 +830,6 @@ $username = $user['username'] ?? 'Admin';
         // View Modal functionality
         let currentViewRow = null;
         const viewModal = document.getElementById('viewModal');
-        const viewBtns = document.querySelectorAll('.view-btn');
-
-        viewBtns.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const row = this.closest('tr');
-                openViewModal(row);
-            });
-        });
 
         function closeViewModal() {
             viewModal.classList.remove('show');
@@ -623,58 +843,6 @@ $username = $user['username'] ?? 'Admin';
         const confirmMessage = document.getElementById('confirmMessage');
         const confirmBtn = document.getElementById('confirmBtn');
         const confirmModalTitle = document.getElementById('confirmModalTitle');
-        
-        const approveBtns = document.querySelectorAll('.approve-btn');
-        const rejectBtns = document.querySelectorAll('.reject-btn');
-        const restoreBtns = document.querySelectorAll('.restore-btn');
-
-        approveBtns.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const row = this.closest('tr');
-                currentActionRow = row;
-                currentAction = 'approve';
-                
-                const projectName = row.getAttribute('data-name');
-                confirmModalTitle.textContent = 'Approve Project';
-                confirmMessage.textContent = `Are you sure you want to approve "${projectName}"? This will activate the project and make it visible to users.`;
-                confirmBtn.textContent = 'Approve Project';
-                confirmBtn.className = 'modal-btn modal-btn-primary';
-                confirmModal.classList.add('show');
-            });
-        });
-
-        rejectBtns.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const row = this.closest('tr');
-                currentActionRow = row;
-                currentAction = 'reject';
-                
-                const projectName = row.getAttribute('data-name');
-                confirmModalTitle.textContent = 'Reject Project';
-                confirmMessage.textContent = `Are you sure you want to reject "${projectName}"? This action cannot be undone easily.`;
-                confirmBtn.textContent = 'Reject Project';
-                confirmBtn.className = 'modal-btn modal-btn-danger';
-                confirmModal.classList.add('show');
-            });
-        });
-
-        restoreBtns.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const row = this.closest('tr');
-                currentActionRow = row;
-                currentAction = 'restore';
-                
-                const projectName = row.getAttribute('data-name');
-                confirmModalTitle.textContent = 'Restore Project';
-                confirmMessage.textContent = `Are you sure you want to restore "${projectName}"? This will change the status back to Pending.`;
-                confirmBtn.textContent = 'Restore Project';
-                confirmBtn.className = 'modal-btn modal-btn-primary';
-                confirmModal.classList.add('show');
-            });
-        });
 
         function closeConfirmModal() {
             confirmModal.classList.remove('show');

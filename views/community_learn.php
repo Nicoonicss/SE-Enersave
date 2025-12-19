@@ -294,57 +294,17 @@ h1 {
         <a href="#">View More Videos &gt;&gt;</a>
     </div>
 
-    <div class="video-list">
-        <div class="video-card">
-            <img src="/images/video.png" class="icon">
-            "How Solar Panels Work"
-            <span style="margin-left:auto; color:#666;">(5 mins)</span>
-        </div>
-
-        <div class="video-card">
-            <img src="/images/video.png" class="icon">
-            "Hydropower Basics"
-            <span style="margin-left:auto; color:#666;">(8 mins)</span>
-        </div>
-
-        <div class="video-card">
-            <img src="/images/video.png" class="icon">
-            "Wind Energy Explained"
-            <span style="margin-left:auto; color:#666;">(6 mins)</span>
-        </div>
+    <div class="video-list" id="videosContainer">
+        <!-- Videos will be loaded dynamically from database -->
     </div>
 
     <div class="section-header">
         <span>Downloadable Guides</span>
-        <a href="#">View More Videos &gt;&gt;</a>
+        <a href="#">View More Guides &gt;&gt;</a>
     </div>
 
-    <div class="guide-list">
-        <div class="guide-card">
-            <img src="/images/notes.png" class="icon">
-            "DIY Solar Panel Setup"
-            <button class="download-btn">
-                <i class="fa-solid fa-download"></i>
-                Download
-            </button>
-        </div>
-
-        <div class="guide-card">
-            <img src="/images/notes.png" class="icon">
-            "Wind Generator Guide"
-            <button class="download-btn">
-                <i class="fa-solid fa-download"></i>
-                Download
-            </button>
-        </div>
-
-        <div class="guide-card">
-            <img src="/images/notes.png" class="icon">
-            "Community Energy Tips"
-            <button class="download-btn">
-                <i class="fa-solid fa-download"></i>Download
-            </button>
-        </div>
+    <div class="guide-list" id="guidesContainer">
+        <!-- Guides will be loaded dynamically from database -->
     </div>
 
     <div class="section-header" style="margin-top:40px;">
@@ -364,6 +324,115 @@ h1 {
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="/navigationCommunity.js"></script>
 <script src="/JavaScripts/avatarDropdown.js"></script>
+<script>
+// Load learning resources from database
+document.addEventListener('DOMContentLoaded', function() {
+    const videosContainer = document.getElementById('videosContainer');
+    const guidesContainer = document.getElementById('guidesContainer');
+    
+    function createVideoCard(resource) {
+        const card = document.createElement('div');
+        card.className = 'video-card';
+        card.innerHTML = `
+            <img src="/images/video.png" class="icon">
+            "${resource.title}"
+            <span style="margin-left:auto; color:#666;">(${resource.description || 'Video'})</span>
+        `;
+        
+        if (resource.file_url) {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', function() {
+                window.open(resource.file_url, '_blank');
+            });
+        }
+        
+        return card;
+    }
+    
+    function createGuideCard(resource) {
+        const card = document.createElement('div');
+        card.className = 'guide-card';
+        card.innerHTML = `
+            <img src="/images/notes.png" class="icon">
+            "${resource.title}"
+            <button class="download-btn" ${resource.file_url ? '' : 'disabled'}>
+                <i class="fa-solid fa-download"></i>
+                Download
+            </button>
+        `;
+        
+        const downloadBtn = card.querySelector('.download-btn');
+        if (downloadBtn && resource.file_url) {
+            downloadBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (resource.file_url) {
+                    window.open(resource.file_url, '_blank');
+                }
+            });
+        }
+        
+        return card;
+    }
+    
+    function loadResources(category = null) {
+        let url = '/api/learning-resources';
+        if (category && category !== 'all') {
+            url += '?category=' + encodeURIComponent(category);
+        }
+        
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.resources) {
+                    // Clear containers
+                    if (videosContainer) videosContainer.innerHTML = '';
+                    if (guidesContainer) guidesContainer.innerHTML = '';
+                    
+                    // Separate videos and downloadable guides
+                    const videos = data.resources.filter(r => r.file_type === 'video' && !r.is_downloadable);
+                    const guides = data.resources.filter(r => r.is_downloadable);
+                    
+                    // Display videos
+                    if (videos.length === 0) {
+                        if (videosContainer) {
+                            videosContainer.innerHTML = '<p style="color: #666; padding: 20px;">No videos available.</p>';
+                        }
+                    } else {
+                        videos.slice(0, 3).forEach(resource => {
+                            const card = createVideoCard(resource);
+                            if (videosContainer) videosContainer.appendChild(card);
+                        });
+                    }
+                    
+                    // Display guides
+                    if (guides.length === 0) {
+                        if (guidesContainer) {
+                            guidesContainer.innerHTML = '<p style="color: #666; padding: 20px;">No downloadable guides available.</p>';
+                        }
+                    } else {
+                        guides.slice(0, 3).forEach(resource => {
+                            const card = createGuideCard(resource);
+                            if (guidesContainer) guidesContainer.appendChild(card);
+                        });
+                    }
+                } else {
+                    console.error('Error loading resources:', data);
+                }
+            })
+            .catch(error => {
+                console.error('Error loading resources:', error);
+                if (videosContainer) videosContainer.innerHTML = '<p style="color: #666; padding: 20px;">Error loading videos.</p>';
+                if (guidesContainer) guidesContainer.innerHTML = '<p style="color: #666; padding: 20px;">Error loading guides.</p>';
+            });
+    }
+    
+    // Load resources on page load
+    loadResources();
+    
+    // Make loadResources accessible globally for category filtering
+    window.loadResources = loadResources;
+});
+</script>
 </body>
 </html>
 

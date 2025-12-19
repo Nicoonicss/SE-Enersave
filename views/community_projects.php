@@ -418,6 +418,14 @@ $username = $user['username'] ?? 'Community User';
     gap: 20px;
   }
 
+  .modal-project-image {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+
   .modal-project-name {
     font-size: 22px;
     font-weight: 700;
@@ -430,6 +438,25 @@ $username = $user['username'] ?? 'Community User';
     color: #555;
     font-size: 15px;
     margin: 0;
+  }
+
+  .modal-project-initiator {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+  }
+
+  .modal-project-initiator-label {
+    font-weight: 600;
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+
+  .modal-project-initiator-name {
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
   }
 
   /* Fundraiser Modal Styles */
@@ -610,7 +637,7 @@ $username = $user['username'] ?? 'Community User';
               <path d="M2 6h20v12H2V6zm2 2v8h16V8H4zm8 1a3 3 0 110 6 3 3 0 010-6z"/>
               </svg>
             </button>
-            <button class="btn-details" data-project-name="Solar for School">View Details</button>
+            <button type="button" class="btn-details" data-project-name="Solar for School">View Details</button>
           </div>
         </div>
       </article>
@@ -631,7 +658,7 @@ $username = $user['username'] ?? 'Community User';
               <path d="M2 6h20v12H2V6zm2 2v8h16V8H4zm8 1a3 3 0 110 6 3 3 0 010-6z"/>
               </svg>
             </button>
-            <button class="btn-details" data-project-name="Solar for School">View Details</button>
+            <button type="button" class="btn-details" data-project-name="Solar for School">View Details</button>
           </div>
         </div>
       </article>
@@ -665,12 +692,16 @@ $username = $user['username'] ?? 'Community User';
   <div id="projectDetailsModal" class="project-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>Project Details</h2>
+        <h2 id="modalProjectName">Project Name</h2>
         <button class="close-modal" id="closeProjectModal">&times;</button>
       </div>
       <div class="modal-body">
-        <h3 class="modal-project-name" id="modalProjectName">Project Name</h3>
+        <img id="modalProjectImage" class="modal-project-image" src="" alt="Project Image" style="display: none;">
         <p class="modal-project-description" id="modalProjectDescription">Project description will appear here.</p>
+        <div class="modal-project-initiator">
+          <div class="modal-project-initiator-label">Project Initiator:</div>
+          <div class="modal-project-initiator-name" id="modalProjectInitiator">Loading...</div>
+        </div>
       </div>
     </div>
   </div>
@@ -730,26 +761,110 @@ $username = $user['username'] ?? 'Community User';
     const closeModalBtn = document.getElementById('closeProjectModal');
     const viewDetailsButtons = document.querySelectorAll('.btn-details');
     
-    // Project descriptions
-    const projectDescriptions = {
-      'Solar for School': 'This initiative aims to install solar panels in local schools to provide clean, renewable energy and reduce electricity costs. The project will benefit multiple schools in the community, providing them with sustainable power for classrooms, computer labs, and other facilities. By implementing solar energy, we can help schools save money on electricity bills while teaching students about renewable energy and environmental sustainability.',
-      'Hydro for Hope': 'The Hydro for Hope project focuses on developing small-scale hydroelectric power systems for remote communities. This renewable energy solution will provide reliable electricity to areas that currently lack access to the power grid. The project includes the installation of micro-hydro turbines that can generate clean energy from flowing water sources, bringing light and power to underserved communities while promoting sustainable development.'
+    console.log('Modal:', modal);
+    console.log('Close button:', closeModalBtn);
+    console.log('View Details buttons found:', viewDetailsButtons.length);
+    
+    if (!modal) {
+      console.error('Project Details Modal not found!');
+      return;
+    }
+    
+    // Project descriptions, initiators, and images
+    const projectData = {
+      'Solar for School': {
+        description: 'This initiative aims to install solar panels in local schools to provide clean, renewable energy and reduce electricity costs. The project will benefit multiple schools in the community, providing them with sustainable power for classrooms, computer labs, and other facilities. By implementing solar energy, we can help schools save money on electricity bills while teaching students about renewable energy and environmental sustainability.',
+        initiator: 'Community Energy Initiative',
+        image: '/images/crowdfundingPic1.png'
+      },
+      'Hydro for Hope': {
+        description: 'The Hydro for Hope project focuses on developing small-scale hydroelectric power systems for remote communities. This renewable energy solution will provide reliable electricity to areas that currently lack access to the power grid. The project includes the installation of micro-hydro turbines that can generate clean energy from flowing water sources, bringing light and power to underserved communities while promoting sustainable development.',
+        initiator: 'Rural Development Foundation',
+        image: '/images/crowdfundingPic2.png'
+      }
     };
     
     // Function to open modal with project data
     function openProjectModal(projectCard) {
+      console.log('Opening project modal for:', projectCard);
+      
+      if (!modal) {
+        console.error('Modal element not found');
+        return;
+      }
+      
       const projectName = projectCard.querySelector('.project-title')?.textContent.trim() || 
-                         projectCard.closest('.project-card').querySelector('.project-title')?.textContent.trim() || 
+                         projectCard.closest('.project-card')?.querySelector('.project-title')?.textContent.trim() || 
                          'Unknown Project';
       
-      // Get description from our descriptions object or use a default
-      const description = projectDescriptions[projectName] || 
-                         'This is a sustainable energy project aimed at bringing renewable energy solutions to communities. The project focuses on environmental sustainability and community empowerment through clean energy initiatives.';
+      console.log('Project name:', projectName);
+      
+      // Get project image from the card
+      const projectImage = projectCard.querySelector('.project-image')?.src || '';
+      console.log('Project image:', projectImage);
+      
+      // Get project ID to check localStorage
+      const projectId = projectCard.getAttribute('data-project-id');
+      let description = '';
+      let initiator = '';
+      let imageUrl = projectImage;
+      
+      // Check if project is in localStorage (newly created)
+      if (projectId) {
+        const STORAGE_KEY = 'donor_crowdfunding_projects';
+        const projects = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        const project = projects.find(p => p.id === projectId);
+        
+        if (project) {
+          description = project.description || 'No description provided.';
+          initiator = project.initiator || '<?php echo htmlspecialchars($username); ?>';
+          // Use image from localStorage if available (base64 or URL)
+          if (project.image) {
+            imageUrl = project.image;
+          }
+        }
+      }
+      
+      // If not found in localStorage, check hardcoded data
+      if (!description) {
+        const projectInfo = projectData[projectName];
+        if (projectInfo) {
+          description = projectInfo.description;
+          initiator = projectInfo.initiator;
+          // Use hardcoded image if available and no image from card
+          if (projectInfo.image && !imageUrl) {
+            imageUrl = projectInfo.image;
+          }
+        } else {
+          description = 'This is a sustainable energy project aimed at bringing renewable energy solutions to communities. The project focuses on environmental sustainability and community empowerment through clean energy initiatives.';
+          initiator = 'Community Member';
+        }
+      }
       
       // Populate modal
-      document.getElementById('modalProjectName').textContent = projectName;
-      document.getElementById('modalProjectDescription').textContent = description;
+      const modalImage = document.getElementById('modalProjectImage');
+      const modalName = document.getElementById('modalProjectName');
+      const modalDescription = document.getElementById('modalProjectDescription');
+      const modalInitiator = document.getElementById('modalProjectInitiator');
       
+      if (!modalImage || !modalName || !modalDescription || !modalInitiator) {
+        console.error('Modal elements not found');
+        return;
+      }
+      
+      // Set project name in header
+      modalName.textContent = projectName;
+      
+      if (imageUrl) {
+        modalImage.src = imageUrl;
+        modalImage.style.display = 'block';
+      } else {
+        modalImage.style.display = 'none';
+      }
+      modalDescription.textContent = description;
+      modalInitiator.textContent = initiator;
+      
+      console.log('Showing modal');
       // Show modal
       modal.classList.add('show');
       document.body.style.overflow = 'hidden';
@@ -757,33 +872,64 @@ $username = $user['username'] ?? 'Community User';
     
     // Function to close modal
     function closeProjectModal() {
-      modal.classList.remove('show');
-      document.body.style.overflow = 'auto';
+      if (modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = 'auto';
+      }
     }
     
-    // Add event listeners to all "View Details" buttons
-    viewDetailsButtons.forEach(button => {
-      button.addEventListener('click', function() {
-        const projectCard = this.closest('.project-card');
+    // Add event listeners to all "View Details" buttons using event delegation
+    // This ensures it works for both existing and dynamically added buttons
+    document.addEventListener('click', function(e) {
+      // Check if the clicked element is a .btn-details button or inside one
+      const btnDetails = e.target.closest('.btn-details');
+      if (btnDetails) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('View Details/Project button clicked');
+        const projectCard = btnDetails.closest('.project-card');
+        console.log('Project card:', projectCard);
         if (projectCard) {
           openProjectModal(projectCard);
+        } else {
+          console.error('Project card not found');
+        }
+      }
+    });
+    
+    // Also add direct listeners for existing buttons
+    viewDetailsButtons.forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('View Details button clicked (direct listener)');
+        const projectCard = this.closest('.project-card');
+        console.log('Project card:', projectCard);
+        if (projectCard) {
+          openProjectModal(projectCard);
+        } else {
+          console.error('Project card not found');
         }
       });
     });
     
     // Close modal when clicking the X button
-    closeModalBtn.addEventListener('click', closeProjectModal);
+    if (closeModalBtn) {
+      closeModalBtn.addEventListener('click', closeProjectModal);
+    }
     
     // Close modal when clicking outside the modal content
-    modal.addEventListener('click', function(e) {
-      if (e.target === modal) {
-        closeProjectModal();
-      }
-    });
+    if (modal) {
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          closeProjectModal();
+        }
+      });
+    }
     
     // Close modal with Escape key
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && modal.classList.contains('show')) {
+      if (e.key === 'Escape' && modal && modal.classList.contains('show')) {
         closeProjectModal();
       }
     });
@@ -876,23 +1022,28 @@ $username = $user['username'] ?? 'Community User';
       const projectCard = document.createElement('article');
       projectCard.className = 'project-card';
       projectCard.setAttribute('data-project-id', project.id);
+      const projectName = project.name || project.title || 'Untitled';
+      const projectImage = project.image || '';
+      const projectRaised = project.raised || 0;
+      const projectAmount = project.amount || 0;
+      const projectProgress = project.progress || 0;
       projectCard.innerHTML = `
-        <img class="project-image" src="${project.image}" alt="${project.name}" />
+        <img class="project-image" src="${projectImage}" alt="${projectName}" />
         <div class="project-content">
-          <div class="project-title">${project.name}</div>
-          <p class="project-raised">Raised<br><strong>₱${project.raised.toLocaleString()}</strong> / ${project.amount.toLocaleString()}</p>
+          <div class="project-title">${projectName}</div>
+          <p class="project-raised">Raised<br><strong>₱${projectRaised.toLocaleString()}</strong> / ${projectAmount.toLocaleString()}</p>
           <div class="progress-bar-container" aria-label="Progress toward funding goal">
-            <div class="progress-bar" style="width: ${project.progress}%;"></div>
+            <div class="progress-bar" style="width: ${projectProgress}%;"></div>
           </div>
-          <div class="progress-text">${project.progress}%</div>
+          <div class="progress-text">${projectProgress}%</div>
           <div class="btn-group">
-            <button class="btn-donate" aria-label="Donate to ${project.name}">
+            <button class="btn-donate" aria-label="Donate to ${projectName}">
               Donate
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M2 6h20v12H2V6zm2 2v8h16V8H4zm8 1a3 3 0 110 6 3 3 0 010-6z"/>
               </svg>
             </button>
-            <button class="btn-details" data-project-name="${project.name}">View Details</button>
+            <button type="button" class="btn-details" data-project-name="${projectName}">View Details</button>
           </div>
         </div>
       `;
@@ -903,7 +1054,10 @@ $username = $user['username'] ?? 'Community User';
       // Add event listener to the new View Details button
       const newViewDetailsBtn = projectCard.querySelector('.btn-details');
       if (newViewDetailsBtn) {
-        newViewDetailsBtn.addEventListener('click', function() {
+        newViewDetailsBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          console.log('New View Details button clicked');
           const projectCard = this.closest('.project-card');
           if (projectCard) {
             openProjectModal(projectCard);
@@ -932,52 +1086,116 @@ $username = $user['username'] ?? 'Community User';
         reader.onload = function(e) {
           const imageData = e.target.result;
 
-          // Create new crowdfunding project
-          const newProject = {
-            id: Date.now().toString(),
-            name: name,
+          // Get current username
+          const currentUsername = '<?php echo addslashes(htmlspecialchars($username, ENT_QUOTES, 'UTF-8')); ?>';
+          
+          // Prepare project data for API
+          const projectData = {
+            title: name,
             description: description || 'No description provided',
-            amount: parseFloat(amount),
-            image: imageData,
-            dateCreated: new Date().toLocaleDateString('en-US', { 
-              year: 'numeric', 
-              month: 'short', 
-              day: 'numeric' 
-            }),
-            raised: 0,
-            progress: 0
+            goal_amount: parseFloat(amount),
+            image: imageData
           };
 
-          // Get existing projects from localStorage
-          let projects = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-          projects.push(newProject);
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+          // Save to database via API
+          fetch('/api/projects', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(projectData)
+          })
+          .then(response => {
+            console.log('Response status:', response.status);
+            if (!response.ok) {
+              return response.json().then(err => {
+                throw new Error(err.error || 'Server error');
+              });
+            }
+            return response.json();
+          })
+          .then(data => {
+            console.log('Response data:', data);
+            if (data.success) {
+              // Create project object for display
+              const newProject = {
+                id: data.id.toString(),
+                name: name,
+                description: description || 'No description provided',
+                amount: parseFloat(amount),
+                image: imageData,
+                initiator: currentUsername || 'Community Member',
+                dateCreated: new Date().toLocaleDateString('en-US', { 
+                  year: 'numeric', 
+                  month: 'short', 
+                  day: 'numeric' 
+                }),
+                raised: 0,
+                progress: 0
+              };
 
-          // Add to current page
-          addProjectToPage(newProject);
+              // Also save to localStorage for backward compatibility (can be removed later)
+              let projects = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+              projects.push(newProject);
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
 
-          // Close modal
-          closeFundraiserModal();
+              // Add to current page
+              addProjectToPage(newProject);
 
-          // Show success message
-          alert('Crowdfunding project added successfully!');
+              // Close modal
+              closeFundraiserModal();
+
+              // Show success message
+              alert('Crowdfunding project added successfully! Saved to database.');
+            } else {
+              alert('Error: ' + (data.error || 'Failed to create project'));
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('Error creating project: ' + error.message + '. Check browser console for details.');
+          });
         };
         reader.readAsDataURL(imageFile);
       });
     }
 
-    // Load existing projects on page load
+    // Load existing projects from database
     function loadExistingProjects() {
-      const projects = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-      if (projects.length > 0) {
-        projects.forEach(project => {
-          // Check if project already exists on page (by ID)
-          const existingProject = document.querySelector(`[data-project-id="${project.id}"]`);
-          if (!existingProject) {
-            addProjectToPage(project);
+      // First, load from database
+      fetch('/api/projects')
+        .then(response => response.json())
+        .then(data => {
+          if (data.success && data.projects) {
+            data.projects.forEach(project => {
+              // Check if project already exists on page (by ID)
+              const existingProject = document.querySelector(`[data-project-id="${project.id}"]`);
+              if (!existingProject) {
+                // Ensure initiator field exists
+                if (!project.initiator) {
+                  project.initiator = project.creator_name || '<?php echo addslashes(htmlspecialchars($username, ENT_QUOTES, 'UTF-8')); ?>' || 'Community Member';
+                }
+                addProjectToPage(project);
+              }
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error loading projects from database:', error);
+          // Fallback to localStorage if database fails
+          const projects = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+          if (projects.length > 0) {
+            projects.forEach(project => {
+              const existingProject = document.querySelector(`[data-project-id="${project.id}"]`);
+              if (!existingProject) {
+                if (!project.initiator) {
+                  project.initiator = '<?php echo addslashes(htmlspecialchars($username, ENT_QUOTES, 'UTF-8')); ?>' || 'Community Member';
+                }
+                addProjectToPage(project);
+              }
+            });
           }
         });
-      }
     }
 
     // Load existing projects when page loads
